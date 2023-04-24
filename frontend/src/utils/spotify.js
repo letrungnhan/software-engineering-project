@@ -1,10 +1,10 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 
-export const spotify_uri = 'https://spotify-server-node.vercel.app'
-// export const spotify_uri = 'http://localhost:3001'
+// export const spotify_uri = 'https://spotify-server-node.vercel.app'
+export const spotify_uri = 'http://localhost:3001'
 
-export const redirect_uri = 'https://spotify-client-react.web.app'
-// export const redirect_uri = 'http://localhost:3000'
+// export const redirect_uri = 'https://spotify-client-react.web.app'
+export const redirect_uri = 'http://localhost:3000'
 
 export const client_id = '96495a496bd743b28aeb95759eb85197'
 export const client_secret = '8115c685b0134817b900e0a0de979952'

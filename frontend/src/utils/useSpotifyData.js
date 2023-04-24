@@ -8,6 +8,7 @@ const SpotifyData = ({ type, id }) => {
     const [artists, setArtists] = useState()
     const [albums, setAlbums] = useState()
     const [tracks, setTracks] = useState()
+
     useEffect(() => {
         switch (type) {
             case 'track':
