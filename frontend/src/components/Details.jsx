@@ -64,8 +64,8 @@ const Details = ({ info }) => {
                 <Box sx={{ color: 'white', fontWeight: '500', fontSize: '.9rem' }}>
                     {info.label && <Box mb={1}>{info.label}</Box>}
                     {info.followers && <Box mb={1}>{info.followers} người nghe hàng tháng</Box>}
-                    {info.artists?.map((artist) => (
-                        <Artists artist={artist} />
+                    {info.artists?.map((artist, index) => (
+                        <Artists key={index} artist={artist} />
                     ))}
                     {(info.totalTracks && info.totalTime) &&
                         <Box component="span">

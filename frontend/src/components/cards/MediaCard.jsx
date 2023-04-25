@@ -11,6 +11,9 @@ function MediaCard(props) {
         e.preventDefault()
         // window.open(item.externalUrl)
     }
+
+
+
     return (
         <Box onClick={(e) => redirectSpotify(e)}
             sx={{
@@ -37,29 +40,32 @@ function MediaCard(props) {
                     display: 'none',
                 }
             }}>
-            {item.number &&
-                <Box
-                    component="div"
-                    sx={{
-                        color: '#b3b3b3',
-                        fontWeight: '500',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '24px'
-                    }}>
-                    <PlayArrowRoundedIcon sx={{
-                        visibility: 'hidden',
-                        display: 'none',
-                        opactity: '0',
-                        width: '100%',
-                    }} />
-                    <Box className='item-index'
-                        sx={{ width: '100%', textAlign: 'center' }}>
-                        {item.number}
+                {item.number &&
+                    <Box
+                        component="div"
+                        sx={{
+                            color: '#b3b3b3',
+                            fontWeight: '500',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '24px'
+                        }}>
+                    
+                        <PlayArrowRoundedIcon
+                            sx={{
+                                visibility: 'hidden',
+                                display: 'none',
+                                opactity: '0',
+                                width: '100%',
+                            }} />
+                        <Box 
+                        className='item-index'
+                            sx={{ width: '100%', textAlign: 'center' }}>
+                            {item.number}
+                        </Box>
                     </Box>
-                </Box>
-            }
+                }
             <Box sx={{
                 display: 'flex',
                 alignItems: 'center',

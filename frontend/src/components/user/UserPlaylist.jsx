@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Box, List, ListItem, ListItemText } from '@mui/material'
 import { spotifyApi } from '../../utils/spotify'
 const UserPlaylist = () => {
@@ -24,7 +24,7 @@ const UserPlaylist = () => {
             <List sx={{ px: 2 }}>
                 {playlist?.map((item, index) => {
                     return (
-                        <ListItem key={index} dense className='sidebar__items__link' component={NavLink} to={`/playlist/${item.id}`} activeClassName='active' exact='true'>
+                        <ListItem key={index} dense className='sidebar__items__link' component={NavLink} to={`/playlist/${item.id}`} activeClassName='active' >
                             <ListItemText primary={item.name} />
                         </ListItem>
                     )

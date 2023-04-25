@@ -19,7 +19,7 @@ export default function Sidebar() {
                         <Search />
                         <ListItemText primary="Tìm kiếm" />
                     </ItemLink>
-                    <ItemLink url='/collection/' exact='false'>
+                    <ItemLink url='/collection/' >
                         <LibraryMusic />
                         <ListItemText primary="Thư viện" />
                     </ItemLink>
@@ -47,6 +47,7 @@ export default function Sidebar() {
 }
 
 const ItemLink = (props) => {
+
     return (
         <ListItem
             sx={{
@@ -56,7 +57,7 @@ const ItemLink = (props) => {
             component={NavLink}
             to={props.url}
             activeClassName='active'
-            exact={props.exact ?? true}
+            exact={props?.exact ?? true}
         >
             {props.children}
         </ListItem>
