@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { Box, Grid, IconButton, Slider } from '@mui/material'
+import React, {useState} from 'react';
+import {Box, Grid, IconButton, Slider} from '@mui/material'
 import {
     PlayCircle, SkipNext, SkipPrevious,
     Replay, Repeat, VolumeUp,
     VolumeDown, VolumeMute, VolumeOff,
     AirplaySharp, QueueMusicSharp
 } from '@mui/icons-material/';
+import Playback from "../Playback";
 
 const Footer = () => {
-    const [volume, setVolume] = useState(100)
+    const [volume, setVolume] = useState(100);
     return (
-        <Grid container sx={{ px: 2 }} alignItems='center' className='footer'>
+        <Grid container sx={{px: 2}} alignItems='center' className='footer'>
             <Grid item sm={4}>
-
+                <Playback/>
             </Grid>
             <Grid item sm={4}>
                 <Box sx={{
@@ -20,20 +21,20 @@ const Footer = () => {
                     justifyContent: 'center',
                     gap: 2
                 }}>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        < Repeat sx={{ fontSize: '1.25rem' }} />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < Repeat sx={{fontSize: '1.25rem'}}/>
                     </IconButton>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        < SkipPrevious sx={{ fontSize: '1.25rem' }} />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < SkipPrevious sx={{fontSize: '1.25rem'}}/>
                     </IconButton>
-                    <IconButton sx={{ color: '#fff' }} className='button--play' component="button">
-                        <PlayCircle sx={{ fontSize: '2.5rem' }} />
+                    <IconButton sx={{color: '#fff'}} className='button--play' component="button">
+                        <PlayCircle sx={{fontSize: '2.5rem'}}/>
                     </IconButton>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        <SkipNext sx={{ fontSize: '1.25rem' }} />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        <SkipNext sx={{fontSize: '1.25rem'}}/>
                     </IconButton>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        <Replay sx={{ fontSize: '1.25rem' }} />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        <Replay sx={{fontSize: '1.25rem'}}/>
                     </IconButton>
 
                 </Box>
@@ -55,7 +56,7 @@ const Footer = () => {
                         defaultValue={0}
                         aria-label="Small"
                         valueLabelDisplay="auto"
-                        sx={{ color: '#b3b3b3', flex: '1' }}
+                        sx={{color: '#b3b3b3', flex: '1'}}
 
                     />
                     <Box sx={{
@@ -73,14 +74,14 @@ const Footer = () => {
                     alignItems: 'center',
                     justifyContent: 'end'
                 }}>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        < QueueMusicSharp />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < QueueMusicSharp/>
                     </IconButton>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        < AirplaySharp />
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < AirplaySharp/>
                     </IconButton>
-                    <IconButton sx={{ color: '#b3b3b3' }} component="button">
-                        {<Volume volume={volume} />}
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        {<Volume volume={volume}/>}
                     </IconButton>
                     <Box width={70} sx={{
                         display: 'flex',
@@ -93,7 +94,7 @@ const Footer = () => {
                             aria-label="Volume"
                             valueLabelDisplay="auto"
                             onChange={e => setVolume(e.target.value)}
-                            sx={{ color: '#b3b3b3' }}
+                            sx={{color: '#b3b3b3'}}
                         />
 
                     </Box>
@@ -107,10 +108,10 @@ const Footer = () => {
 export default Footer;
 
 const Volume = (props) => {
-    let { volume } = props
-    if (volume >= 80) return <VolumeUp sx={{ transition: 'all .3s ease' }} />
-    if (volume >= 50) return <VolumeDown sx={{ transition: 'all .3s ease' }} />
-    if (volume >= 0) return <VolumeMute sx={{ transition: 'all .3s ease' }} />
-    return <VolumeOff sx={{ transition: 'all .3s ease' }} />
+    let {volume} = props
+    if (volume >= 80) return <VolumeUp sx={{transition: 'all .3s ease'}}/>
+    if (volume >= 50) return <VolumeDown sx={{transition: 'all .3s ease'}}/>
+    if (volume >= 0) return <VolumeMute sx={{transition: 'all .3s ease'}}/>
+    return <VolumeOff sx={{transition: 'all .3s ease'}}/>
 
 }

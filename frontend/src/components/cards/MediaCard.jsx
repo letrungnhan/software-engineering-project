@@ -51,7 +51,7 @@ function MediaCard(props) {
                     <PlayArrowRoundedIcon sx={{
                         visibility: 'hidden',
                         display: 'none',
-                        opactity: '0',
+                        opacity: '0',
                         width: '100%',
                     }} />
                     <Box className='item-index'

@@ -1,5 +1,5 @@
-import React from 'react'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import React, {useEffect} from 'react'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import Home from '../pages/Home'
 import Search from '../pages/Search'
 import Playlist from '../pages/Dashboard'
@@ -7,25 +7,27 @@ import Collection from '../pages/Collection'
 import Genre from '../pages/Genre'
 import Layout from '../components/layout/Layout'
 import useAuth from '../hooks/useAuth'
-import { Box, CircularProgress } from '@mui/material';
+import {Box, CircularProgress} from '@mui/material';
+import {spotifyApi} from "../utils/spotify";
+import axios from "axios";
 
-const Routes = ({ code }) => {
+const Routes = ({code}) => {
     const accessToken = useAuth(code);
 
     return accessToken ? (
         <BrowserRouter>
-            <Layout >
+            <Layout>
                 <Switch>
-                    <Route exact path='/' component={Home} />
-                    <Route exact path='/search' component={Search} />
-                    <Redirect exact from="/collection" to="/collection/playlist" />
-                    <Route exact path='/collection/:type' component={Collection} />
-                    <Route exact path='/genre/:id' component={Genre} />
-                    <Route exact path='/:type/:id' component={Playlist} />
+                    <Route exact path='/' component={Home}/>
+                    <Route exact path='/search' component={Search}/>
+                    <Redirect exact from="/collection" to="/collection/playlist"/>
+                    <Route exact path='/collection/:type' component={Collection}/>
+                    <Route exact path='/genre/:id' component={Genre}/>
+                    <Route exact path='/:type/:id' component={Playlist}/>
                 </Switch>
             </Layout>
         </BrowserRouter>
-    ) : <Spinner />
+    ) : <Spinner/>
 }
 const Spinner = () => {
     return (
@@ -45,10 +47,11 @@ const Spinner = () => {
                 gap: '5rem',
             }}>
                 <Box component="img"
-                    src='https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png' alt='Logo Spotify'
-                    className="logo"
-                    sx={{ maxWidth: '380px', display: 'block' }} />
-                <CircularProgress sx={{ color: 'var(--primary-color)' }} />
+                     src='https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png'
+                     alt='Logo Spotify'
+                     className="logo"
+                     sx={{maxWidth: '380px', display: 'block'}}/>
+                <CircularProgress sx={{color: 'var(--primary-color)'}}/>
             </Box>
         </Box>
     )

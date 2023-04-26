@@ -15,18 +15,19 @@ export const scopes = [
 
     'user-read-private',
     'user-read-email',
+    'user-library-read',
+    'user-top-read',
     'user-read-playback-state',
     'user-modify-playback-state',
     'user-read-currently-playing',
+    'user-read-recently-played',
+    'user-follow-read',
 
     'playlist-modify-private',
     'playlist-read-collaborative',
     'playlist-read-private',
     'playlist-modify-public',
-
-    'user-read-playback-position',
-    'user-top-read',
-    'user-read-recently-played',
+    'streaming'
 ]
 export const AUTH_URL = 'https://accounts.spotify.com/authorize'
     + '?client_id=' + client_id
