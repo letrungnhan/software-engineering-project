@@ -20,6 +20,7 @@ const Collection = () => {
             })
     }, [])
     useEffect(() => {
+        // chỗ này thiểu default case
         switch (type) {
             case 'playlist':
                 spotifyApi.getUserPlaylists(user.id)

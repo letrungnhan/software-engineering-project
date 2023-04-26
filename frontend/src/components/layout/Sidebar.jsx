@@ -56,7 +56,6 @@ const ItemLink = (props) => {
             component={NavLink}
             to={props.url}
             exact={props.exact}
-            activeClassName='active'
         >
             {props.children}
         </ListItem>
