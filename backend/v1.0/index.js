@@ -24,8 +24,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // middleware
 
 // routes
-app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/users', userRoute);
 app.use('/api/songs', songRoute);
 app.use('/api/playlists', playListRoute);
 app.use('/api/search', searchRoute);
