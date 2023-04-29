@@ -17,7 +17,5 @@ module.exports = (req, res, next) => {
             req.user = validToken;
             next();
         }
-
-
     });
 }
