@@ -36,8 +36,3 @@ export const AUTH_URL = 'https://accounts.spotify.com/authorize'
     + '&scope=' + scopes.join('%20')
     + '&show_dialog=true'
 
-export const spotifyApi = new SpotifyWebApi({
-    clientId: client_id,
-    redirectUri: redirect_uri,
-    clientSecret: client_secret,
-})

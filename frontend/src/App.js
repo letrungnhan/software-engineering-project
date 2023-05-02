@@ -1,13 +1,16 @@
-
 import React from 'react';
-import Routes from './routes/Routes'
-import Login from './pages/Login'
 import './assets/scss/index.scss'
+import Router from "./routes/Router";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers";
 
 function App() {
-  const code = new URLSearchParams(window.location.search).get('code')
-  const token = sessionStorage.getItem('token')
-  return code || token ? <Routes code={code} /> : <Login />;
+
+    return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Router/>
+        </LocalizationProvider>
+    )
 }
 
 export default App;

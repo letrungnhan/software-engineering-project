@@ -11,16 +11,13 @@ const userSchema = new mongoose.Schema({
     birthday: {type: Date, required: true,},
     likedSongs: {type: [String], default: [],},
     playLists: {type: [String], default: [],},
+    isArtist: {type: Boolean, default: true,},
     isAdmin: {type: Boolean, default: false,},
-    createdAt: {type: Date, default: Date.now},
-    updatedAt: {type: Date, default: Date.now}
-})
+}, {timestamps: true})
+
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign(
-        {_id: this._id, name: this.name, isAdmin: this.isAdmin,},
-        process.env.JWT_PRIVATE_KEY,
-        {expiresIn: '7d'});
-    return token;
+    const payload = {_id: this._id, name: this.name, isAdmin: this.isAdmin};
+    return jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {expiresIn: '7d'});
 }
 
 const validateUser = (user) => {
@@ -36,4 +33,5 @@ const validateUser = (user) => {
 
 
 const User = mongoose.model('User', userSchema);
+
 module.exports = {User, validateUser};
