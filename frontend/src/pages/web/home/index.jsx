@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, memo} from 'react'
 import Helmet from '../../../components/web/common/Helmet'
 import Header from '../../../components/web/layout/Header'
 import CardSection from '../../../components/web/sections/CardSection'
@@ -97,4 +97,4 @@ const Home = () => {
 };
 
 
-export default Home;
+export default memo(Home);

@@ -1,16 +1,23 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {Box, Card, CardContent, CardActionArea, Typography, IconButton} from '@mui/material';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import {useDispatch} from "react-redux";
+import {playTrack, setCurrentTrack} from "../../../redux/actions/audioActions";
 
 export default function MainCard({item, type}) {
-    let {_id, title, artists, desc, imageUrl, songSrc} = item;
-    console.log(item)
-    let url = `/${type}/${_id}`
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {_id, title, artists, desc, imageUrl, songSrc} = item;
 
-    if (!desc && artists) {
-        desc = artists.map(a => a.name)
+
+    function handlePlayTrack() {
+        if (type === 'track') {
+            dispatch(setCurrentTrack(item));
+            navigate(`/${type}/${_id}`);
+        }
     }
+
 
     return (
         <Card
@@ -23,11 +30,11 @@ export default function MainCard({item, type}) {
                     opacity: '1'
                 }
             }}>
-            <IconButton id="play-card" className="button-play-card" sx={{top: '45%'}}>
+            <IconButton id="play-card" className="button-play-card" sx={{top: '45%'}} onClick={handlePlayTrack}>
                 <PlayArrowRoundedIcon sx={{fontSize: '40px',}}/>
             </IconButton>
             <CardActionArea
-                component={Link} to={url}
+                component={Link} to={`/${type}/${_id}`}
                 sx={{zIndex: 0, padding: '16px'}}>
                 <Box
                     component="div"
@@ -80,7 +87,7 @@ export default function MainCard({item, type}) {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                     }}>
-                        {desc}
+                        {desc || artists.map(a => a.name)}
                     </Typography>
                 </CardContent>
             </CardActionArea>

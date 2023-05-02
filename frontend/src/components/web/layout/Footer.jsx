@@ -6,49 +6,131 @@ import {
     VolumeDown, VolumeMute, VolumeOff,
     AirplaySharp, QueueMusicSharp
 } from '@mui/icons-material/';
-import PlayBack from "../PlayBack";
+import PlayBack from "../Player";
+import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 const Footer = () => {
+    const {audio} = useSelector(state => state);
     const [volume, setVolume] = useState(100);
 
     return (
         <Grid container sx={{px: 2}} alignItems='center' className='footer'>
             <Grid item sm={4}>
+                {audio?.currentTrack ?
+                    <Box sx={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: '56px',
+                                height: '56px',
+                                minWidth: '56px',
+                                minHeight: '56px',
+                                position: 'relative',
+                                backgroundColor: '#333',
+                                boxShadow: '0 4px 60px rgb(0 0 0 / 50%)',
+                                borderRadius: '4px',
+                                overflow: 'hidden',
+                            }}
+                        >
+                            <Box
+                                component="img"
+                                src={audio.currentTrack.imageUrl}
+                                sx={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%',
+                                    top: '0',
+                                    left: '0',
+                                    objectFit: 'cover',
+                                    objectPosition: 'center center',
+                                    borderRadius: '4px'
+                                }}
+                            />
+                        </Box>
+                        <Box sx={{}}>
+                            <Box component={Link} to={`/track/${audio.currentTrack._id}`}
+                                 sx={{
+                                     fontWeight: '600',
+                                     textDecoration: 'none',
+                                     fontSize: '0.9rem',
+                                     color: 'white',
+                                     mb: 1,
+                                     display: 'block',
+                                     maxWidth: '300px',
+                                     whiteSpace: 'nowrap',
+                                     overflow: 'hidden',
+                                     textOverflow: 'ellipsis',
+                                     transition: 'all .15s ease-in-out',
+                                     '&:hover': {
+                                         textDecoration: 'underline',
+                                     }
+                                 }}>
+                                {audio.currentTrack.title}
+                            </Box>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                {audio.currentTrack.artists.map((artist, i) => (
+                                    <Box key={artist._id} component={Link} to={`/artist/${artist._id}`} sx={{
+                                        fontWeight: '500',
+                                        textDecoration: 'none',
+                                        fontSize: '0.8rem',
+                                        color: '#b3b3b3',
+                                        display: 'block',
+                                        maxWidth: '300px',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        transition: 'all .15s ease-in-out',
+                                        '&:hover': {
+                                            textDecoration: 'underline',
+                                        }
+                                    }}>
+                                        {artist.name}
+                                        {i < audio.currentTrack.artists.length - 1 && ', '}
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Box>
+                    </Box> :
+                    <div>
+
+                    </div>
+                }
             </Grid>
             <Grid item sm={4}>
                 <PlayBack/>
             </Grid>
             <Grid item sm={4}>
-                {/*<Box sx={{*/}
-                {/*    display: 'flex',*/}
-                {/*    alignItems: 'center',*/}
-                {/*    justifyContent: 'end'*/}
-                {/*}}>*/}
-                {/*    <IconButton sx={{color: '#b3b3b3'}} component="button">*/}
-                {/*        < QueueMusicSharp/>*/}
-                {/*    </IconButton>*/}
-                {/*    <IconButton sx={{color: '#b3b3b3'}} component="button">*/}
-                {/*        < AirplaySharp/>*/}
-                {/*    </IconButton>*/}
-                {/*    <IconButton sx={{color: '#b3b3b3'}} component="button">*/}
-                {/*        {<Volume volume={volume}/>}*/}
-                {/*    </IconButton>*/}
-                {/*    <Box width={70} sx={{*/}
-                {/*        display: 'flex',*/}
-                {/*        alignItems: 'center',*/}
-                {/*        justifyContent: 'end'*/}
-                {/*    }}>*/}
-                {/*        <Slider*/}
-                {/*            size="small"*/}
-                {/*            defaultValue={volume}*/}
-                {/*            aria-label="Volume"*/}
-                {/*            valueLabelDisplay="auto"*/}
-                {/*            onChange={e => setVolume(e.target.value)}*/}
-                {/*            sx={{color: '#b3b3b3'}}*/}
-                {/*        />*/}
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'end'
+                }}>
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < QueueMusicSharp/>
+                    </IconButton>
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        < AirplaySharp/>
+                    </IconButton>
+                    <IconButton sx={{color: '#b3b3b3'}} component="button">
+                        {<Volume volume={volume}/>}
+                    </IconButton>
+                    <Box width={70} sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'end'
+                    }}>
+                        <Slider
+                            size="small"
+                            defaultValue={volume}
+                            aria-label="Volume"
+                            valueLabelDisplay="auto"
+                            onChange={e => setVolume(e.target.value)}
+                            sx={{color: '#b3b3b3'}}
+                        />
 
-                {/*    </Box>*/}
-                {/*</Box>*/}
+                    </Box>
+                </Box>
             </Grid>
         </Grid>
 
