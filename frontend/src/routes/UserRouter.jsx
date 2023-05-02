@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import {NotFound} from "./Router";
-import {isArtist, isRole} from "../services/auth";
+import {isArtist, isRole} from "../services/AuthService";
 import * as config from "../config/routes";
 
 const Login = lazy(() => import('../pages/web/login'));

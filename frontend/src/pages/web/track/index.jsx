@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {memo, useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
 import Helmet from '../../../components/web/common/Helmet'
 import Header from '../../../components/web/layout/Header'
@@ -58,6 +58,6 @@ const TrackDashboard = () => {
 
     );
 };
-export default TrackDashboard;
+export default memo(TrackDashboard);
 
 
