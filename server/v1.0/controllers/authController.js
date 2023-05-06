@@ -18,8 +18,21 @@ const login = asyncHandler(async (req, res) => {
     });
 
     const token = user.generateAuthToken();
-    res.status(200).send({ data: token, message: 'Signing...' });
+    res.status(200).send({
+        data: token,
+        userId: user._id,
+        message: 'Signing...'
+    }
+    );
+});
+// get user info by token
 
+const getUserInfo = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.userId).select('-password');
+    if (!user) return res.status(404).send({
+        message: 'User not found.'
+    });
+    res.status(200).send({ data: user, message: 'User info.' });
 });
 
-module.exports = { login };
+module.exports = { login, getUserInfo };
