@@ -1,33 +1,33 @@
-const {User, validateUser} = require('../models/user');
+const { User, validateUser } = require('../models/user');
 const asyncHandler = require('express-async-handler');
 
 const bcrypt = require('bcrypt');
 
-// @desc    login a user
+// @desc    Login a user
 const login = asyncHandler(async (req, res) => {
-    const user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send({message: 'Invalid email'});
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(400).send({ message: 'Invalid email' });
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send({message: 'Invalid password'});
+    if (!validPassword) return res.status(400).send({ message: 'Invalid password' });
 
     const token = user.generateAuthToken();
     user.password = undefined;
-    res.status(200).send({token, user, message: 'User login successfully'});
+    res.status(200).send({ token, user, message: 'User login successfully' });
 });
 
 // @desc    Register a new user
 const register = asyncHandler(async (req, res) => {
-    const {error} = validateUser(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-    const user = await User.findOne({email: req.body.email});
-    if (user) return res.status(400).send('User already registered.');
+    const user = await User.findOne({ email: req.body.email });
+    if (user) return res.status(400).send({ message: 'User already registered.' });
 
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    await new User({...req?.body, password: hashedPassword}).save();
-    res.status(200).send({message: 'Account created successfully'});
+    await new User({ ...req?.body, password: hashedPassword }).save();
+    res.status(200).send({ message: 'Account created successfully' });
 });
 
-module.exports = {login, register};
+module.exports = { login, register };
