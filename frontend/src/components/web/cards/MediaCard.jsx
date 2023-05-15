@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useNavigate} from 'react-router-dom'
 import {Box} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -6,44 +6,52 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import {changeDuration, formatTime} from "../../../utils/changeDuration";
 import {setCurrentTrack} from "../../../redux/actions/audioActions";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {formatMediumTime} from "../../../utils/formatTime";
 
 function MediaCard({item}) {
+    const {audio} = useSelector(state => state);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isPlaying, setIsPlaying] = useState(() => {
+        return audio?.currentTrack?._id === item._id
+    })
+
+    useEffect(() => {
+        setIsPlaying(audio?.currentTrack?._id === item._id)
+    }, [audio?.currentTrack])
 
     function playTrack() {
+        if (audio?.currentTrack?._id === item._id) return;
         const action = setCurrentTrack({...item, isPlaying: true});
         dispatch(action);
     }
 
-
     return (
-        <Box onClick={playTrack}
-             sx={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 gap: '1rem',
-                 height: '56px',
-                 padding: '0 16px',
-                 borderRadius: '4px',
-                 cursor: 'pointer',
-                 transition: 'all 0s',
-                 '&:hover': {
-                     background: 'rgba(255,255,255,.3)',
-                     transition: 'all 0.3s',
-                 },
-                 '&:hover svg': {
-                     visibility: 'visible',
-                     opacity: '1',
-                     display: 'inline-block',
-                 },
-                 '&:hover .item-index': {
-                     visibility: 'hidden',
-                     opacity: '0',
-                     display: 'none',
-                 }
-             }}>
+        <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+            height: '56px',
+            padding: '0 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            transition: 'all 0s',
+            '&:hover': {
+                background: 'rgba(255,255,255,.3)',
+                transition: 'all 0.3s',
+            },
+            '&:hover svg': {
+                visibility: 'visible',
+                opacity: '1',
+                display: 'inline-block',
+            },
+            '&:hover .item-index': {
+                visibility: 'hidden',
+                opacity: '0',
+                display: 'none',
+            }
+        }}>
             {item.number &&
                 <Box
                     component="div"
@@ -61,10 +69,20 @@ function MediaCard({item}) {
                         opacity: '0',
                         width: '100%',
                     }}/>
-                    <Box className='item-index'
-                         sx={{width: '100%', textAlign: 'center'}}>
-                        {item.number}
-                    </Box>
+                    {isPlaying && audio?.isPlaying ?
+                        <Box className='item-index'
+                             sx={{width: '100%', textAlign: 'center'}}>
+                            <Box component={"img"} sx={{
+                                width: '16px', height: '16px'
+                            }}
+                                 src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
+                                 alt={"equalizer"}/>
+                        </Box> :
+                        <Box className='item-index'
+                             sx={{width: '100%', textAlign: 'center'}}>
+                            {item.number}
+                        </Box>
+                    }
                 </Box>
             }
             <Box sx={{
@@ -104,12 +122,15 @@ function MediaCard({item}) {
                 <Box sx={{
                     fontSize: '1rem', lineHeight: '1.5rem', letterSpacing: 'normal', fontWeight: '500', flex: 1
                 }}>
-                    <Box sx={{
+                    <Box onClick={playTrack} sx={{
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                        maxWidth: item.style === 'detail' ? '600px' : '350px'
+                        maxWidth: item.style === 'detail' ? '600px' : '350px',
+                        '&:hover': {
+                            color: 'var(--primary-color)'
+                        }
                     }}>
                         {item?.title}
                     </Box>
@@ -121,32 +142,30 @@ function MediaCard({item}) {
                         maxWidth: '350px'
                     }}>
                         {item?.artists?.length < 10 ? item?.artists?.map((artist, index) => {
-                            return (
-                                <Box key={index} component='span'
-                                    // component={Link} to={`/artist/${artist.id}`}
-                                     onClick={(e) => {
-                                         e.preventDefault()
-                                         navigate(`/artist/${artist.id}`)
-                                     }}
-                                     sx={{
-                                         fontSize: '.8rem',
-                                         lineHeight: '1.5rem',
-                                         height: '1.5rem',
-                                         color: '#b3b3b3',
-                                         textDecoration: 'none',
-                                         transition: 'all .2s',
-                                         zIndex: 1,
-                                         '&:hover': {
-                                             textDecoration: 'underline',
-                                             color: 'white'
-                                         }
-                                     }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
-                        }) : <Box sx={{
-                            fontSize: '.8rem',
-                            lineHeight: '1.5rem',
-                            color: '#b3b3b3',
-                            textDecoration: 'none',
-                        }}>Various artists</Box>
+                                return (
+                                    <Box key={index} component={Link} to={`/artist/${artist._id}`}
+                                         sx={{
+                                             fontSize: '.8rem',
+                                             lineHeight: '1.5rem',
+                                             height: '1.5rem',
+                                             color: '#b3b3b3',
+                                             textDecoration: 'none',
+                                             transition: 'all .2s',
+                                             zIndex: 1,
+                                             '&:hover': {
+                                                 textDecoration: 'underline',
+                                                 color: 'white'
+                                             }
+                                         }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
+                            }) :
+                            <Box sx={{
+                                fontSize: '.8rem',
+                                lineHeight: '1.5rem',
+                                color: '#b3b3b3',
+                                textDecoration: 'none',
+                            }}>
+                                Various artists
+                            </Box>
                         }
                     </Box>
                 </Box>
@@ -183,7 +202,7 @@ function MediaCard({item}) {
                     }
                 }}
             >
-                {item.addedAt}
+                {item.createdAt && formatMediumTime(item.createdAt)}
             </Box>
             <Box sx={{
                 fontWeight: '500',
@@ -203,7 +222,7 @@ function MediaCard({item}) {
                     fontWeight: '500',
 
                 }}>
-                    {formatTime(item.duration)}
+                    {item.duration && formatTime(item.duration)}
                 </Box>
                 <MoreHorizIcon sx={{
                     fontSize: '1.2rem',

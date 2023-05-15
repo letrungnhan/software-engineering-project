@@ -3,6 +3,7 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import {Box} from '@mui/material'
 
 const TracksSection = ({items, info}) => {
+
     return (
         <Box component='div' mt={2}>
             <Box
@@ -27,7 +28,7 @@ const TracksSection = ({items, info}) => {
                     {info.hasAlbum && 'Album'}
                 </Box>
                 <Box sx={{flex: '1'}}>
-                    {info.hasAddAt && 'Thêm vào ngày'}
+                    {info.createdAt && 'Thêm vào ngày'}
                 </Box>
                 <Box sx={{fontSize: '1rem', width: '110px', textAlign: 'center'}}>
                     <AccessTimeRoundedIcon/>

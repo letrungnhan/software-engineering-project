@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import './style.scss'
 import {useSelector} from "react-redux";
 import Header from "../../../components/web/layout/Header";
-import BackgroundColor from "../../../components/web/common/BackgroundColor";
+import BackgroundColor from "../../../components/common/BackgroundColor";
 import Layout from "../../../components/web/layout/Layout";
-import Helmet from "../../../components/web/common/Helmet";
+import Helmet from "../../../components/common/Helmet";
 import Box from "@mui/material/Box";
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import CloseIcon from '@mui/icons-material/Close';
@@ -33,6 +33,7 @@ function UploadSong() {
     const audioSrcRef = useRef(null);
     const [artists, setArtists] = useState([]);
     const [track, setTrack] = useState({});
+
     useEffect(() => {
         spotifyService.getSongById(id)
             .then(res => {

@@ -6,6 +6,15 @@ export const setCurrentTrack = (track) => {
         payload: {track, isPlaying: true},
     };
 }
+export const seekTrack = ({currentTime, currentTimePercent}) => {
+    return {
+        type: types.audio.SEEK_AUDIO,
+        payload: {currentTime, currentTimePercent}
+    };
+}
+export const resetSeekTrack = () => {
+    return {type: types.audio.SEEK_AUDIO_RESET,};
+}
 export const playTrack = () => {
     return {type: types.audio.PLAY_TRACK};
 }
@@ -22,5 +31,11 @@ export const setAudio = ({duration, currentTime, currentTimePercent}) => {
     return {
         type: types.audio.SET_AUDIO,
         payload: {duration, currentTime, currentTimePercent},
+    };
+}
+export const changeVolume = ({volume}) => {
+    return {
+        type: types.audio.CHANGE_VOLUME,
+        payload: {volume},
     };
 }

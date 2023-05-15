@@ -6,12 +6,16 @@ import {NotFound} from "./Router";
 import {isArtist, isRole} from "../services/AuthService";
 import * as config from "../config/routes";
 
+const ListSong = lazy(() => import('../pages/artist/list-song'));
 const UploadSong = lazy(() => import('../pages/artist/upload-song'));
+const CreateAlbum = lazy(() => import('../pages/artist/create-album'));
 const Song = lazy(() => import('../pages/artist/song'));
 
 const routes = [
-    {path: config.detailSongArtistPage, element: Song},
-    {path: config.uploadSong, element: UploadSong},
+    {path: config.listSongArtist, element: ListSong},
+    {path: config.detailSongArtist, element: Song},
+    {path: config.uploadSongArtist, element: UploadSong},
+    {path: config.createAlbumArtist, element: CreateAlbum},
 ];
 
 function ArtistRouter() {
@@ -21,7 +25,7 @@ function ArtistRouter() {
         <Routes>
             {routes.map(route => (
                 <Route key={route.path} path={route.path} exact={true} element={
-                    <ProtectedRoute isAccepted={() => isRole(user)} to={"/login"}>
+                    <ProtectedRoute isAccepted={() => isRole(user, isArtist)} to={"/login"}>
                         <route.element/>
                     </ProtectedRoute>
                 }/>
