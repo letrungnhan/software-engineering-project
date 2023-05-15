@@ -1,16 +1,18 @@
 import * as types from '../constants/ActionType'
 import {protectedRequest, publicRequest} from "../../utils/requestMethod";
+import UserService from '../../services/UserService';
 
 export const login = async (payload) => {
     const action = {type: types.user.USER_LOGIN_FAILED};
-    await publicRequest().post("/auth/login", payload)
+    await UserService.login({...payload})
         .then(res => {
             action.payload = {
                 token: res.data.token,
                 info: {...res.data.user},
             }
             action.type = types.user.USER_LOGIN_SUCCESS;
-        }).catch(err => {
+        })
+        .catch(err => {
             action.type = types.user.USER_LOGIN_FAILED;
             action.error = err.response?.data || 'Password invalid';
         })
@@ -22,6 +24,7 @@ export const logout = async () => {
         type: types.user.USER_LOGOUT,
     }
 }
+
 export const validateToken = async () => {
     let action = {type: types.user.CHECK_TOKEN_FAILED};
     await protectedRequest().get("/auth/token-valid")
@@ -36,6 +39,7 @@ export const validateToken = async () => {
         })
     return {...action}
 }
+
 export const updateUser = async (user) => {
     let action = {type: types.user.UPDATE_USER_FAILED};
     await protectedRequest().put(`/users/user-profile/${user.id}`, {name: user.name, phoneNumber: user.phoneNumber})

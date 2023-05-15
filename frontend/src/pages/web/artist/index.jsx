@@ -9,16 +9,10 @@ import Layout from "../../../components/web/layout/Layout";
 import Details from '../../../components/common/Details';
 import TracksSection from "../../../components/web/sections/TracksSection";
 
-const TrackDashboard = () => {
+const ArtistDashboard = () => {
     const {id} = useParams();
     const [track, setTrack] = useState(null);
-
-    useEffect(() => {
-        // let content = document.querySelector('.container__content');
-        // content.style.scrollBehavior = 'auto';
-        // content.scrollTop = 0;
-        // content.style.scrollBehavior = 'smooth';
-    }, [id])
+    const [tracks, setTracks] = useState(null);
 
     useEffect(() => {
         SpotifyService.getSongById(id)
@@ -43,20 +37,12 @@ const TrackDashboard = () => {
                             <TracksSection items={[track]} info={track}/>
                         </Box>
                     }
-                    {/*<Box sx={{mt: '5rem'}}>*/}
-                    {/*    {data.albums &&*/}
-                    {/*        <CardSection items={data.albums.items || []} title={data.albums.title}/>*/}
-                    {/*    }*/}
-                    {/*    {data.artists &&*/}
-                    {/*        <CardSection items={data.artists.items || []} title={data.artists.title}/>*/}
-                    {/*    }*/}
-                    {/*</Box>*/}
                 </Box>
             </Layout>
         </Helmet>
 
     );
 };
-export default memo(TrackDashboard);
+export default ArtistDashboard;
 
 

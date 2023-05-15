@@ -25,7 +25,6 @@ const spotifyService = new SpotifyService();
 
 const links = [
     {title: 'Nhạc của tôi', url: `/me${routesConfig.listSongArtist}`},
-    {title: 'Album của tôi', url: `/me${routesConfig.uploadSongArtist}`},
     {title: 'Tải nhạc lên', url: `/me${routesConfig.uploadSongArtist}`},
 ]
 

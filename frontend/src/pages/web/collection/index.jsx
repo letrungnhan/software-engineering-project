@@ -1,12 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {useParams, Route, NavLink, Routes} from 'react-router-dom'
-import Helmet from '../../components/web/common/Helmet'
-import Header from '../../components/web/layout/Header'
-import BackgroundColor from '../../components/web/common/BackgroundColor'
-import Playlist from './Playlist'
+import Helmet from '../../../components/common/Helmet'
+import Header from '../../../components/web/layout/Header'
+import BackgroundColor from '../../../components/common/BackgroundColor'
+import Playlist from '../Playlist'
 import {Box, Button} from '@mui/material'
+import ButtonGroup from "../../../components/common/button-group-header";
 
-const Collection = () => {
+const links = [
+    {title: 'Playlist', url: '/collection/playlist'},
+    {title: 'Podcast', url: '/collection/podcast'},
+    {title: 'Nghệ sĩ', url: '/collection/artist'},
+    {title: 'Album', url: '/collection/album'},
+]
+const Index = () => {
     const {type} = useParams('type')
     const [playlists, setPlaylists] = useState([])
     const [user, setUser] = useState({})
@@ -38,9 +45,9 @@ const Collection = () => {
         }
     }, [type, user])
     return (
-        <Helmet title="Collection">
+        <Helmet title="Index">
             <Header>
-                {type !== 'tracasdks' && <ButtonGroup type={type}/>}
+                {type !== 'tracks' && <ButtonGroup links={links}/>}
             </Header>
             <BackgroundColor/>
             <Box p={3}>
@@ -53,53 +60,9 @@ const Collection = () => {
 
     );
 }
-const ButtonGroup = ({type}) => {
-    const links = [
-        {title: 'Playlist', url: '/collection/playlist'},
-        {title: 'Podcast', url: '/collection/podcast'},
-        {title: 'Nghệ sĩ', url: '/collection/artist'},
-        {title: 'Album', url: '/collection/album'},
-    ]
-    return (
-        <Box component='div'>
-            {links.map(link => (
-                <MyButton key={link.title} title={link.title} url={link.url}/>
-            ))}
-        </Box>
-    )
-}
-const MyButton = (props) => {
-    return (
-        <Button
-            variant="contained"
-            sx={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                boxShadow: 'none',
-                textTransform: 'none',
-                fontWeight: '500',
-                letterSpacing: '.8px',
-                '&.active': {
-                    transition: 'all .2 ease',
-                    backgroundColor: 'rgba(13,13,13,.65)',
-                    boxShadow: 'none',
-                },
-                '&:hover': {
-                    backgroundColor: 'transparent',
-                    boxShadow: 'none',
-                }
-            }}
-            component={NavLink} to={props.url}
-            activeClassName='active' exact='true'
-        >
-
-            {props.title}
-        </Button>
-    )
-}
 const Tracks = () => {
     return (
         <div>tracks</div>
     )
 }
-export default Collection;
+export default Index;

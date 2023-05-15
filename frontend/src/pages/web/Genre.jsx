@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { spotifyApi } from '../../utils/spotify';
-import Helmet from '../../components/web/common/Helmet'
+import Helmet from '../../components/common/Helmet'
 import Header from '../../components/web/layout/Header'
 import CardSection from '../../components/web/sections/CardSection'
-import BackgroundColor from '../../components/web/common/BackgroundColor'
+import BackgroundColor from '../../components/common/BackgroundColor'
 import { Box } from '@mui/material'
 const Genre = () => {
     const { id } = useParams();

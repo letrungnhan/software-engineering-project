@@ -4,8 +4,6 @@ const joi = require('joi');
 
 const artistSchema = new mongoose.Schema({
     name: {type: String, required: true,},
-    // imageUrl: {type: String, required: true,},
-    // follower: {type: Number, required: true,},
 }, {timestamps: true});
 
 const songSchema = new mongoose.Schema({
@@ -17,7 +15,7 @@ const songSchema = new mongoose.Schema({
     albumId: {type: String, required: false},
 }, {timestamps: true});
 
-const validateSong = (song) => {
+songSchema.statics.validateSong = function (song) {
     const schema = joi.object({
         title: joi.string().required(),
         artists: joi.array().required(),
@@ -28,7 +26,17 @@ const validateSong = (song) => {
     return schema.validate(song);
 }
 
+songSchema.statics.getSongsByArtistId = async function (id) {
+    return await this.find({
+        artists: {
+            $elemMatch: {_id: id}
+        }
+    });
 
-const Song = mongoose.model('Song', songSchema);
+}
 
-module.exports = {Song, validateSong};
+// const Song = mongoose.model('Song', songSchema);
+
+// module.exports = {Song, validateSong};
+
+module.exports = mongoose.model('Song', songSchema);

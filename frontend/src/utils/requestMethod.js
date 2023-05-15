@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getItem} from "./localStorage";
+import { getItem } from "./localStorage";
 
 export const baseURL = "http://localhost:5000/api/";
 
@@ -12,7 +12,7 @@ export const publicRequest = () => {
 export const protectedRequest = () => {
     const token = getItem("user")?.token
     return axios.create({
-        baseURL: baseURL,
-        headers: {'x-auth-token': `${token}`},
+        baseURL: baseURL, 
+        headers: { 'x-auth-token': `${token}` },
     });
 }

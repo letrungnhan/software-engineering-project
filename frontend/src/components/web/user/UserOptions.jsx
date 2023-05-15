@@ -85,7 +85,8 @@ export default function UserOptions() {
                     'aria-labelledby': 'user-options',
                 }}
                 sx={{
-                    transform: 'translateX(-18px)',
+                    transform: 'translateX(0px)',
+                    mt: 1,
                     '& div': {background: 'transparent'},
                     '& ul': {
                         backgroundColor: '#282828',
@@ -95,12 +96,15 @@ export default function UserOptions() {
                         maxWidth: '350px',
                         minWidth: '160px',
                         overflowY: 'auto',
-                        padding: '4px',
+                        padding: '5px',
                         '& li': {
-                            fontSize: '.95rem',
+                            fontSize: '.8rem',
+                            fontWeight: '500',
                             letterSpacing: '.5px',
                             paddingTop: '8px',
                             paddingBottom: '8px',
+                            borderRadius: '5px',
+                            transition: 'all .15s ease-in-out',
                             '&:hover': {
                                 backgroundColor: 'rgba(255,255,255,.1)',
                             }
@@ -110,7 +114,8 @@ export default function UserOptions() {
             >
                 <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
                 <MenuItem onClick={handleClose}>Hồ sơ</MenuItem>
-                <MenuItem onClick={() => navigate("/me/song/upload")}>Quản lý bài hát</MenuItem>
+                <MenuItem onClick={() => navigate("/me/song")}>Nhạc của tôi</MenuItem>
+                <MenuItem onClick={() => navigate("/me/song/upload")}>Đăng bài hát</MenuItem>
                 <MenuItem onClick={handleClose}>
                     <Box component="a" sx={{
                         color: 'white', textDecoration: 'none'

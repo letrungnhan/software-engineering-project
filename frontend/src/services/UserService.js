@@ -1,16 +1,27 @@
-import {protectedRequest} from "../utils/requestMethod";
+import { publicRequest, protectedRequest } from "../utils/requestMethod";
 
 class User {
 
-    async getUser(id) {
-        await protectedRequest().get(`/users/user/${id}`)
-            .then(res => {
-                return res;
-            })
-            .catch(err => {
-                return err;
-            });
+    async login({ email, password }) {
+        return new Promise((resolve, reject) => {
+            publicRequest().post("/auth/login", { email, password }).then(resolve).catch(reject);
+        })
     }
+
+    async register({ name, email, password, birthday, gender }) {
+        return new Promise((resolve, reject) => {
+            publicRequest().post("/auth/register", { name, email, password, birthday, gender }).then(resolve).catch(reject);
+        })
+    }
+
+    async getUser(id) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/users/user/${id}`).then(resolve).catch(reject);
+        })
+    }
+
 }
 
-export default User;
+const UserService = new User();
+
+export default UserService;
