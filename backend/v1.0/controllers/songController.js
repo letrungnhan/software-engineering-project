@@ -1,20 +1,29 @@
 const asyncHandler = require('express-async-handler');
-const {Song, validateSong} = require('../models/song');
+const Song = require('../models/song');
 const {User} = require("../models/user");
 
 
 // @desc    create a new song
 const createSong = asyncHandler(async (req, res) => {
-    const {error} = validateSong(req.body);
+    const {error} = Song.validateSong(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     const song = await new Song(req.body).save();
     res.status(200).send({song, message: 'Song created successfully'});
 });
 
-// @desc    Get all songs
-const getSongs = asyncHandler(async (req, res) => {
-    const songs = await Song.find();
-    res.status(200).send({songs});
+// @desc    Update a song by id
+const updateSongById = asyncHandler(async (req, res) => {
+    const song = await Song.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
+    if (!song) return res.status(404).send({
+        message: 'Song not found'
+    });
+    res.status(200).send({song});
+});
+
+// @desc    Delete a song by id
+const deleteSongById = asyncHandler(async (req, res) => {
+    await Song.findByIdAndDelete(req.params.id);
+    res.status(200).send({message: 'Song deleted successfully'});
 });
 
 // @desc    Get a song by id
@@ -24,23 +33,19 @@ const getSongById = asyncHandler(async (req, res) => {
     res.status(200).send({song});
 });
 
-// @desc    Update a song by id
-const updateSongById = asyncHandler(async (req, res) => {
-    const song = await Song.findByIdAndUpdate(req.params.id,
-        {$set: req.body},
-        {new: true});
-    if (!song) return res.status(404).send({
-        message: 'Song not found'
-    });
-    res.status(200).send({data: song});
+// @desc    Get all songs
+const getSongs = asyncHandler(async (req, res) => {
+    const songs = await Song.find();
+    res.status(200).send({songs});
 });
-// @desc    Delete a song by id
-const deleteSongById = asyncHandler(async (req, res) => {
-        await Song.findByIdAndDelete(req.params.id);
-        res.status(200).send({message: 'Song deleted successfully'});
 
-    }
-);
+// @desc    Get a song by artist id
+const getSongsByArtistId = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    const songs = await Song.getSongsByArtistId(id);
+    if (!songs) return res.status(404).send({message: 'Artist not found'});
+    res.status(200).send({songs});
+});
 
 // @desc   like a song
 const likeSong = asyncHandler(async (req, res) => {
@@ -75,6 +80,7 @@ module.exports = {
     createSong,
     getSongs,
     getSongById,
+    getSongsByArtistId,
     updateSongById,
     deleteSongById,
     likeSong,
