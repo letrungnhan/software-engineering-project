@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Grid, IconButton, Slider} from '@mui/material'
 import {
     PlayCircle, SkipNext, SkipPrevious,
@@ -7,12 +7,18 @@ import {
     AirplaySharp, QueueMusicSharp
 } from '@mui/icons-material/';
 import PlayBack from "../Player";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import {changeVolume} from "../../../redux/actions/audioActions";
 
 const Footer = () => {
     const {audio} = useSelector(state => state);
-    const [volume, setVolume] = useState(100);
+    const dispatch = useDispatch();
+
+    function handleChangeVolume(e) {
+        e.preventDefault();
+        dispatch(changeVolume({volume: e.target.value}))
+    }
 
     return (
         <Grid container sx={{px: 2}} alignItems='center' className='footer'>
@@ -107,13 +113,13 @@ const Footer = () => {
                     justifyContent: 'end'
                 }}>
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
-                        < QueueMusicSharp/>
+                        <QueueMusicSharp/>
                     </IconButton>
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
-                        < AirplaySharp/>
+                        <AirplaySharp/>
                     </IconButton>
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
-                        {<Volume volume={volume}/>}
+                        {<Volume volume={audio?.volume}/>}
                     </IconButton>
                     <Box width={70} sx={{
                         display: 'flex',
@@ -122,13 +128,12 @@ const Footer = () => {
                     }}>
                         <Slider
                             size="small"
-                            defaultValue={volume}
+                            value={audio?.volume} max={100}
                             aria-label="Volume"
                             valueLabelDisplay="auto"
-                            onChange={e => setVolume(e.target.value)}
+                            onChange={handleChangeVolume}
                             sx={{color: '#b3b3b3'}}
                         />
-
                     </Box>
                 </Box>
             </Grid>

@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useParams } from "react-router-dom";
 import useSpotifyData from '../../utils/useSpotifyData';
-import Helmet from '../../components/web/common/Helmet'
-import Details from '../../components/web/common/Details'
+import Helmet from '../../components/common/Helmet'
+import Details from '../../components/common/Details'
 import Header from '../../components/web/layout/Header'
 import TracksSection from '../../components/web/sections/TracksSection'
 import CardSection from '../../components/web/sections/CardSection'
-import BackgroundColor from '../../components/web/common/BackgroundColor'
+import BackgroundColor from '../../components/common/BackgroundColor'
 import { Box } from '@mui/material'
 const Dashboard = () => {
     const { type, id } = useParams();

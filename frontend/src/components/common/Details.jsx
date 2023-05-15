@@ -1,12 +1,11 @@
 import {Link} from "react-router-dom";
 import {Box} from '@mui/material'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import {formatTime} from "../../../utils/changeDuration";
+import {formatTime} from "../../utils/changeDuration";
 
 const albumDefaultImage = 'https://t3.ftcdn.net/jpg/03/91/19/22/360_F_391192211_2w5pQpFV1aozYQhcIw3FqA35vuTxJKrB.jpg'
 
 const Details = ({info}) => {
-
 
     return (
         <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
@@ -60,7 +59,7 @@ const Details = ({info}) => {
                     fontWeight: '700',
                     letterSpacing: '-0.04em'
                 }}>
-                    {info.title}
+                    {info.title || info.name}
                 </Box>
                 <Box sx={{color: 'white', fontWeight: '500', fontSize: '.9rem'}}>
                     {info.label && <Box mb={1}>{info.label}</Box>}
@@ -98,8 +97,14 @@ const Artists = ({artist, showSeparate}) => {
             <Box
                 component={Link}
                 to={`/artist/${artist.id}`}
-                sx={{color: 'white', textDecoration: 'none'}}
-            >
+                sx={{
+                    color: 'white',
+                    textDecoration: 'none',
+                  transition:'all .15s ease',
+                    '&:hover': {
+                        textDecoration: 'underline'
+                    }
+                }}>
                 {artist.name}
             </Box>
             {showSeparate &&

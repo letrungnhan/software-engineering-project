@@ -11,6 +11,7 @@ const Register = lazy(() => import('../pages/web/register'));
 
 const Home = lazy(() => import('../pages/web/home'));
 const Track = lazy(() => import('../pages/web/track'));
+const Search = lazy(() => import('../pages/web/search'));
 // const Collection = lazy(() => import('../pages/web/Collection'));
 // const Dashboard = lazy(() => import('../pages/web/Dashboard'));
 // const Genre = lazy(() => import('../pages/web/Genre'));
@@ -21,14 +22,14 @@ const Track = lazy(() => import('../pages/web/track'));
 const routes = [
     {path: config.login, element: Login},
     {path: config.signup, element: Register},
+    {path: '/', element: Home},
+    {path: config.home, element: Home},
+    {path: config.track, element: Track},
+    {path: config.search, element: Search},
 ];
 
 
 const userRoutes = [
-    {path: '/', element: Home},
-    {path: config.home, element: Home},
-    {path: config.track, element: Track},
-    // {path: '/search', element: Search},
     // {path: '/genre/:id', element: Genre},
     // {path: '/:type/:id', element: Playlist},
 ];

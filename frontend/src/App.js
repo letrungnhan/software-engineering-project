@@ -1,24 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import './assets/scss/index.scss'
-import Router from "./routes/Router";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {useDispatch, useSelector} from "react-redux";
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import './assets/scss/index.scss';
 import useAudio from "./hooks/useAudio";
+import Router from "./routes/Router";
 
 
 function App() {
-    const {audio} = useSelector(state => state);
+    const { audio } = useSelector(state => state);
     const dispatch = useDispatch();
-    const [ setTrack] = useAudio();
+    const [setTrack] = useAudio();
 
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Router/>
-        </LocalizationProvider>
+        <Router />
     )
 }
 
 export default App;
- 

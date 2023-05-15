@@ -3,7 +3,7 @@ import {Box, IconButton, Slider} from "@mui/material";
 import {PlayCircle, Repeat, Replay, SkipNext, SkipPrevious} from "@mui/icons-material";
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import {useDispatch, useSelector} from "react-redux";
-import {pauseTrack, playTrack} from "../../../redux/actions/audioActions";
+import {pauseTrack, playTrack, seekTrack} from "../../../redux/actions/audioActions";
 import {formatTime} from "../../../utils/changeDuration";
 
 
@@ -13,7 +13,10 @@ function PlayBack() {
     const progressRef = useRef();
 
     function handleChangeProgress(e) {
-        // audioRef.current.currentTime = progressRef.current.value;
+        if (!audio?.duration) return;
+        const currentTimePercent = e.target.value;
+        const currentTime = currentTimePercent * audio.duration / 100;
+        dispatch(seekTrack({currentTime, currentTimePercent}))
     }
 
     function handleChange() {
@@ -74,11 +77,10 @@ function PlayBack() {
                 <Slider
                     ref={progressRef}
                     size="small"
-                    defaultValue={0}
-                    value={audio.currentTimePercent || 0}
+                    value={audio?.currentTimePercent || 0}
                     aria-label="Small"
                     valueLabelDisplay="auto"
-                    onChange={(e) => handleChangeProgress(e)}
+                    onChange={handleChangeProgress}
                     sx={{color: '#b3b3b3', flex: '1'}}
 
                 />
