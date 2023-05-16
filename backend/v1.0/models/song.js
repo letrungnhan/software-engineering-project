@@ -3,17 +3,17 @@ const mongoose = require('mongoose');
 const joi = require('joi');
 
 const artistSchema = new mongoose.Schema({
-    name: {type: String, required: true,},
-}, {timestamps: true});
+    name: { type: String, required: true, },
+}, { timestamps: true });
 
 const songSchema = new mongoose.Schema({
-    title: {type: String, required: true,},
-    songSrc: {type: String, required: true,},
-    imageUrl: {type: String, required: true,},
-    duration: {type: Number, required: true,},
-    artists: {type: [artistSchema], required: true},
-    albumId: {type: String, required: false},
-}, {timestamps: true});
+    title: { type: String, required: true, },
+    songSrc: { type: String, required: true, },
+    imageUrl: { type: String, required: true, },
+    duration: { type: Number, required: true, },
+    artists: { type: [artistSchema], required: true },
+    albumId: { type: String, required: false },
+}, { timestamps: true });
 
 songSchema.statics.validateSong = function (song) {
     const schema = joi.object({
@@ -22,6 +22,7 @@ songSchema.statics.validateSong = function (song) {
         songSrc: joi.string().required(),
         imageUrl: joi.string().required(),
         duration: joi.number().required(),
+        genre: joi.string().required(),
     });
     return schema.validate(song);
 }
@@ -29,7 +30,7 @@ songSchema.statics.validateSong = function (song) {
 songSchema.statics.getSongsByArtistId = async function (id) {
     return await this.find({
         artists: {
-            $elemMatch: {_id: id}
+            $elemMatch: { _id: id }
         }
     });
 
@@ -39,4 +40,6 @@ songSchema.statics.getSongsByArtistId = async function (id) {
 
 // module.exports = {Song, validateSong};
 
-module.exports = mongoose.model('Song', songSchema);
+const Song = mongoose.model('Song', songSchema);
+
+module.exports = Song;
