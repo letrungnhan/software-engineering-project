@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Card, CardContent, CardActionArea, Typography, IconButton } from '@mui/material';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 export default function ResultCard({ item }) {
-    let { id, name, artists, desc, images, type } = item;
+    let { id, name, title, artists, desc, imageUrl, type } = item;
     let url = `/${type}/${id}`
     if (!desc && artists) {
         desc = artists.map(a => a.name)
@@ -56,7 +56,7 @@ export default function ResultCard({ item }) {
                         }}>
                         <Box
                             component="img"
-                            src={images[0]?.url || 'https://t3.ftcdn.net/jpg/03/91/19/22/360_F_391192211_2w5pQpFV1aozYQhcIw3FqA35vuTxJKrB.jpg'}
+                            src={imageUrl || 'https://t3.ftcdn.net/jpg/03/91/19/22/360_F_391192211_2w5pQpFV1aozYQhcIw3FqA35vuTxJKrB.jpg'}
                             sx={{
                                 position: 'absolute',
                                 width: '120px',
@@ -79,7 +79,7 @@ export default function ResultCard({ item }) {
                             whiteSpace: 'nowrap',
                             marginBottom: '12px'
                         }}>
-                            {name}
+                            {name || title}
                         </Typography>
                         <Typography sx={{
                             fontSize: '.9rem',
@@ -111,6 +111,7 @@ export default function ResultCard({ item }) {
                             >
                                 {type === 'track' && 'Bài hát'}
                                 {type === 'album' && 'Album'}
+                                {type === 'playlist' && 'Playlist'}
                             </Box>
                         </Typography>
                     </CardContent>

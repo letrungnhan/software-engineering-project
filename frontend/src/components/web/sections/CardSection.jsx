@@ -7,7 +7,7 @@ import MainCard from '../cards/MainCard';
 
 export default function CardSection(props) {
     const {title, desc, url, items, type} = props;
-
+console.log(items);
     return items ? (
         <Box sx={{mb: 5}}>
             <Grid container justifyContent="space-between" alignItems="center">

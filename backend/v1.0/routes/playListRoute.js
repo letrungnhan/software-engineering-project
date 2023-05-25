@@ -12,7 +12,8 @@ const { createPlayList,
     getRandomPlayList,
     getPlayListById,
     getAllPlayLists,
-    deletePlayList } = require('../controllers/playListController');
+    deletePlayList,
+    getPlayListByUserId } = require('../controllers/playListController');
 
 router.post("/create", [auth], createPlayList);
 router.put("/edit/:id", [auth, validateObjectId], editPlayList);
@@ -20,8 +21,9 @@ router.put("/addSong", [auth], addSongToPlayList);
 router.put("/removeSong", [auth], removeSongFromPlayList);
 router.get("/favorite", [auth], getUserFavoritePlayList);
 router.get("/random", [auth], getRandomPlayList);
-router.get("/playlist/:id", [auth, validateObjectId], getPlayListById);
+router.get("/user/:id", [auth], getPlayListByUserId);
+router.get("/:id", [auth, validateObjectId], getPlayListById);
 router.get("/playlists", [auth], getAllPlayLists);
-router.delete("/playlist/:id", [auth, validateObjectId], deletePlayList);
+router.delete("/:id", [auth, validateObjectId], deletePlayList);
 
 module.exports = router;

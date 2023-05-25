@@ -19,7 +19,7 @@ class User {
             protectedRequest().get(`/users/user/${id}`).then(resolve).catch(reject);
         })
     }
-
+    
 }
 
 const UserService = new User();
