@@ -102,6 +102,7 @@ function UploadSong() {
                 navigate(`/services${config.serviceArtist}`);
             })
             .catch(err => {
+                console.log(err.response);
                 setOpen(false)
                 setProgressUploadSong(null);
             });

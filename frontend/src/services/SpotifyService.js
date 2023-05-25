@@ -20,8 +20,10 @@ class Spotify {
         })
     }
 
-    async getArtist() {
-        return 'artist';
+    async getArtistById(id) {
+        return new Promise((resolve, reject) => {
+            publicRequest().get(`/artists/${id}`).then(resolve).catch(reject)
+        })
     }
 
     async getAllSongs() {
@@ -39,6 +41,12 @@ class Spotify {
     async createAlbum(album) {
         return new Promise((resolve, reject) => {
             protectedRequest().post(`/albums`, album).then(resolve).catch(reject)
+        })
+    }
+
+    async getAlbums() {
+        return new Promise((resolve, reject) => {
+            publicRequest().get(`/albums`).then(resolve).catch(reject)
         })
     }
 
