@@ -2,7 +2,7 @@
 const asyncHandler = require('express-async-handler');
 
 const Song = require('../models/song');
-const { PlayList } = require('../models/playList');
+const { PlayList } = require('../models/playlist');
 
 // @desc    Search for a song 
 
