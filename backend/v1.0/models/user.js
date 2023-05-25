@@ -4,21 +4,20 @@ const joi = require('joi');
 const passwordComplexity = require('joi-password-complexity');
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    gender: {type: String, enum: ['MALE', 'FEMALE', 'OTHER'], required: true, default: 'OTHER'},
-    birthday: {type: Date, required: true},
-    artist: {type: String, unique: true},
-    isArtist: {type: Boolean, default: true},
-    isAdmin: {type: Boolean, default: false},
-    likedSongs: {type: [String], default: []},
-    playLists: {type: [String], default: []},
-}, {timestamps: true})
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    gender: { type: String, enum: ['MALE', 'FEMALE', 'OTHER'], required: true, default: 'OTHER' },
+    birthday: { type: Date, required: true },
+    isArtist: { type: Boolean, default: true },
+    isAdmin: { type: Boolean, default: false },
+    likedSongs: { type: [String], default: [] },
+    playLists: { type: [String], default: [] },
+}, { timestamps: true })
 
 userSchema.methods.generateAuthToken = function () {
-    const payload = {_id: this._id, name: this.name, isAdmin: this.isAdmin};
-    return jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {expiresIn: '7d'});
+    const payload = { _id: this._id, name: this.name, isAdmin: this.isAdmin };
+    return jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: '7d' });
 }
 
 const validateUser = (user) => {
@@ -35,4 +34,4 @@ const validateUser = (user) => {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = {User, validateUser};
+module.exports = { User, validateUser };

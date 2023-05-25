@@ -5,6 +5,7 @@ export const search = '/search'
 export const genre = '/genre/:id'
 export const track = '/track/:id'
 export const playlist = '/playlist/:id'
+export const collection = '/collection'
 
 
 // /service

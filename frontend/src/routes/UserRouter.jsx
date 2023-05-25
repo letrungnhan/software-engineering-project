@@ -12,6 +12,7 @@ const Register = lazy(() => import('../pages/web/register'));
 const Home = lazy(() => import('../pages/web/home'));
 const Track = lazy(() => import('../pages/web/track'));
 const Playlist = lazy(() => import('../pages/web/playlist'));
+const Collection = lazy(() => import('../pages/web/collection'));
 const Search = lazy(() => import('../pages/web/search'));
 
 const routes = [
@@ -20,6 +21,7 @@ const routes = [
     { path: config.home, element: Home },
     { path: config.track, element: Track },
     { path: config.playlist, element: Playlist },
+    { path: config.collection, element: Collection },
     { path: config.search, element: Search },
     { path: '/', element: Home },
 ];

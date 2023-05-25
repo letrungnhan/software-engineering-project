@@ -86,7 +86,11 @@ class Spotify {
             protectedRequest().get(`/playlists/user/${userId}`).then(resolve).catch(reject)
         })
     }
-
+    async search(textSearch) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/search/search?q=${textSearch}`).then(resolve).catch(reject)
+        })
+    }
 }
 
 const SpotifyService = new Spotify();
