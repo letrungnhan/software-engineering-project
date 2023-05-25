@@ -7,7 +7,6 @@ const joi = require('joi');
 // @desc    create a new playlist
 
 const createPlayList = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const { error } = validatePlayList(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 

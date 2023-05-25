@@ -4,7 +4,7 @@ const albumSchema = new mongoose.Schema({
     title: { type: String, required: true, },
     imageUrl: { type: String, required: true, },
     artists: { type: [], required: true },
-    songs: { type: [], required: true },
+    songs: { type: Array, required: true, default: [] },
     totalTracks: { type: Number, required: false, default: 0 },
     duration: { type: Number, required: false, default: 0 },
 }, { timestamps: true });

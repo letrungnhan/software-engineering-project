@@ -1,17 +1,16 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import MainCard from '../cards/MainCard';
+import MainCard from '../../../components/web/cards/MainCard';
 
-export default function CardSection(props) {
-    const {title, desc, url, items, type} = props;
-console.log(items);
+export default function Playlist(props) {
+    const { title, desc, url, items, type } = props;
     return items ? (
-        <Box sx={{mb: 5}}>
+        <Box sx={{ mb: 5 }}>
             <Grid container justifyContent="space-between" alignItems="center">
-                <Box sx={{pb: 2}}>
+                <Box sx={{ pb: 2 }}>
                     <Typography gutterBottom variant="h2" component="div" sx={{
                         fontSize: '1.5rem',
                         fontWeight: '700',
@@ -45,12 +44,12 @@ console.log(items);
                 </Box>}
             </Grid>
             <Grid container spacing={2}>
-                {items?.slice(0, 6).map((item, index) => (
+                {items?.map((item, index) => (
                     <Grid key={index} item xl={2} lg={2} md={4} sm={6} xs={6}>
-                        <MainCard item={item} type={type}/>
+                        <MainCard item={item} type={type} />
                     </Grid>
                 ))}
             </Grid>
         </Box>
-    ) : <div/>
+    ) : <div />
 }

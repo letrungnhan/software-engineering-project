@@ -1,19 +1,19 @@
-import React from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {Box, Card, CardContent, CardActionArea, Typography, IconButton} from '@mui/material';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import {useDispatch} from "react-redux";
-import {playTrack, setCurrentTrack} from "../../../redux/actions/audioActions";
+import { Box, Card, CardActionArea, CardContent, IconButton, Typography } from '@mui/material';
+import React from 'react';
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom';
+import { setCurrentTrack } from "../../../redux/actions/audioActions";
 
-export default function MainCard({item, type}) {
+export default function MainCard({ item, type }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {_id, title, artists, desc, imageUrl, songSrc} = item;
-
+    const { _id, title, name, artists, description, imageUrl } = item;
 
     function handlePlayTrack() {
         if (type === 'track') {
             dispatch(setCurrentTrack(item));
+        } else if (type) {
             navigate(`/${type}/${_id}`);
         }
     }
@@ -30,12 +30,12 @@ export default function MainCard({item, type}) {
                     opacity: '1'
                 }
             }}>
-            <IconButton id="play-card" className="button-play-card" sx={{top: '45%'}} onClick={handlePlayTrack}>
-                <PlayArrowRoundedIcon sx={{fontSize: '40px',}}/>
+            <IconButton id="play-card" className="button-play-card" sx={{ top: '45%' }} onClick={handlePlayTrack}>
+                <PlayArrowRoundedIcon sx={{ fontSize: '40px', }} />
             </IconButton>
             <CardActionArea
                 component={Link} to={`/${type}/${_id}`}
-                sx={{zIndex: 0, padding: '16px'}}>
+                sx={{ zIndex: 0, padding: '16px' }}>
                 <Box
                     component="div"
                     sx={{
@@ -63,7 +63,7 @@ export default function MainCard({item, type}) {
                         }}
                     />
                 </Box>
-                <CardContent sx={{padding: '0'}}>
+                <CardContent sx={{ padding: '0' }}>
                     <Typography gutterBottom component="div" sx={{
                         fontSize: '16px',
                         fontWeight: '700',
@@ -72,7 +72,7 @@ export default function MainCard({item, type}) {
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
                     }}>
-                        {title}
+                        {name || title}
                     </Typography>
                     <Typography sx={{
                         fontSize: '0.875rem',
@@ -87,7 +87,7 @@ export default function MainCard({item, type}) {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                     }}>
-                        {desc || artists.map(a => a.name)}
+                        {description || (artists?.length > 0 && artists.map(a => a.name))}
                     </Typography>
                 </CardContent>
             </CardActionArea>
