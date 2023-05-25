@@ -83,8 +83,7 @@ export default function UserOptions() {
                 MenuListProps={{
                     'aria-labelledby': 'user-options',
                 }}
-                sx={{
-                    transform: 'translateX(20px)',
+                sx={{ 
                     mt: 1,
                     '& div': { background: 'transparent' },
                     '& ul': {
@@ -112,8 +111,8 @@ export default function UserOptions() {
                 }}
             >
                 <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
-                <MenuItem onClick={() => navigate("/services/artist")}>Nhạc của tôi</MenuItem>
-                <MenuItem onClick={() => navigate("/services/artist/song")}>Tải nhạc lên</MenuItem>
+                <MenuItem onClick={() => navigate("/services/artist")}>Hồ sơ của tôi</MenuItem>
+                <MenuItem onClick={() => navigate("/services/artist/song/upload")}>Tải nhạc lên</MenuItem>
                 <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>
         </Box>

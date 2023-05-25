@@ -21,8 +21,7 @@ songSchema.statics.validateSong = function (song) {
         artists: joi.array().required(),
         songSrc: joi.string().required(),
         imageUrl: joi.string().required(),
-        duration: joi.number().required(),
-        genre: joi.string().required(),
+        duration: joi.number().required(), 
     });
     return schema.validate(song);
 }

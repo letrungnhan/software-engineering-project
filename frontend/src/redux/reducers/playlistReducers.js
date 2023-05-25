@@ -13,7 +13,7 @@ const userReducers = (state = [], action) => {
             state = [...state].map(item => {
                 if (item._id === action.payload._id) {
                     const { name, description, user, imageUrl } = action.payload;
-                    return { name, description, user, imageUrl, }
+                    return { ...item, name, description, imageUrl }
                 }
                 return item
             })
