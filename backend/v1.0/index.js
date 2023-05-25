@@ -9,6 +9,7 @@ const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const userRoute = require('./routes/userRoute');
 const authRoute = require('./routes/authRoute');
 const songRoute = require('./routes/songRoute');
+const albumRoute = require('./routes/albumRoute');
 const playListRoute = require('./routes/playListRoute');
 const searchRoute = require('./routes/searchRoute');
 
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/songs', songRoute);
+app.use('/api/albums', albumRoute);
 app.use('/api/playlists', playListRoute);
 app.use('/api/search', searchRoute);
 

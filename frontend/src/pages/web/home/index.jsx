@@ -19,7 +19,6 @@ const Home = () => {
         if (loaded) return;
         SpotifyService.getAllSongs()
             .then(res => {
-                console.log(res)
                 setNewReleases({
                     title: 'Bản phát hành mới phổ biến',
                     items: res.data.songs

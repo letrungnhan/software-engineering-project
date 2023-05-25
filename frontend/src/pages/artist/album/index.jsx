@@ -1,33 +1,36 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import TracksSection from "../../../components/artist/sections/TracksSection";
+import TracksSection from "./TracksSection";
 import BackgroundColor from '../../../components/common/BackgroundColor';
 import Details from "../../../components/common/Details";
 import Helmet from '../../../components/common/Helmet';
-import ButtonGroupService from "../../../components/artist/button-group-service";
 import Header from '../../../components/web/layout/Header';
 import Layout from "../../../components/web/layout/Layout";
-import * as routesConfig from '../../../config/routes';
 import SpotifyService from "../../../services/SpotifyService";
+import ButtonGroupService from '../../../components/artist/button-group-service';
+import { useParams } from 'react-router-dom';
 
 
 
-const ListSong = () => {
+function Album() {
+    const { id } = useParams();
     const { user } = useSelector(state => state);
-    const [artist, setArtist] = useState({})
-    const [tracks, setTracks] = useState([]);
-
+    const [songs, setSongs] = useState([]);
+    const [info, setInfo] = useState({})
     useEffect(() => {
-        if (!user?.info?._id) return;
-        SpotifyService.getSongByArtistId(user.info._id)
+        SpotifyService.getAlbumById(id)
             .then(res => {
-                setTracks([...res.data.songs.map(song => ({ ...song, type: 'track' }))])
+                setInfo({
+                    ...res.data.album, type: 'album'
+                })
+                setSongs(res.data.album.songs)
             })
             .catch(err => {
-                setTracks([])
+                setInfo({})
+                setSongs([])
             })
-    }, [user])
+    }, [id])
 
     return (
         <Helmet title={'Nhạc của tôi'} style={{ position: 'relative' }}>
@@ -37,9 +40,9 @@ const ListSong = () => {
                 </Header>
                 <BackgroundColor />
                 <Box sx={{ p: 3 }}>
-                    {artist && <Details info={{ ...user?.info, type: 'artist' }} />}
+                    <Details info={{ ...info }} />
                     <Box sx={{ my: 5 }}>
-                        <TracksSection items={tracks} info={{ createdAt: true }} />
+                        <TracksSection items={songs || []} createdAt={true} hasAlbum={true} />
                     </Box>
                 </Box>
             </Layout>
@@ -47,6 +50,6 @@ const ListSong = () => {
 
     );
 };
-export default ListSong;
+export default Album;
 
 

@@ -1,8 +1,14 @@
 import { Box, Button } from "@mui/material";
 import { Link, NavLink } from "react-router-dom";
 import React from "react";
+import * as routesConfig from "../../../config/routes";
 
-const ButtonGroup = ({ links }) => {
+const links = [
+    { title: 'Hồ sơ của tôi', url: `/services${routesConfig.serviceArtist}` }, 
+    { title: 'Tải nhạc lên', url: `/services${routesConfig.serviceUploadSong}` },
+    { title: 'Tạo album', url: `/services${routesConfig.serviceCreateAlbum}` },
+]
+const ButtonGroupService = () => {
 
     return (
         <Box component='div' sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -36,9 +42,8 @@ const MyButton = (props) => {
             }}
             component={Link} to={props.url}
         >
-
             {props.title}
         </Button>
     )
 }
-export default ButtonGroup;
+export default ButtonGroupService;

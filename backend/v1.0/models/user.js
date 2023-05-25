@@ -4,15 +4,16 @@ const joi = require('joi');
 const passwordComplexity = require('joi-password-complexity');
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true,},
-    email: {type: String, required: true, unique: true,},
-    password: {type: String, required: true,},
+    name: {type: String, required: true},
+    email: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
     gender: {type: String, enum: ['MALE', 'FEMALE', 'OTHER'], required: true, default: 'OTHER'},
-    birthday: {type: Date, required: true,},
-    likedSongs: {type: [String], default: [],},
-    playLists: {type: [String], default: [],},
-    isArtist: {type: Boolean, default: true,},
-    isAdmin: {type: Boolean, default: false,},
+    birthday: {type: Date, required: true},
+    artist: {type: String, unique: true},
+    isArtist: {type: Boolean, default: true},
+    isAdmin: {type: Boolean, default: false},
+    likedSongs: {type: [String], default: []},
+    playLists: {type: [String], default: []},
 }, {timestamps: true})
 
 userSchema.methods.generateAuthToken = function () {

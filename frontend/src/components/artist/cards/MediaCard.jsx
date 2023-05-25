@@ -1,32 +1,20 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { setCurrentTrack } from "../../../redux/actions/audioActions";
 import { formatTime } from "../../../utils/changeDuration";
 import { formatMediumTime } from "../../../utils/formatTime";
-import SpotifyService from "../../../services/SpotifyService";
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+
 function MediaCard({ item }) {
-    const { audio, playlist } = useSelector(state => state);
-    const navigate = useNavigate();
+    const { audio } = useSelector(state => state);
     const dispatch = useDispatch();
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
     const [isPlaying, setIsPlaying] = useState(() => {
         return audio?.currentTrack?._id === item._id
-    });
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
+    })
 
     useEffect(() => {
         setIsPlaying(audio?.currentTrack?._id === item._id)
@@ -38,25 +26,6 @@ function MediaCard({ item }) {
         dispatch(action);
     }
 
-    function handleAddSongToPlaylist(playListId) {
-        SpotifyService.addSongToPlaylist({ playListId, songId: item._id })
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
-    function handleCreatePlaylist() {
-        const payload = {}
-        SpotifyService.createPlaylist(payload)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
     return (
         <Box sx={{
             display: 'flex',
@@ -127,6 +96,8 @@ function MediaCard({ item }) {
                     sx={{
                         width: '40px',
                         height: '40px',
+                        minWidth: '40px',
+                        minHeight: '40px',
                         position: 'relative',
                         backgroundColor: '#333',
                         boxShadow: '0 4px 60px rgb(0 0 0 / 50%)',
@@ -152,8 +123,10 @@ function MediaCard({ item }) {
                 <Box sx={{
                     fontSize: '1rem', lineHeight: '1.5rem', letterSpacing: 'normal', fontWeight: '500', flex: 1
                 }}>
-                    <Box onClick={playTrack} sx={{
+                    <Box component={Link} to={`/me/song/${item?._id}`} sx={{
                         WebkitBoxOrient: 'vertical',
+                        color: 'white',
+                        textDecoration: 'none',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -254,147 +227,12 @@ function MediaCard({ item }) {
                 }}>
                     {item.duration && formatTime(item.duration)}
                 </Box>
-                <Box sx={{
-                    position: 'relative'
-                }}>
-                    <MoreHorizIcon
-                        id="song-options-button"
-                        aria-haspopup="true"
-                        aria-controls={open ? 'song-options' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        sx={{
-                            fontSize: '1.2rem',
-                            visibility: 'hidden',
-                            opacity: '0',
-                            transition: 'all 0s'
-                        }}
-                    />
-                    <Menu
-                        id="song-options"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'song-options-button',
-                        }}
-                        sx={{
-                            overflow: 'visible',
-                            mt: 1,
-                            '.MuiMenu-paper': {
-                                transform: 'translate(-50px,-100%) !important',
-                                borderRadius: '5px',
-                                background: 'transparent', overflow: 'visible'
-                            },
-                            '& ul': {
-                                backgroundColor: '#282828',
-                                color: '#fff',
-                                boxShadow: '0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%)',
-                                maxHeight: 'calc(100vh - 24px)',
-                                maxWidth: '350px',
-                                minWidth: '160px',
-                                padding: '5px',
-                                '& li': {
-                                    fontSize: '.8rem',
-                                    fontWeight: '500',
-                                    letterSpacing: '.5px',
-                                    py: '8px',
-                                    px: '5px',
-                                    borderRadius: '5px',
-                                    transition: 'all .15s ease-in-out',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255,255,255,.1)',
-                                    }
-                                }
-                            }
-                        }}
-                    >
-                        <MenuItem >
-                            Go to song radio
-                        </MenuItem>
-                        <MenuItem >
-                            Go to artist
-                        </MenuItem>
-                        <MenuItem >
-                            Go to album
-                        </MenuItem>
-                        <MenuItem >
-                            Show credits
-                        </MenuItem>
-                        <MenuItem
-                            sx={{
-                                position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                '&:hover .playlist': {
-                                    display: 'block'
-                                }
-                            }}>
-                            Add to playlist
-                            <ArrowRightIcon />
-                            <Box className="playlist" sx={{
-                                position: 'absolute', left: '0px', bottom: '0', transform: 'translate(-100%,0)', borderRadius: '5px',
-                                display: 'none', transition: '0.3s ease',
-                                background: '#282828', padding: '5px', boxShadow: '0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%)',
-                                width: '220px', maxHeight: '300px', overflow: 'hidden'
-
-                            }}>
-                                <Button sx={{
-                                    display: 'block', width: '100%',
-                                    color: 'white',
-                                    textAlign: 'left',
-                                    textTransform: 'none',
-                                    fontSize: '.825rem',
-                                    fontWeight: '500',
-                                    letterSpacing: '.5px',
-                                    paddingTop: '8px',
-                                    paddingBottom: '8px',
-                                    borderRadius: '5px',
-                                    transition: 'all .15s ease-in-out',
-                                    borderBottom: '1px solid hsla(0,0%,100%,.1)',
-                                    mb: '5px',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255,255,255,.1)',
-                                    }
-
-                                }} onClick={handleCreatePlaylist}>
-                                    Create playlist
-                                </Button>
-                                <Box sx={{ width: '100%', overflowY: 'auto', height: '200px', display: 'block' }} className="scroll-component">
-                                    {playlist.map(item => (
-                                        <Button key={item._id}
-                                            sx={{
-                                                display: 'block', width: '100%',
-                                                color: 'white',
-                                                textAlign: 'left',
-                                                textTransform: 'none',
-                                                fontSize: '.825rem',
-                                                fontWeight: '500',
-                                                letterSpacing: '.5px',
-                                                paddingTop: '8px',
-                                                paddingBottom: '8px',
-                                                borderRadius: '5px',
-                                                transition: 'all .15s ease-in-out',
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(255,255,255,.1)',
-                                                }
-
-                                            }}
-                                            onClick={() => handleAddSongToPlaylist(item._id)}>
-                                            {item.name}
-                                        </Button>
-                                    ))}
-                                </Box>
-
-                            </Box>
-                        </MenuItem>
-                        <MenuItem >
-                            Share
-                        </MenuItem>
-                        <MenuItem >
-                            Open in Desktop app
-                        </MenuItem>
-
-                    </Menu>
-                </Box>
+                <MoreHorizIcon sx={{
+                    fontSize: '1.2rem',
+                    visibility: 'hidden',
+                    opacity: '0',
+                    transition: 'all 0s'
+                }} />
             </Box>
         </Box>
     );

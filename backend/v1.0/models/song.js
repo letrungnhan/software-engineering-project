@@ -27,19 +27,18 @@ songSchema.statics.validateSong = function (song) {
     return schema.validate(song);
 }
 
+songSchema.statics.getSongsByAllId = async function (ids) {
+    return await this.find({
+        '_id': { $in: ids }
+    });
+}
+
 songSchema.statics.getSongsByArtistId = async function (id) {
     return await this.find({
         artists: {
             $elemMatch: { _id: id }
         }
     });
-
 }
 
-// const Song = mongoose.model('Song', songSchema);
-
-// module.exports = {Song, validateSong};
-
-const Song = mongoose.model('Song', songSchema);
-
-module.exports = Song;
+module.exports = mongoose.model('Song', songSchema);

@@ -1,11 +1,13 @@
-const { PlayList, validatePlayList } = require('../models/playList');
+const { PlayList, validatePlayList } = require('../models/playlist');
 const { User } = require('../models/user');
+const Song = require('../models/song');
 const asyncHandler = require('express-async-handler');
 const joi = require('joi');
 
 // @desc    create a new playlist
 
 const createPlayList = asyncHandler(async (req, res) => {
+    console.log(req.body);
     const { error } = validatePlayList(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -16,7 +18,7 @@ const createPlayList = asyncHandler(async (req, res) => {
     const playList = await new PlayList({ ...req.body, user: user._id }).save();
     user.playLists.push(playList._id);
     await user.save();
-    res.status(200).send({ data: playList, message: 'Playlist created successfully' });
+    res.status(200).send({ playList, message: 'Playlist created successfully' });
 });
 
 // @desc    edit a playlist
@@ -46,9 +48,10 @@ const editPlayList = asyncHandler(async (req, res) => {
     playList.description = req.body.description;
     playList.imageUrl = req.body.imageUrl;
     await playList.save();
-
-
-    res.status(200).send({ data: playList, message: 'Playlist edited successfully' });
+    playList.songs = await Song.find({
+        '_id': { $in: playList.songs }
+    }).exec();
+    res.status(200).send({ playList, message: 'Playlist edited successfully' });
 });
 
 // @desc    Get add song to playlist
@@ -132,17 +135,31 @@ const getRandomPlayList = asyncHandler(async (req, res) => {
 
 const getPlayListById = asyncHandler(async (req, res) => {
     const playList = await PlayList.findById(req.params.id);
+    console.log(playList);
     if (!playList) return res.status(404).send({
         message: 'Playlist not found'
     });
-    res.status(200).send({ data: playList, message: 'Playlist fetched successfully' });
+    playList.songs = await Song.find({
+        '_id': { $in: playList.songs }
+    }).exec();
+    res.status(200).send({ playList, message: 'Playlist fetched successfully' });
+});
+
+// @desc    Get playlist by id and songs
+
+const getPlayListByUserId = asyncHandler(async (req, res) => {
+    const playLists = await PlayList.find({ user: req.params.id });
+    if (!playLists) return res.status(404).send({
+        message: 'Playlist not found'
+    });
+    res.status(200).send({ playLists, message: 'Playlist fetched successfully' });
 });
 
 // @desc    Get all playlists
 
 const getAllPlayLists = asyncHandler(async (req, res) => {
     const playLists = await PlayList.find();
-    res.status(200).send({ data: playLists, message: 'Playlists fetched successfully' });
+    res.status(200).send({ playLists, message: 'Playlists fetched successfully' });
 });
 
 // @desc    delete a playlist by id
@@ -174,6 +191,7 @@ module.exports = {
     editPlayList,
     addSongToPlayList,
     removeSongFromPlayList,
+    getPlayListByUserId,
     getUserFavoritePlayList,
     getRandomPlayList,
     getPlayListById,
