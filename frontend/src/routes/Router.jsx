@@ -1,16 +1,16 @@
 import React from 'react'
-import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
-import {Box, CircularProgress} from '@mui/material';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { Box, CircularProgress } from '@mui/material';
 import UserRouter from "./UserRouter";
 import ArtistRouter from "./ArtistRouter";
 
 const Router = () => {
     return (
-        <React.Suspense fallback={<Spinner/>}>
+        <React.Suspense fallback={<Spinner />}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/*" exact={true} element={<UserRouter/>}/>
-                    <Route path="/me/*" exact={true} element={<ArtistRouter/>}/>
+                    <Route path="/*" exact={true} element={<UserRouter />} />
+                    <Route path="/services/*" exact={true} element={<ArtistRouter />} />
                 </Routes>
             </BrowserRouter>
         </React.Suspense>
@@ -35,17 +35,17 @@ export const Spinner = () => {
                 gap: '5rem',
             }}>
                 <Box component="img"
-                     src='https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png'
-                     alt='Logo SpotifyService'
-                     className="logo"
-                     sx={{maxWidth: '380px', display: 'block'}}/>
-                <CircularProgress sx={{color: 'var(--primary-color)'}}/>
+                    src='https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png'
+                    alt='Logo SpotifyService'
+                    className="logo"
+                    sx={{ maxWidth: '380px', display: 'block' }} />
+                <CircularProgress sx={{ color: 'var(--primary-color)' }} />
             </Box>
         </Box>
     )
 }
 
-export function NotFound() {
+export const NotFound = () => {
     const navigate = useNavigate();
     return (
         <Box sx={{
@@ -53,11 +53,11 @@ export function NotFound() {
             width: '100vw', height: '100vh', mt: '30px'
         }}>
             <Box component={"img"}
-                 src={"https://1.bp.blogspot.com/-W_8l-L7BARo/Xs0wlcD8GcI/AAAAAAAAJhQ/H5ztSXUAVYIKy2cEynjAOMd1M9qicizcgCLcBGAsYHQ/s1600/404.png"}
-                 alt={"404"}
-                 sx={{
-                     width: '500px'
-                 }}
+                src={"https://1.bp.blogspot.com/-W_8l-L7BARo/Xs0wlcD8GcI/AAAAAAAAJhQ/H5ztSXUAVYIKy2cEynjAOMd1M9qicizcgCLcBGAsYHQ/s1600/404.png"}
+                alt={"404"}
+                sx={{
+                    width: '500px'
+                }}
             />
             <Box component={"button"} onClick={() => navigate(-1)} sx={{
                 display: 'block',

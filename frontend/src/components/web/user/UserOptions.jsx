@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {Box, Button, Avatar, Menu, MenuItem} from '@mui/material';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import {useDispatch, useSelector} from "react-redux";
-import {removeItem} from "../../../utils/localStorage";
-import {Link, useNavigate} from "react-router-dom";
-import {logout} from "../../../redux/actions/userActions";
+import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../redux/actions/userActions";
 
 export default function UserOptions() {
-    const {user} = useSelector(state => state);
+    const { user } = useSelector(state => state);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -53,7 +52,7 @@ export default function UserOptions() {
                     },
 
                 }}>
-                <Avatar src={user.avatar} sx={{transform: 'scale(.7)'}}/>
+                <Avatar src={user.avatar} sx={{ transform: 'scale(.7)' }} />
                 <Box sx={{
                     maxWidth: '180px',
                     display: 'flex',
@@ -73,7 +72,7 @@ export default function UserOptions() {
                     <ArrowDropDownOutlinedIcon sx={{
                         width: '2rem',
                         paddingRight: '.5rem',
-                    }}/>
+                    }} />
                 </Box>
             </Button>
             <Menu
@@ -85,9 +84,9 @@ export default function UserOptions() {
                     'aria-labelledby': 'user-options',
                 }}
                 sx={{
-                    transform: 'translateX(0px)',
+                    transform: 'translateX(20px)',
                     mt: 1,
-                    '& div': {background: 'transparent'},
+                    '& div': { background: 'transparent' },
                     '& ul': {
                         backgroundColor: '#282828',
                         color: '#fff',
@@ -98,7 +97,7 @@ export default function UserOptions() {
                         overflowY: 'auto',
                         padding: '5px',
                         '& li': {
-                            fontSize: '.8rem',
+                            fontSize: '.85rem',
                             fontWeight: '500',
                             letterSpacing: '.5px',
                             paddingTop: '8px',
@@ -113,14 +112,8 @@ export default function UserOptions() {
                 }}
             >
                 <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
-                <MenuItem onClick={handleClose}>Hồ sơ</MenuItem>
-                <MenuItem onClick={() => navigate("/me/song")}>Nhạc của tôi</MenuItem>
-                <MenuItem onClick={() => navigate("/me/song/upload")}>Đăng bài hát</MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <Box component="a" sx={{
-                        color: 'white', textDecoration: 'none'
-                    }}
-                         href="https://www.spotify.com/vn-en/premium/">Nâng cấp lên Prenium</Box></MenuItem>
+                <MenuItem onClick={() => navigate("/services/artist")}>Nhạc của tôi</MenuItem>
+                <MenuItem onClick={() => navigate("/services/artist/song")}>Tải nhạc lên</MenuItem>
                 <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>
         </Box>

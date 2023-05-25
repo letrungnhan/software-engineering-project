@@ -1,7 +1,7 @@
-import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
-import {storage} from "../config/firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
+import { storage } from "../config/firebase";
 
-class FirebaseService {
+class Firebase {
     async uploadFile(folder, file, next, error, complete) {
         if (!file) return;
         const storageRef = ref(storage, `${folder}/${file.name}`);
@@ -24,5 +24,6 @@ class FirebaseService {
         })
     }
 }
+const FirebaseService = new Firebase();
 
 export default FirebaseService;

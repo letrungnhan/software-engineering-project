@@ -33,6 +33,21 @@ body {
   background: #555;
 }
 
+.scroll-component::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scroll-component::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-component::-webkit-scrollbar-thumb {
+  background: rgb(136, 136, 136);
+}
+
+.scroll-component::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 .logo {
   width: 100%;
 }

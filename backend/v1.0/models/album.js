@@ -1,15 +1,20 @@
 const mongoose = require('mongoose');
 
 const albumSchema = new mongoose.Schema({
-    title: {type: String, required: true,},
-    imageUrl: {type: String, required: true,},
-    duration: {type: Number, required: true,},
-    artists: {type: [], required: true},
-    totalTracks: {type: Number, required: true, default: 0},
-    totalTimes: {type: String, required: true},
-}, {timestamps: true});
+    title: { type: String, required: true, },
+    imageUrl: { type: String, required: true, },
+    artists: { type: [], required: true },
+    songs: { type: [], required: true },
+    totalTracks: { type: Number, required: false, default: 0 },
+    duration: { type: Number, required: false, default: 0 },
+}, { timestamps: true });
 
+albumSchema.statics.getAlbumById = async function (id) {
+    return await this.findOne({ _id: id });
+}
 
-const Album = mongoose.model('Album', albumSchema);
+albumSchema.statics.getAlbumsByArtistId = async function (id) {
+    return await this.find({ artists: { $elemMatch: { _id: id } } });
+}
 
-module.exports = {Album};
+module.exports = mongoose.model('Album', albumSchema);
