@@ -17,7 +17,7 @@ const validateAlbum = (album) => {
     return Joi.object({
         title: Joi.string().required(),
         imageUrl: Joi.string().required(),
-
+        artists: Joi.array().items(Joi.string().required()).required(),
     }).validate(album);
 };
 
