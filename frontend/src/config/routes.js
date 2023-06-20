@@ -2,10 +2,10 @@ export const home = '/home'
 export const login = '/login'
 export const signup = '/signup'
 export const search = '/search'
-export const genre = '/genre/:id'
 export const track = '/track/:id'
 export const artist = '/artist/:id'
 export const playlist = '/playlist/:id'
+export const album = '/album/:id'
 export const collection = '/collection'
 
 

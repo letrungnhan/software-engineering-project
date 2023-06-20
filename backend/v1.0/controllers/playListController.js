@@ -1,27 +1,25 @@
-const { PlayList, validatePlayList } = require('../models/playlist');
-const { User } = require('../models/user');
+const {PlayList, validatePlayList} = require('../models/playlist');
+const {User} = require('../models/user');
 const Song = require('../models/song');
 const asyncHandler = require('express-async-handler');
 const joi = require('joi');
 
 // @desc    create a new playlist
-
 const createPlayList = asyncHandler(async (req, res) => {
-    const { error } = validatePlayList(req.body);
+    const {error} = validatePlayList(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).send({
         message: 'User not found'
     });
-    const playList = await new PlayList({ ...req.body, user: user._id }).save();
+    const playList = await new PlayList({...req.body, user: user._id}).save();
     user.playLists.push(playList._id);
     await user.save();
-    res.status(200).send({ playList, message: 'Playlist created successfully' });
+    res.status(200).send({playList, message: 'Playlist created successfully'});
 });
 
 // @desc    edit a playlist
-
 const editPlayList = asyncHandler(async (req, res) => {
 
     const schema = joi.object({
@@ -30,7 +28,7 @@ const editPlayList = asyncHandler(async (req, res) => {
         imageUrl: joi.string().allow(''),
     });
 
-    const { error } = validatePlayList(req.body);
+    const {error} = validatePlayList(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const playList = await PlayList.findById(req.params.id);
@@ -48,19 +46,18 @@ const editPlayList = asyncHandler(async (req, res) => {
     playList.imageUrl = req.body.imageUrl;
     await playList.save();
     playList.songs = await Song.find({
-        '_id': { $in: playList.songs }
+        '_id': {$in: playList.songs}
     }).exec();
-    res.status(200).send({ playList, message: 'Playlist edited successfully' });
+    res.status(200).send({playList, message: 'Playlist edited successfully'});
 });
 
 // @desc    Get add song to playlist
-
 const addSongToPlayList = asyncHandler(async (req, res) => {
     const schema = joi.object({
         playListId: joi.string().required(),
         songId: joi.string().required(),
     });
-    const { error } = schema.validate(req.body);
+    const {error} = schema.validate(req.body);
 
     if (error) return res.status(400).send({
         errorMessage: error.details[0].message,
@@ -88,7 +85,7 @@ const addSongToPlayList = asyncHandler(async (req, res) => {
 
     playList.songs.push(req.body.songId);
     await playList.save();
-    res.status(200).send({ data: playList, message: 'Song added to playlist successfully' });
+    res.status(200).send({data: playList, message: 'Song added to playlist successfully'});
 
 })
 
@@ -98,7 +95,7 @@ const removeSongFromPlayList = asyncHandler(async (req, res) => {
         playListId: joi.string().required(),
         songId: joi.string().required(),
     });
-    const { error } = schema.validate(req.body);  // validate the request body first
+    const {error} = schema.validate(req.body);  // validate the request body first
     if (error) return res.status(400).send(error.details[0].message);
     const user = await User.findById(req.user._id);
     const playList = await PlayList.findById(req.body.playListId);
@@ -113,51 +110,41 @@ const removeSongFromPlayList = asyncHandler(async (req, res) => {
     });
     playList.songs.splice(index, 1);
     await playList.save();
-    res.status(200).send({ data: playList, message: 'Song removed from playlist successfully' });
+    res.status(200).send({data: playList, message: 'Song removed from playlist successfully'});
 });
 
 // @desc    Get user favorite playlist
 const getUserFavoritePlayList = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-    const playLists = await PlayList.find({ _id: { $in: user.playLists } });
-    res.status(200).send({ data: playLists, message: 'Playlists fetched successfully' });
+    const playLists = await PlayList.find({_id: {$in: user.playLists}});
+    res.status(200).send({data: playLists, message: 'Playlists fetched successfully'});
 });
 
 // @desc    Get random playlist
 
 const getRandomPlayList = asyncHandler(async (req, res) => {
-    const playLists = await PlayList.aggregate([{ $sample: { size: 10 } }]);
-    res.status(200).send({ data: playLists, message: 'Playlists fetched successfully' });
+    const playLists = await PlayList.aggregate([{$sample: {size: 10}}]);
+    res.status(200).send({data: playLists, message: 'Playlists fetched successfully'});
 });
 
 // @desc    Get playlist by id and songs
-
 const getPlayListById = asyncHandler(async (req, res) => {
-    const playList = await PlayList.findById(req.params.id);
-    if (!playList) return res.status(404).send({
-        message: 'Playlist not found'
-    });
-    playList.songs = await Song.find({
-        '_id': { $in: playList.songs }
-    }).exec();
-    res.status(200).send({ playList, message: 'Playlist fetched successfully' });
+    const playList = await PlayList.findById(req.params.id).populate('songs').populate('user');
+    if (!playList) return res.status(404).send({message: 'Playlist not found'});
+    res.status(200).send({playList, message: 'Playlist fetched successfully'});
 });
 
 // @desc    Get playlist by id and songs
-
 const getPlayListByUserId = asyncHandler(async (req, res) => {
-    const playLists = await PlayList.find({ user: req.params.id });
-    if (!playLists) return res.status(404).send({
-        message: 'Playlist not found'
-    });
-    res.status(200).send({ playLists, message: 'Playlist fetched successfully' });
+    const playLists = await PlayList.find({user: req.params.id});
+    if (!playLists) return res.status(404).send({message: 'Playlist not found'});
+    res.status(200).send({playLists, message: 'Playlist fetched successfully'});
 });
 
 // @desc    Get all playlists
-
 const getAllPlayLists = asyncHandler(async (req, res) => {
     const playLists = await PlayList.find();
-    res.status(200).send({ playLists, message: 'Playlists fetched successfully' });
+    res.status(200).send({playLists, message: 'Playlists fetched successfully'});
 });
 
 // @desc    delete a playlist by id
@@ -176,12 +163,10 @@ const deletePlayList = asyncHandler(async (req, res) => {
     user.playLists.splice(index, 1);
     await user.save();
     await playList.deleteOne();
-    res.status(200).send({ message: 'Playlist deleted successfully' });
+    res.status(200).send({message: 'Playlist deleted successfully'});
 
 
 });
-
-
 
 module.exports = {
     createPlayList,

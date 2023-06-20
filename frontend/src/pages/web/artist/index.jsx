@@ -39,6 +39,7 @@ function Artist() {
 
         SpotifyService.getAlbumsByArtistId(id)
             .then(res => {
+                console.log(res);
                 setAlbums([...res.data.albums.map(album => ({ ...album, type: 'album' }))])
             })
             .catch(err => {
@@ -60,7 +61,7 @@ function Artist() {
                     <TracksSection items={tracks} createdAt={true} hasAlbum={true} />
                 </Box>
                 <Box sx={{ p: 3 }}>
-                    <CardSection items={albums} title={`Album của ${artist?.name}`} type="album" />
+                    {albums?.length > 0 && <CardSection items={albums} title={`Album của ${artist?.name}`} type="album" />}
                 </Box>
             </Layout>
         </Helmet>

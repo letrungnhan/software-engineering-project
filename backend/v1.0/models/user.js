@@ -36,8 +36,6 @@ userSchema.statics.getUserById = async function (id) {
     return await this.findOne({ _id: id });
 }
 
-
-
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User, validateUser };
