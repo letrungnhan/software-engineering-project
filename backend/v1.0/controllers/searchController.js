@@ -33,5 +33,18 @@ const search = asyncHandler(async (req, res) => {
 
 });
 
+const searchArtistByFullText = asyncHandler(async (req, res) => {
+    const searchQuery = req.query.q;
+    if (searchQuery !== "") {
+        const artists = await User.find({
+            name: { $regex: searchQuery, $options: 'i' }
+        }).limit(10);
+        res.status(200).send({ artists });
+    } else {
+        res.status(200).send({ message: "No search query" });
+    }
+});
+
+
 module.exports = { search };
 
