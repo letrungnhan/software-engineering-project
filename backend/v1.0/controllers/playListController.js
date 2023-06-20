@@ -134,7 +134,6 @@ const getRandomPlayList = asyncHandler(async (req, res) => {
 
 const getPlayListById = asyncHandler(async (req, res) => {
     const playList = await PlayList.findById(req.params.id);
-    console.log(playList);
     if (!playList) return res.status(404).send({
         message: 'Playlist not found'
     });
@@ -170,8 +169,7 @@ const deletePlayList = asyncHandler(async (req, res) => {
         message: 'User do not have permission to delete this playlist'
     });
     const index = user.playLists.indexOf(req.params.id);
-    console.log(user.playLists);
-    console.log(index);
+
     if (index === -1) return res.status(400).send({
         message: 'Playlist not found'
     });

@@ -6,8 +6,8 @@ const Joi = require("joi");
 const albumSchema = new mongoose.Schema({
     title: { type: String, required: true },
     imageUrl: { type: String, required: true },
-    artists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
-    songs: { type: [String], default: [] },
+    artists: { type: [], required: true },
+    songs: { type: [], default: [] },
     totalTracks: { type: Number, required: false, default: 0 },
     duration: { type: Number, required: false, default: 0 },
 }, { timestamps: true });
