@@ -14,10 +14,8 @@ const createSong = asyncHandler(async (req, res) => {
 // @desc    Update a song by id
 const updateSongById = asyncHandler(async (req, res) => {
     const song = await Song.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
-    if (!song) return res.status(404).send({
-        message: 'Song not found'
-    });
-    res.status(200).send({song});
+    if (!song) return res.status(404).send({message: 'Song not found'});
+    return res.status(200).send({song});
 });
 
 // @desc    Delete a song by id

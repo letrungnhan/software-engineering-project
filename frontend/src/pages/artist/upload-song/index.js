@@ -131,13 +131,18 @@ function UploadSong() {
                         <div className={"song__info"}>
                             <button type={"button"} onClick={() => setOpen(true)} className={"song__info__name"}>
                                 <Box sx={{
-                                    fontSize: title?.length > 15 ? '2.5rem' : '5.5rem',
+                                    fontSize: title?.length > 15 ? '2rem' : '2.5rem',
                                     fontWeight: '700',
                                     letterSpacing: '-0.04em'
                                 }}>
                                     {title || 'Tên bài hát'}
                                 </Box>
                             </button>
+                            <Box sx={{mt: 3, mb: 3, width: '400px', 'audio': {width: '100%', height: '46px'}}}>
+                                <audio ref={audioPreviewRef} controls>
+                                    <source src={song?.url}/>
+                                </audio>
+                            </Box>
                             <div className={"song__info__artist"}>
                                 <p className={"song__info__artist__title"}>Nghệ sĩ:</p>
                                 <div className={"song__info__artist__names"}>
@@ -154,12 +159,6 @@ function UploadSong() {
                             </div>
                         </div>
                     </div>
-
-                    <Box sx={{mt: 5, width: '40%', 'audio': {width: '100%', height: '46px'}}}>
-                        <audio ref={audioPreviewRef} controls>
-                            <source src={song?.url}/>
-                        </audio>
-                    </Box>
                     <div className={`${open ? 'open' : 'hidden'} popup`}>
                         <div className={"popup__header"}>
                             <h5>Upload Track</h5>

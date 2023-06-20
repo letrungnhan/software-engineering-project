@@ -123,7 +123,7 @@ function MediaCard({ item }) {
                 <Box sx={{
                     fontSize: '1rem', lineHeight: '1.5rem', letterSpacing: 'normal', fontWeight: '500', flex: 1
                 }}>
-                    <Box component={Link} to={`/me/song/${item?._id}`} sx={{
+                    <Box component={Link} to={`/services/song/${item?._id}`} sx={{
                         WebkitBoxOrient: 'vertical',
                         color: 'white',
                         textDecoration: 'none',
