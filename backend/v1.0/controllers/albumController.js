@@ -4,33 +4,25 @@ const {Album, validateAlbum} = require('../models/album');
 const {User} = require("../models/user");
 
 const createAlbum = asyncHandler(async (req, res) => {
-    console.log(req.body);
-    // const { error } = validateAlbum(req.body);
-    // if (error) {
-    //     res.status(400).send({ message: error.details[0].message });
-    //     return;
-    // }
+    const {error} = validateAlbum(req.body);
+    if (error) return res.status(400).send({message: error.details[0].message});
+
     const {artists} = req.body;
     if (!Array.isArray(artists)) {
-        res.status(400).send({message: 'Artists must be provided as an array'});
-        return;
+        return res.status(400).send({message: 'Artists must be provided as an array'});
     }
     try {
         const users = await User.find({_id: {$in: artists}, isArtist: true});
+        const validArtistIds = users.map(user => user._id);
         if (users.length !== artists.length) {
-            const validArtistIds = users.map(user => user._id);
             const invalidArtistIds = artists.filter(artistId => !validArtistIds.includes(artistId));
-            res.status(400).send({message: `One or more artists are not valid: ${invalidArtistIds.join(', ')}`});
-            return;
+            return res.status(400).send({message: `One or more artists are not valid: ${invalidArtistIds.join(', ')}`});
         }
-        const album = new Album({
-            ...req.body,
-            artists: users.map(user => user._id),
-        });
+        const album = new Album({...req.body, artists: validArtistIds});
         await album.save();
-        res.status(200).send({album, message: 'Album created successfully'});
+        return res.status(200).send({album, message: 'Album created successfully'});
     } catch (error) {
-        res.status(500).send({message: error.message});
+        return res.status(500).send({message: error.message});
     }
 });
 
@@ -104,7 +96,6 @@ const addArtistToAlbum = asyncHandler(async (req, res) => {
 
 const removeArtistFromAlbum = asyncHandler(async (req, res) => {
     const {albumId, artistId} = req.params;
-
     const album = await Album.findById(albumId).select('-__v');
     if (!album) {
         res.status(404).send({message: 'Album not found'});
@@ -120,11 +111,9 @@ const removeArtistFromAlbum = asyncHandler(async (req, res) => {
         return;
     }
     album.artists = album.artists.filter(artist => artist.toString() !== artistId.toString());
-
     await album.save();
     res.status(200).send({album, message: 'Artist removed from album successfully'});
 });
-
 
 const getAlbumById = asyncHandler(async (req, res) => {
     const album = await Album.getAlbumById(req.params.id);

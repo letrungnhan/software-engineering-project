@@ -3,10 +3,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
-import { Backdrop, Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {Backdrop, Box} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import BackgroundColor from "../../../components/common/BackgroundColor";
 import Helmet from "../../../components/common/Helmet";
 import ButtonGroupService from "../../../components/artist/button-group-service";
@@ -19,28 +19,38 @@ import MediaCard from './MediaCard';
 import FirebaseService from '../../../services/FirebaseService';
 import CircularProgressWithLabel from '../../../components/web/CircularProgressWithLabel';
 
+function CreateAlbum(props) {
+    return (
+        <Helmet title={"Tạo album"}>
+            <ShowingAlbum {...props}/>
+        </Helmet>
+    )
+}
 
-function CreateAlbum() {
+export const ShowingAlbum = (props) => {
     const navigate = useNavigate();
-    const { user } = useSelector(state => state);
+    const {user} = useSelector(state => state);
     const [open, setOpen] = useState(false);
     const [openSong, setOpenSong] = useState(false);
     const [title, setTitle] = useState(null);
     const [image, setImage] = useState(null);
     const [songs, setSongs] = useState([]);
     const [progressUpload, setProgressUpload] = useState(null);
-
     const [artists, setArtists] = useState(() => {
-        const { _id, name } = user.info;
-        return [{ _id, name }]
+        const {_id, name} = user.info;
+        return [{_id, name}]
     });
+
+    useEffect(() => {
+        setTitle(props.title || title)
+        if (props.image) setImage({url: props.image} || image)
+        setSongs(props.songs || songs)
+        setArtists(props.artists || artists)
+    }, [props])
 
     function addSong(song) {
         const index = songs.findIndex(item => item._id === song._id)
-        if (index !== -1) {
-            return
-
-        }
+        if (index !== -1) return;
         setSongs(prev => ([...prev, song]))
     }
 
@@ -49,175 +59,171 @@ function CreateAlbum() {
         if (!e?.target?.files?.length) return;
         const file = e.target.files[0];
         const objectUrl = URL.createObjectURL(file);
-        setImage({ url: objectUrl, isPreview: true, file });
+        setImage({url: objectUrl, isPreview: true, file});
     }
 
     function handleAddArtist() {
     }
 
-    function handleAddSong(song) {
-        const index = songs.findIndex(s => s._id === song._id);
-        if (index === -1) return;
-        setSongs(prev => ([...prev, song]))
-    }
-
     async function handleSave() {
-        let uploadedImage, duration = 0, totalTracks = songs.length;
+        let imageUrl, duration = 0, totalTracks = songs.length;
         songs.forEach(song => duration += song.duration)
         await FirebaseService.uploadFile('images', image.file,
             (progress) => {
-                setProgressUpload({ message: 'Uploading image', progress });
+                setProgressUpload({message: 'Uploading image', progress});
             },
             (error) => {
                 console.log(error)
             },
             (uploadedURL) => {
-                uploadedImage = uploadedURL;
+                imageUrl = uploadedURL;
             })
         const album = {
-            title, artists, songs, duration, totalTracks,
-            imageUrl: uploadedImage
-
+            title, duration, totalTracks, imageUrl,
+            artists: artists.map(artist => artist._id),
+            songs: songs.map(song => song._id),
         }
         SpotifyService.createAlbum(album)
             .then(res => {
                 navigate(`/services/artist/album/${res.data.album._id}`)
             })
             .catch(err => {
+                console.log(err.response);
+                setProgressUpload(null)
             })
     }
 
     return (
-        <Helmet title="Tạo album" style={{ position: 'relative' }}>
-            <Layout>
-                <Header>
-                    <ButtonGroupService />
-                </Header>
-                <BackgroundColor />
-                <Box sx={{ p: 3 }}>
-                    <div className="song">
-                        <button type={"button"} onClick={() => setOpen(true)} className="button-select-song"
+        <Layout>
+            <Header>
+                <ButtonGroupService/>
+            </Header>
+            <BackgroundColor/>
+            <Box sx={{p: 3}}>
+                <div className="song">
+                    <button type={"button"} onClick={() => setOpen(true)} className="button-select-song"
                             style={{
                                 backgroundImage: image?.url ? `url(${image?.url})` : 'none'
                             }}>
+                        <div className={`icon`} style={{
+                            visibility: image?.url ? "hidden" : "visible",
+                            opacity: image?.url ? "0" : "100",
+                        }}>
+                            <LibraryMusicIcon/>
+                        </div>
+                    </button>
+                    <div className={"song__info"}>
+                        <button type={"button"} className={"song__info__name"} onClick={() => setOpen(true)}>
+                            <Box sx={{
+                                fontSize: title?.length > 15 ? '2.5rem' : '5.5rem',
+                                fontWeight: '700',
+                                letterSpacing: '-0.04em'
+                            }}>
+                                {title || 'Tên album'}
+                            </Box>
+                        </button>
+                        <div className={"song__info__artist"}>
+                            <p className={"song__info__artist__title"}>Nghệ sĩ:</p>
+                            <div className={"song__info__artist__names"}>
+                                {artists.map(artist => (
+                                    <p key={artist._id} className={"song__info__artist__name"}>
+                                        {artist.name}
+                                    </p>
+                                ))}
+                                <button type={"button"} onClick={() => setOpen(true)}
+                                        className={"song__info__artist__name__select"}>
+                                    <AddIcon className={"icon"}/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className={`${open ? 'open' : 'hidden'} popup`}>
+                    <div className={"popup__header"}>
+                        <h5>Tạo Album</h5>
+                        <button type={"button"} onClick={() => setOpen(false)}>
+                            <CloseIcon className={"icon"}/>
+                        </button>
+                    </div>
+
+                    <div className={"popup__body"}>
+                        <label className={"button-select-song"} htmlFor={"image"}
+                               style={{backgroundImage: `url(${image?.url})`}}>
+                            <input type={"file"} id={"image"} name={"image"} onChange={handleUploadImage}
+                                   accept="image/png, image/jpeg"/>
                             <div className={`icon`} style={{
                                 visibility: image?.url ? "hidden" : "visible",
                                 opacity: image?.url ? "0" : "100",
                             }}>
-                                <LibraryMusicIcon />
+                                <LibraryMusicIcon/>
                             </div>
-                        </button>
-                        <div className={"song__info"}>
-                            <button type={"button"} className={"song__info__name"} onClick={() => setOpen(true)}>
-                                <Box sx={{
-                                    fontSize: title?.length > 15 ? '2.5rem' : '5.5rem',
-                                    fontWeight: '700',
-                                    letterSpacing: '-0.04em'
-                                }}>
-                                    {title || 'Tên album'}
-                                </Box>
-                            </button>
-                            <div className={"song__info__artist"}>
-                                <p className={"song__info__artist__title"}>Nghệ sĩ:</p>
-                                <div className={"song__info__artist__names"}>
-                                    {artists.map(artist => (
-                                        <p key={artist._id} className={"song__info__artist__name"}>
-                                            {artist.name}
-                                        </p>
-                                    ))}
-                                    <button type={"button"} onClick={() => setOpen(true)}
-                                        className={"song__info__artist__name__select"}>
-                                        <AddIcon className={"icon"} />
+                        </label>
+                        <div className={"popup__body__song"}>
+                            <input type={"text"} className={"popup__body__song__name"} placeholder={"Tên album"}
+                                   value={title || ''} onChange={(e) => setTitle(e.target.value)}/>
+                            <div className={"popup__body__song__artist"}>
+                                <form className={"popup__body__song__artist__search"} onSubmit={handleAddArtist}>
+                                    <input type={"text"} placeholder={"Thêm nghệ sĩ khác"}/>
+                                    <button type={"submit"}>
+                                        <SearchIcon/>
                                     </button>
+                                </form>
+                                <div className={"popup__body__song__artists"}>
+                                    {artists.map(artist => (
+                                        <div key={artist._id} className={"popup__body__song__artists__name"}>
+                                            {artist.name}
+                                            <button>
+                                                <RemoveCircleOutlineIcon/>
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className={`${open ? 'open' : 'hidden'} popup`}>
-                        <div className={"popup__header"}>
-                            <h5>Tạo Album</h5>
-                            <button type={"button"} onClick={() => setOpen(false)}>
-                                <CloseIcon className={"icon"} />
-                            </button>
-                        </div>
-
-                        <div className={"popup__body"}>
-                            <label className={"button-select-song"} htmlFor={"image"}
-                                style={{ backgroundImage: `url(${image?.url})` }}>
-                                <input type={"file"} id={"image"} name={"image"} onChange={handleUploadImage}
-                                    accept="image/png, image/jpeg" />
-                                <div className={`icon`} style={{
-                                    visibility: image?.url ? "hidden" : "visible",
-                                    opacity: image?.url ? "0" : "100",
-                                }}>
-                                    <LibraryMusicIcon />
-                                </div>
-                            </label>
-                            <div className={"popup__body__song"}>
-                                <input type={"text"} className={"popup__body__song__name"} placeholder={"Tên album"}
-                                    value={title || ''} onChange={(e) => setTitle(e.target.value)} />
-                                <div className={"popup__body__song__artist"}>
-                                    <form className={"popup__body__song__artist__search"} onSubmit={handleAddArtist}>
-                                        <input type={"text"} placeholder={"Thêm nghệ sĩ khác"} />
-                                        <button type={"submit"}>
-                                            <SearchIcon />
-                                        </button>
-                                    </form>
-                                    <div className={"popup__body__song__artists"}>
-                                        {artists.map(artist => (
-                                            <div key={artist._id} className={"popup__body__song__artists__name"}>
-                                                {artist.name}
-                                                <button>
-                                                    <RemoveCircleOutlineIcon />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <Box sx={{
-                            fontSize: '0.8rem', fontWeight: '600', width: '100%', mt: 2
-                        }}>
-                            By proceeding, you agree to give Spotify access to the image you choose to upload. Please
-                            make sure you have the right to upload the image.
-                        </Box>
-                    </div>
-                    <Backdrop open={open} type={"button"} onClick={() => { setOpen(false) }} sx={{ zIndex: 999 }} />
-                </Box>
-                <Box sx={{ px: 3, pt: 3, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Box component={'button'} type='button' onClick={() => setOpenSong(true)}
-                        sx={{
-                            background: '#ffffff12', color: 'white',
-                            fontSize: '0.9rem', fontWeight: '600', outline: 'none', border: 'none',
-                            p: '10px 24px', borderRadius: '5px', cursor: 'pointer',
-                        }}
-                    >
-                        Thêm bài hát
+                    <Box sx={{
+                        fontSize: '0.8rem', fontWeight: '600', width: '100%', mt: 2
+                    }}>
+                        By proceeding, you agree to give Spotify access to the image you choose to upload. Please
+                        make sure you have the right to upload the image.
                     </Box>
-
-                    <Box component={'button'} type='button' onClick={handleSave}
-                        sx={{
-                            background: 'var(--primary-color)', color: 'white',
-                            fontSize: '0.9rem', fontWeight: '600', outline: 'none', border: 'none',
-                            p: '10px 24px', borderRadius: '5px', cursor: 'pointer',
-                        }}
-                    >
-                        Lưu album
-                    </Box>
+                </div>
+                <Backdrop open={open} type={"button"} onClick={() => {
+                    setOpen(false)
+                }} sx={{zIndex: 999}}/>
+            </Box>
+            <Box sx={{px: 3, pt: 3, display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <Box component={'button'} type='button' onClick={() => setOpenSong(true)}
+                     sx={{
+                         background: '#ffffff12', color: 'white',
+                         fontSize: '0.9rem', fontWeight: '600', outline: 'none', border: 'none',
+                         p: '10px 24px', borderRadius: '5px', cursor: 'pointer',
+                     }}
+                >
+                    Thêm bài hát
                 </Box>
-                <PopupTracks artist={user?.info} openSong={openSong} setOpenSong={setOpenSong} addSong={addSong} />
-                <Box sx={{ px: 3 }}>
-                    <TracksSection items={songs} createdAt={true} />
+                <Box component={'button'} type='button' onClick={handleSave}
+                     sx={{
+                         background: 'var(--primary-color)', color: 'white',
+                         fontSize: '0.9rem', fontWeight: '600', outline: 'none', border: 'none',
+                         p: '10px 24px', borderRadius: '5px', cursor: 'pointer',
+                     }}
+                >
+                    Lưu album
                 </Box>
-                <Backdrop open={!!progressUpload} sx={{ zIndex: 1001 }}>
-                    <CircularProgressWithLabel value={progressUpload?.progress || 0} message={progressUpload?.message} />
-                </Backdrop>
-            </Layout>
-        </Helmet>
+            </Box>
+            <PopupTracks artist={user?.info} openSong={openSong} setOpenSong={setOpenSong} addSong={addSong}/>
+            <Box sx={{px: 3}}>
+                <TracksSection items={songs} createdAt={true}/>
+            </Box>
+            <Backdrop open={!!progressUpload} sx={{zIndex: 1001}}>
+                <CircularProgressWithLabel value={progressUpload?.progress || 0} message={progressUpload?.message}/>
+            </Backdrop>
+        </Layout>
     );
 }
-const PopupTracks = ({ artist, songs, addSong, openSong, setOpenSong }) => {
+
+const PopupTracks = ({artist, songs, addSong, openSong, setOpenSong}) => {
     const [tracks, setTracks] = useState([]);
 
     useEffect(() => {
@@ -236,26 +242,33 @@ const PopupTracks = ({ artist, songs, addSong, openSong, setOpenSong }) => {
         <Box>
             <Backdrop open={openSong} type={"button"} onClick={() => {
                 setOpenSong(false)
-            }} sx={{ zIndex: 999 }} />
+            }} sx={{zIndex: 999}}/>
             <Box className={`${openSong ? 'open' : 'hidden'} popup`} sx={{
-                padding: '16px !important', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-                zIndex: 1000, width: '600px', borderRadius: '8px', overflowY: 'hidden'
+                padding: '16px !important',
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%,-50%)',
+                zIndex: 1000,
+                width: '600px',
+                borderRadius: '8px',
+                overflowY: 'hidden'
             }}>
                 <Box className={"popup__header"}>
                     <h5>Tạo Album</h5>
                     <button type={"button"} onClick={() => setOpenSong(false)}>
-                        <CloseIcon className={"icon"} />
+                        <CloseIcon className={"icon"}/>
                     </button>
                 </Box>
-                <form className={"popup__body__song__artist__search"}  >
-                    <input type={"text"} placeholder={"Tìm bài hát theo tên, id,..."} />
+                <form className={"popup__body__song__artist__search"}>
+                    <input type={"text"} placeholder={"Tìm bài hát theo tên, id,..."}/>
                     <button type={"submit"}>
-                        <SearchIcon />
+                        <SearchIcon/>
                     </button>
                 </form>
-                <Box sx={{ overflowY: 'auto', maxHeight: '400px', pr: '10px' }} className="scroll-component">
+                <Box sx={{overflowY: 'auto', maxHeight: '400px', pr: '10px'}} className="scroll-component">
                     {tracks.map((track, i) => (
-                        <MediaCard key={track._id} item={{ ...track, number: i + 1 }} addSong={addSong} />
+                        <MediaCard key={track._id} item={{...track, number: i + 1}} addSong={addSong}/>
                     ))}
                 </Box>
             </Box>

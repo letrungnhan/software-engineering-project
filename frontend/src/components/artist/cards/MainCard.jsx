@@ -87,7 +87,7 @@ export default function MainCard({item, type}) {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                     }}>
-                        {desc || artists.map(a => a.name)}
+                        {desc || artists?.map(a => a.name)}
                     </Typography>
                 </CardContent>
             </CardActionArea>
