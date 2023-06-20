@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const mongoose = require('mongoose');
 
 
@@ -6,7 +10,7 @@ const Joi = require("joi");
 const albumSchema = new mongoose.Schema({
     title: { type: String, required: true },
     imageUrl: { type: String, required: true },
-    artists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
+    artists: { type: [Object], required: true },
     songs: { type: [String], default: [] },
     totalTracks: { type: Number, required: false, default: 0 },
     duration: { type: Number, required: false, default: 0 },

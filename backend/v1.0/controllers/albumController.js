@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
 const { Album, validateAlbum } = require('../models/album');
@@ -15,7 +19,7 @@ const createAlbum = asyncHandler(async (req, res) => {
         return;
     }
     try {
-        const users = await User.find({ _id: { $in: artists }, isArtist: true });
+        const users = await User.find({ _id: { $in: artists }, isArtist: true }).select('-password -__v');
         if (users.length !== artists.length) {
             const validArtistIds = users.map(user => user._id);
             const invalidArtistIds = artists.filter(artistId => !validArtistIds.includes(artistId));
@@ -24,7 +28,10 @@ const createAlbum = asyncHandler(async (req, res) => {
         }
         const album = new Album({
             ...req.body,
-            artists: users.map(user => user._id),
+            artists: users.map(user => ({
+                _id: user._id,
+                name: user.name
+            })),
         });
         await album.save();
         res.status(200).send({ album, message: 'Album created successfully' });

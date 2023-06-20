@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const mongoose = require('mongoose');
 
 const joi = require('joi');

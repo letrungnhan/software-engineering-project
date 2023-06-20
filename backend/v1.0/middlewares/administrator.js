@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {

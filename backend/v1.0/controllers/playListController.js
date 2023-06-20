@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const { PlayList, validatePlayList } = require('../models/playlist');
 const { User } = require('../models/user');
 const Song = require('../models/song');
