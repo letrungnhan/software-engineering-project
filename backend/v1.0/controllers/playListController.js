@@ -22,16 +22,6 @@ const createPlayList = asyncHandler(async (req, res) => {
 
 // @desc    edit a playlist
 const editPlayList = asyncHandler(async (req, res) => {
-
-    const schema = joi.object({
-        name: joi.string().required(),
-        description: joi.string().allow(''),
-        imageUrl: joi.string().allow(''),
-    });
-
-    const {error} = validatePlayList(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     const playList = await PlayList.findById(req.params.id);
     if (!playList) return res.status(404).send({
         message: 'Playlist not found'
@@ -41,7 +31,6 @@ const editPlayList = asyncHandler(async (req, res) => {
     if (!user._id.equals(playList.user)) return res.status(403).send({
         message: 'User do not have permission to edit this playlist'
     });
-
     playList.name = req.body.name;
     playList.description = req.body.description;
     playList.imageUrl = req.body.imageUrl;
