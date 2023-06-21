@@ -19,7 +19,7 @@ const validatePlayList = (playList) => {
         description: joi.allow(''),
         imageUrl: joi.allow(''),
         user: joi.string().required(),
-        
+        songs: joi.allow(''),
     });
     return schema.validate(playList);
 }

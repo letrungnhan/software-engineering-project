@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
