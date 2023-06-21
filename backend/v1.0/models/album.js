@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const mongoose = require('mongoose');
 
 const Joi = require("joi");
@@ -10,6 +14,7 @@ const albumSchema = new mongoose.Schema({
     artists: [{type: mongoose.Schema.Types.ObjectId, ref: 'User', default: []}],
     songs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Song', default: []}],
 }, {timestamps: true});
+
 
 
 const validateAlbum = (album) => {

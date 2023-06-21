@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
 const {Album, validateAlbum} = require('../models/album');
@@ -14,6 +18,7 @@ const createAlbum = asyncHandler(async (req, res) => {
     try {
         const users = await User.find({_id: {$in: artists}, isArtist: true});
         const validArtistIds = users.map(user => user._id);
+
         if (users.length !== artists.length) {
             const invalidArtistIds = artists.filter(artistId => !validArtistIds.includes(artistId));
             return res.status(400).send({message: `One or more artists are not valid: ${invalidArtistIds.join(', ')}`});

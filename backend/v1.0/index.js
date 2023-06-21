@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 require('dotenv').config();
 require("express-async-errors");
 const express = require('express');

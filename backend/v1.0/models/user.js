@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const joi = require('joi');
@@ -38,4 +42,4 @@ userSchema.statics.getUserById = async function (id) {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = { User, validateUser };
+module.exports = { User, validateUser, userSchema };
