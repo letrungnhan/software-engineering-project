@@ -14,13 +14,6 @@ const TrackDashboard = () => {
     const [track, setTrack] = useState(null);
 
     useEffect(() => {
-        // let content = document.querySelector('.container__content');
-        // content.style.scrollBehavior = 'auto';
-        // content.scrollTop = 0;
-        // content.style.scrollBehavior = 'smooth';
-    }, [id])
-
-    useEffect(() => {
         SpotifyService.getSongById(id)
             .then(res => {
                 setTrack({...res.data.song, type: 'track'})
