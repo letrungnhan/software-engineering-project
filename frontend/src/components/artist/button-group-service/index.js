@@ -29,7 +29,7 @@ const MyButton = (props) => {
             variant="contained"
             sx={{
                 color: 'white',
-                fontSize: '0.85rem',
+                fontSize: '0.9rem',
                 boxShadow: 'none',
                 textTransform: 'none',
                 fontWeight: '500',

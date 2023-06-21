@@ -13,13 +13,13 @@ const search = asyncHandler(async (req, res) => {
     if (searchQuery !== "") {
         const songs = await Song.find({
             title: { $regex: searchQuery, $options: 'i' }
-        }).limit(10);
+        }).limit(10).populate('artists');
         const playlists = await PlayList.find({
             name: { $regex: searchQuery, $options: 'i' }
-        }).limit(10);
+        }).limit(10).populate('songs').populate('user');
         const albums = await Album.find({
             title: { $regex: searchQuery, $options: 'i' }
-        }).limit(10);
+        }).limit(10).populate('songs').populate('artists');
         const artists = await User.find({
             name: { $regex: searchQuery, $options: 'i' }
         }).limit(10);

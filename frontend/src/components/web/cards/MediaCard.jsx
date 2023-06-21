@@ -1,18 +1,18 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { Box, Button, Menu, MenuItem } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from 'react-router-dom';
-import { setCurrentTrack } from "../../../redux/actions/audioActions";
-import { formatTime } from "../../../utils/changeDuration";
-import { formatMediumTime } from "../../../utils/formatTime";
+import {Box, Button, Menu, MenuItem} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from 'react-router-dom';
+import {setCurrentTrack} from "../../../redux/actions/audioActions";
+import {formatTime} from "../../../utils/changeDuration";
+import {formatMediumTime} from "../../../utils/formatTime";
 import SpotifyService from "../../../services/SpotifyService";
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-function MediaCard({ item }) {
-    const { audio, playlist } = useSelector(state => state);
-    const navigate = useNavigate();
+
+function MediaCard({item}) {
+    const {audio, playlist} = useSelector(state => state);
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -20,26 +20,26 @@ function MediaCard({ item }) {
         return audio?.currentTrack?._id === item._id
     });
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-
     useEffect(() => {
         setIsPlaying(audio?.currentTrack?._id === item._id)
     }, [audio?.currentTrack])
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     function playTrack() {
         if (audio?.currentTrack?._id === item._id) return;
-        const action = setCurrentTrack({ ...item, isPlaying: true });
+        const action = setCurrentTrack({...item, isPlaying: true});
         dispatch(action);
     }
 
     function handleAddSongToPlaylist(playListId) {
-        SpotifyService.addSongToPlaylist({ playListId, songId: item._id })
+        SpotifyService.addSongToPlaylist({playListId, songId: item._id})
             .then(res => {
                 console.log(res);
             })
@@ -47,6 +47,7 @@ function MediaCard({ item }) {
                 console.log(err);
             })
     }
+
     function handleCreatePlaylist() {
         const payload = {}
         SpotifyService.createPlaylist(payload)
@@ -57,6 +58,7 @@ function MediaCard({ item }) {
                 console.log(err);
             })
     }
+
     return (
         <Box sx={{
             display: 'flex',
@@ -98,18 +100,18 @@ function MediaCard({ item }) {
                         display: 'none',
                         opacity: '0',
                         width: '100%',
-                    }} />
+                    }}/>
                     {isPlaying && audio?.isPlaying ?
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             <Box component={"img"} sx={{
                                 width: '16px', height: '16px'
                             }}
-                                src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
-                                alt={"equalizer"} />
+                                 src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
+                                 alt={"equalizer"}/>
                         </Box> :
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             {item.number}
                         </Box>
                     }
@@ -172,22 +174,22 @@ function MediaCard({ item }) {
                         maxWidth: '350px'
                     }}>
                         {item?.artists?.length < 10 ? item?.artists?.map((artist, index) => {
-                            return (
-                                <Box key={index} component={Link} to={`/artist/${artist._id}`}
-                                    sx={{
-                                        fontSize: '.8rem',
-                                        lineHeight: '1.5rem',
-                                        height: '1.5rem',
-                                        color: '#b3b3b3',
-                                        textDecoration: 'none',
-                                        transition: 'all .2s',
-                                        zIndex: 1,
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                            color: 'white'
-                                        }
-                                    }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
-                        }) :
+                                return (
+                                    <Box key={index} component={Link} to={`/artist/${artist._id}`}
+                                         sx={{
+                                             fontSize: '.8rem',
+                                             lineHeight: '1.5rem',
+                                             height: '1.5rem',
+                                             color: '#b3b3b3',
+                                             textDecoration: 'none',
+                                             transition: 'all .2s',
+                                             zIndex: 1,
+                                             '&:hover': {
+                                                 textDecoration: 'underline',
+                                                 color: 'white'
+                                             }
+                                         }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
+                            }) :
                             <Box sx={{
                                 fontSize: '.8rem',
                                 lineHeight: '1.5rem',
@@ -247,7 +249,7 @@ function MediaCard({ item }) {
                     visibility: 'hidden',
                     opacity: '0',
                     transition: 'all 0s'
-                }} />
+                }}/>
                 <Box sx={{
                     fontWeight: '500',
 
@@ -309,32 +311,44 @@ function MediaCard({ item }) {
                             }
                         }}
                     >
-                        <MenuItem >
+                        <MenuItem>
                             Go to song radio
                         </MenuItem>
-                        <MenuItem >
+                        <MenuItem>
                             Go to artist
                         </MenuItem>
-                        <MenuItem >
+                        <MenuItem>
                             Go to album
                         </MenuItem>
-                        <MenuItem >
+                        <MenuItem>
                             Show credits
                         </MenuItem>
                         <MenuItem
                             sx={{
-                                position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                position: 'relative',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
                                 '&:hover .playlist': {
                                     display: 'block'
                                 }
                             }}>
                             Add to playlist
-                            <ArrowRightIcon />
+                            <ArrowRightIcon/>
                             <Box className="playlist" sx={{
-                                position: 'absolute', left: '0px', bottom: '0', transform: 'translate(-100%,0)', borderRadius: '5px',
-                                display: 'none', transition: '0.3s ease',
-                                background: '#282828', padding: '5px', boxShadow: '0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%)',
-                                width: '220px', maxHeight: '300px', overflow: 'hidden'
+                                position: 'absolute',
+                                left: '0px',
+                                bottom: '0',
+                                transform: 'translate(-100%,0)',
+                                borderRadius: '5px',
+                                display: 'none',
+                                transition: '0.3s ease',
+                                background: '#282828',
+                                padding: '5px',
+                                boxShadow: '0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%)',
+                                width: '220px',
+                                maxHeight: '300px',
+                                overflow: 'hidden'
 
                             }}>
                                 <Button sx={{
@@ -358,27 +372,28 @@ function MediaCard({ item }) {
                                 }} onClick={handleCreatePlaylist}>
                                     Create playlist
                                 </Button>
-                                <Box sx={{ width: '100%', overflowY: 'auto', height: '200px', display: 'block' }} className="scroll-component">
+                                <Box sx={{width: '100%', overflowY: 'auto', height: '200px', display: 'block'}}
+                                     className="scroll-component">
                                     {playlist.map(item => (
                                         <Button key={item._id}
-                                            sx={{
-                                                display: 'block', width: '100%',
-                                                color: 'white',
-                                                textAlign: 'left',
-                                                textTransform: 'none',
-                                                fontSize: '.825rem',
-                                                fontWeight: '500',
-                                                letterSpacing: '.5px',
-                                                paddingTop: '8px',
-                                                paddingBottom: '8px',
-                                                borderRadius: '5px',
-                                                transition: 'all .15s ease-in-out',
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(255,255,255,.1)',
-                                                }
+                                                sx={{
+                                                    display: 'block', width: '100%',
+                                                    color: 'white',
+                                                    textAlign: 'left',
+                                                    textTransform: 'none',
+                                                    fontSize: '.825rem',
+                                                    fontWeight: '500',
+                                                    letterSpacing: '.5px',
+                                                    paddingTop: '8px',
+                                                    paddingBottom: '8px',
+                                                    borderRadius: '5px',
+                                                    transition: 'all .15s ease-in-out',
+                                                    '&:hover': {
+                                                        backgroundColor: 'rgba(255,255,255,.1)',
+                                                    }
 
-                                            }}
-                                            onClick={() => handleAddSongToPlaylist(item._id)}>
+                                                }}
+                                                onClick={() => handleAddSongToPlaylist(item._id)}>
                                             {item.name}
                                         </Button>
                                     ))}
@@ -386,13 +401,12 @@ function MediaCard({ item }) {
 
                             </Box>
                         </MenuItem>
-                        <MenuItem >
+                        <MenuItem>
                             Share
                         </MenuItem>
-                        <MenuItem >
+                        <MenuItem>
                             Open in Desktop app
                         </MenuItem>
-
                     </Menu>
                 </Box>
             </Box>

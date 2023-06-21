@@ -54,6 +54,18 @@ class Spotify {
         })
     }
 
+    async addSongToAlbum(albumId, songId) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().post(`/albums/${albumId}/add-song/${songId}`).then(resolve).catch(reject)
+        })
+    }
+
+    async removeSongFromAlbum(albumId, songId) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().post(`/albums/${albumId}/remove-song/${songId}`).then(resolve).catch(reject)
+        })
+    }
+
     async getAlbums() {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/albums`).then(resolve).catch(reject)

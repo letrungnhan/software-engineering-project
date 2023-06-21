@@ -1,6 +1,6 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
+import {Box} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from "react-redux";
 import BackgroundColor from '../../../components/common/BackgroundColor';
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
@@ -8,13 +8,13 @@ import Layout from "../../../components/web/layout/Layout";
 import SpotifyService from "../../../services/SpotifyService";
 import ButtonGroupService from "../../../components/artist/button-group-service";
 import DefaultArtistImage from "../../../assets/images/default-artist.jpg";
-import { IconChecked } from "../../../components/common/Details";
+import {IconChecked} from "../../../components/common/Details";
 import EditIcon from '@mui/icons-material/Edit';
 import TracksSection from '../../../components/artist/sections/TracksSection';
 import CardSection from '../../../components/artist/sections/CardSection';
 
 function Artist() {
-    const { user } = useSelector(state => state);
+    const {user} = useSelector(state => state);
     const [tracks, setTracks] = useState([]);
     const [albums, setAlbums] = useState([]);
 
@@ -22,7 +22,7 @@ function Artist() {
         if (!user?.info?._id) return;
         SpotifyService.getSongByArtistId(user.info._id)
             .then(res => {
-                setTracks([...res.data.songs.map(song => ({ ...song, type: 'track' }))])
+                setTracks([...res.data.songs.map(song => ({...song, type: 'track'}))])
             })
             .catch(err => {
                 setTracks([])
@@ -30,7 +30,7 @@ function Artist() {
 
         SpotifyService.getAlbumsByArtistId(user.info._id)
             .then(res => {
-                setAlbums([...res.data.albums.map(album => ({ ...album, type: 'album' }))])
+                setAlbums([...res.data.albums.map(album => ({...album, type: 'album'}))])
             })
             .catch(err => {
                 setAlbums([])
@@ -38,20 +38,20 @@ function Artist() {
     }, [user])
 
     return (
-        <Helmet title={user?.info?.name} style={{ position: 'relative' }}>
+        <Helmet title={user?.info?.name} style={{position: 'relative'}}>
             <Layout>
                 <Header>
-                    <ButtonGroupService />
+                    <ButtonGroupService/>
                 </Header>
-                <BackgroundColor />
-                <Box sx={{ p: 3 }}>
-                    <ArtistProfile artist={{ ...user?.info }} />
+                <BackgroundColor/>
+                <Box sx={{p: 3}}>
+                    <ArtistProfile artist={{...user?.info}}/>
                 </Box>
-                <Box sx={{ p: 3 }}>
-                    <TracksSection items={tracks} createdAt={true} hasAlbum={true} />
+                <Box sx={{p: 3}}>
+                    <TracksSection items={tracks} createdAt={true} hasAlbum={true}/>
                 </Box>
-                <Box sx={{ p: 3 }}>
-                    <CardSection items={albums} title="Album của tôi" type="album" />
+                <Box sx={{p: 3}}>
+                    <CardSection items={albums} title="Album của tôi" type="album"/>
                 </Box>
             </Layout>
         </Helmet>
@@ -59,11 +59,11 @@ function Artist() {
     );
 }
 
-const ArtistProfile = ({ artist }) => {
+const ArtistProfile = ({artist}) => {
     const [openEdit, setOpenEdit] = useState(false);
 
     return (
-        <Box sx={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
             <Box
                 component="div"
                 sx={{
@@ -110,19 +110,21 @@ const ArtistProfile = ({ artist }) => {
                             textTransform: 'uppercase',
                             display: 'flex', alignItems: 'center'
                         }}>
-                        <IconChecked />
+                        <IconChecked/>
                     </Box>
                     <Box component={"button"} type={"button"} onClick={() => setOpenEdit(true)}
-                        sx={{
-                            background: 'var(--primary-color)', outline: 'none', border: 'none',
-                            fontSize: '0.925rem', fontWeight: 600, color: 'white', padding: '6px 12px',
-                            borderRadius: '50px',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                            cursor: 'pointer'
-                        }}
+                         sx={{
+                             background: 'var(--primary-color)', outline: 'none', border: 'none',
+                             fontSize: '0.85rem', fontWeight: 600, color: 'white', padding: '6px 12px',
+                             borderRadius: '50px', letterSpacing: '1px',
+                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                             cursor: 'pointer'
+                         }}
                     >
-                        <EditIcon sx={{ width: '18px', height: '18px' }} />
-                        Edit Profile
+                        <EditIcon sx={{width: '16px', height: '16px'}}/>
+                        <Box sx={{position:'relative', top:'0.8px'}}>
+                            Edit Profile
+                        </Box>
                     </Box>
                 </Box>
                 <Box sx={{
@@ -132,7 +134,7 @@ const ArtistProfile = ({ artist }) => {
                 }}>
                     {artist.name}
                 </Box>
-                <Box sx={{ color: 'white', fontWeight: '500', fontSize: '.9rem' }}>
+                <Box sx={{color: 'white', fontWeight: '500', fontSize: '.9rem'}}>
                     {artist.label && <Box mb={1}>{artist.label}</Box>}
                     {artist.followers && <Box mb={1}>{artist.followers} người nghe hàng tháng</Box>}
                 </Box>
@@ -141,7 +143,7 @@ const ArtistProfile = ({ artist }) => {
     )
 }
 
-const EditArtistProfile = ({ openEdit, artist }) => {
+const EditArtistProfile = ({openEdit, artist}) => {
 
 
     return (

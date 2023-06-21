@@ -1,7 +1,3 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
 
 const {PlayList, validatePlayList} = require('../models/playlist');
 const {User} = require('../models/user');
@@ -123,9 +119,9 @@ const getRandomPlayList = asyncHandler(async (req, res) => {
 
 // @desc    Get playlist by id and songs
 const getPlayListById = asyncHandler(async (req, res) => {
-    const playList = await PlayList.findById(req.params.id).populate('songs').populate('user');
+    const playList = await PlayList.getPlaylistById(req.params.id);
     if (!playList) return res.status(404).send({message: 'Playlist not found'});
-    res.status(200).send({playList, message: 'Playlist fetched successfully'});
+    return res.status(200).send({playList, message: 'Playlist fetched successfully'});
 });
 
 // @desc    Get playlist by id and songs
