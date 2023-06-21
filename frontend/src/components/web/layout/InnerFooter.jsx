@@ -38,7 +38,7 @@ function InnerFooter() {
                         <SmallLabel title={'About Ads'}/>
                         <SmallLabel title={'Accessibility'}/>
                     </Box>
-                    <Box>2023 Spotify AB</Box>
+                    <Box sx={{fontWeight: '500', fontSize: '0.9rem'}}>@2023 Spotify AB</Box>
                 </Box>
             </Box>
         </Box>
@@ -48,7 +48,7 @@ function InnerFooter() {
 const HeadingLabel = ({title}) => {
     return (
         <Box sx={{
-            fontWeight: '600', fontSize: '0.95rem', mb: 2
+            fontWeight: '600', fontSize: '0.95rem', mb: 2, cursor: 'default'
         }}>
             {title}
         </Box>
@@ -57,7 +57,7 @@ const HeadingLabel = ({title}) => {
 const Label = ({title}) => {
     return (
         <Box sx={{
-            fontWeight: '500', fontSize: '0.95rem', color: '#a7a7a7', mb: 2
+            fontWeight: '500', fontSize: '0.95rem', color: '#a7a7a7', mb: 2, cursor: 'pointer'
         }}>
             {title}
         </Box>
@@ -66,7 +66,7 @@ const Label = ({title}) => {
 const SmallLabel = ({title}) => {
     return (
         <Box sx={{
-            fontWeight: '500', fontSize: '0.9rem', color: '#a7a7a7', mb: 2
+            fontWeight: '500', fontSize: '0.9rem', color: '#a7a7a7', mb: 2, cursor: 'pointer'
         }}>
             {title}
         </Box>
