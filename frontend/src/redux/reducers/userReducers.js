@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import * as types from "../constants/ActionType";
 import {getItem, removeItem, setItem} from "../../utils/localStorage";
 

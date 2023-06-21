@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import {protectedRequest, publicRequest} from "../utils/requestMethod";
 
 class Spotify {

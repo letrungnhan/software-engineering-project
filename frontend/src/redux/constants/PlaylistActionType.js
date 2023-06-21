@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const playlist = {
     GET_PLAYLIST: 'GET_PLAYLIST',
     GET_PLAYLIST_FAILED: 'GET_PLAYLIST_FAILED',

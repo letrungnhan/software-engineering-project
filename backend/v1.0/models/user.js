@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     birthday: { type: Date, required: true },
     isArtist: { type: Boolean, default: true },
     isAdmin: { type: Boolean, default: false },
-    likedSongs: { type: [String], default: [] },
+    likedSongs: { type: [], default: [] },
     playLists: { type: [String], default: [] },
 }, { timestamps: true })
 

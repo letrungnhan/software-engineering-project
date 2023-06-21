@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const audio = {
     SET_AUDIO: 'SET_AUDIO',
     CHANGE_VOLUME: 'CHANGE_VOLUME',
