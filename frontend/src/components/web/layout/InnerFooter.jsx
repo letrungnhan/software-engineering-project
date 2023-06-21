@@ -3,8 +3,8 @@ import {Box} from "@mui/material";
 
 function InnerFooter() {
     return (
-        <Box sx={{mx: 3, background: '#181818', p: 5, borderRadius: '8px'}}>
-            <Box sx={{display: 'flex', gap: 5, mb: 3}}>
+        <Box sx={{mx: 3, background: '#181818', py: 5, borderRadius: '8px'}}>
+            <Box sx={{display: 'flex', gap: 5, mb: 3, px: 5}}>
                 <Box sx={{minWidth: '200px'}}>
                     <HeadingLabel title={'Company'}/>
                     <Label title={'About'}/>
@@ -27,7 +27,7 @@ function InnerFooter() {
                 </Box>
             </Box>
             <Box sx={{
-                py: 3
+                px: 5, pt: 3, borderTop: '1px solid #ffffff1a'
             }}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', gap: 5}}>
                     <Box sx={{display: 'flex', gap: 5}}>

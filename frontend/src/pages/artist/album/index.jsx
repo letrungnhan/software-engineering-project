@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
 import SpotifyService from "../../../services/SpotifyService";
-import {useNavigate, useParams} from 'react-router-dom';
-import CreateAlbum from "../create-album";
+import {useParams} from 'react-router-dom';
+import {ShowingAlbum} from "../create-album";
 import Helmet from "../../../components/common/Helmet";
 
 function Album() {
@@ -25,10 +24,11 @@ function Album() {
 
     return (
         <Helmet title={title}>
-            <CreateAlbum image={image} title={title} songs={songs}/>
+            <ShowingAlbum albumId={id} title={title} songs={songs} image={image}/>
         </Helmet>
     );
-};
+}
+
 export default Album;
 
 

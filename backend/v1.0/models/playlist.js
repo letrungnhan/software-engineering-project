@@ -24,7 +24,14 @@ const validatePlayList = (playList) => {
     return schema.validate(playList);
 }
 
-
+playListSchema.statics.getPlaylistById = async function (id) {
+    const options = {path: 'songs.artists', model: 'User'};
+    return await PlayList.findById(id).populate('user').populate('songs')
+        .then(async (data) => {
+            const options = {path: 'songs.artists', model: 'User'};
+            return await PlayList.populate(data, options);
+        })
+}
 const PlayList = mongoose.model('PlayList', playListSchema);
 
 module.exports = {PlayList, validatePlayList};
