@@ -1,78 +1,108 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
-const {User} = require("../models/user");
+const { User } = require("../models/user");
 
 
 // @desc    create a new song
 const createSong = asyncHandler(async (req, res) => {
-    const {error} = Song.validateSong(req.body);
+    const { error } = Song.validateSong(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     const song = await new Song(req.body).save();
-    res.status(200).send({song, message: 'Song created successfully'});
+    res.status(200).send({ song, message: 'Song created successfully' });
 });
 
 // @desc    Update a song by id
 const updateSongById = asyncHandler(async (req, res) => {
-    const song = await Song.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
-    if (!song) return res.status(404).send({message: 'Song not found'});
-    return res.status(200).send({song});
+    const song = await Song.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+    if (!song) return res.status(404).send({ message: 'Song not found' });
+    return res.status(200).send({ song });
 });
 
 // @desc    Delete a song by id
 const deleteSongById = asyncHandler(async (req, res) => {
-    await Song.findByIdAndDelete(req.params.id);
-    res.status(200).send({message: 'Song deleted successfully'});
+    const isDelete = await Song.findByIdAndDelete(req.params.id);
+    res.status(200).send({
+        message: 'Song deleted successfully',
+        isDeleteSong: isDelete
+
+    });
 });
 
 // @desc    Get a song by id
 const getSongById = asyncHandler(async (req, res) => {
     const song = await Song.getSongById(req.params.id);
-    if (!song) return res.status(404).send({message: 'Song not found'});
-    res.status(200).send({song});
+    if (!song) return res.status(404).send({ message: 'Song not found' });
+    res.status(200).send({ song });
 });
 
 // @desc    Get all songs
 const getSongs = asyncHandler(async (req, res) => {
     const songs = await Song.getSongs();
-    return res.status(200).send({songs});
+    return res.status(200).send({ songs });
 });
 
 // @desc    Get a song by artist id
 const getSongsByArtistId = asyncHandler(async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const songs = await Song.getSongsByArtistId(id);
-    if (!songs) return res.status(404).send({message: 'Artist not found'});
-    return res.status(200).send({songs});
+    if (!songs) return res.status(404).send({ message: 'Artist not found' });
+    return res.status(200).send({ songs });
 });
 
 // @desc   like a song
 const likeSong = asyncHandler(async (req, res) => {
-
     let responseMessage = '';
-
     const song = await Song.findById(req.params.id);
     if (!song) return res.status(404).send({
         message: 'Song not found'
     });
 
     const user = await User.findById(req.user._id);
-    const index = user.likedSongs.indexOf(song._id);
+    if (!user) return res.status(404).send({
+        message: 'User not found'
+    });
+    const match = user.likedSongs.find((songLike) => songLike._id.toString() === song._id.toString());
+    // console.log(match, 'match');
+    const index = user.likedSongs.indexOf(match);
+    // console.log(song._id, 'song._id');
+    // console.log(index, 'index');
     if (index === -1) {
-        user.likedSongs.push(song._id);
+        // console.log('liked');
+        user.likedSongs.push(song)
+        await user.save();
         responseMessage = 'Song liked successfully';
     } else {
+        // console.log('unliked');
         user.likedSongs.splice(index, 1);
+        await user.save();
         responseMessage = 'Song unliked successfully';
     }
-    res.status(200).send({message: responseMessage});
+    res.status(200).send({
+        message: responseMessage,
+
+
+    });
 });
 
-// @desc   get all liked songs
 const getLikedSongs = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-    const songs = await Song.find({_id: {$in: user.likedSongs}});
-    res.status(200).send({data: songs});
+
+    if (!user) return res.status(404).send({
+        message: 'User not found'
+    });
+    const songs = await Song.getSongsByAllId(user.likedSongs);
+    res.status(200).send({
+        songs,
+        message: 'Liked songs fetched successfully'
+    });
 });
+
+
+
 
 module.exports = {
     createSong,

@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import * as types from "../constants/ActionType";
 
 const userReducers = (state = { volume: 100 }, action) => {
