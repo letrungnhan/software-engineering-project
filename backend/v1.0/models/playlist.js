@@ -16,10 +16,10 @@ const playListSchema = new mongoose.Schema({
 const validatePlayList = (playList) => {
     const schema = joi.object({
         name: joi.string().required(),
-        user: joi.string().required(),
         description: joi.allow(''),
-        songs: joi.array().items(joi.string()),
         imageUrl: joi.allow(''),
+        user: joi.string().required(),
+        
     });
     return schema.validate(playList);
 }

@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import axios from "axios";
 import { getItem } from "./localStorage";
 

@@ -20,7 +20,7 @@ const { createPlayList,
     getPlayListByUserId } = require('../controllers/playListController');
 
 router.post("/create", [auth], createPlayList);
-router.put("/edit/:id", [auth, validateObjectId], editPlayList);
+router.put("/edit/:id", [auth], editPlayList);
 router.put("/addSong", [auth], addSongToPlayList);
 router.put("/removeSong", [auth], removeSongFromPlayList);
 router.get("/favorite", [auth], getUserFavoritePlayList);
