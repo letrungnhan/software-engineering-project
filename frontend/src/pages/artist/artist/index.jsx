@@ -144,8 +144,7 @@ const ArtistProfile = ({artist}) => {
 }
 
 const EditArtistProfile = ({openEdit, artist}) => {
-
-
+    
     return (
         <Box>
 
