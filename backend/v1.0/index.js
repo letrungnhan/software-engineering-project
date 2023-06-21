@@ -16,6 +16,7 @@ const songRoute = require('./routes/songRoute');
 const albumRoute = require('./routes/albumRoute');
 const playListRoute = require('./routes/playListRoute');
 const searchRoute = require('./routes/searchRoute');
+const artistRoute = require('./routes/artistRoute');
 
 // db connection
 const dbConnect = require('./config/dbConnect');
@@ -31,11 +32,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // routes
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
+app.use('/api/artists', artistRoute);
 app.use('/api/songs', songRoute);
 app.use('/api/albums', albumRoute);
 app.use('/api/playlists', playListRoute);
 app.use('/api/search', searchRoute);
-
 // routes
 
 

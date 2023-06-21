@@ -1,13 +1,13 @@
-import { Link } from "react-router-dom";
-import { Box } from '@mui/material'
+import {Link} from "react-router-dom";
+import {Box} from '@mui/material'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { formatTime } from "../../utils/changeDuration";
+import {formatTime} from "../../utils/changeDuration";
 import DefaultAlbumImage from "../../assets/images/default-artist.jpg";
 
-const Details = ({ info }) => {
+const Details = ({info}) => {
 
     return (
-        <Box sx={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
             <Box
                 component="div"
                 sx={{
@@ -45,13 +45,13 @@ const Details = ({ info }) => {
                 gap: '2.5rem'
             }}>
                 <Box mt={1}
-                    sx={{
-                        fontSize: '.9rem',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        display: 'flex', alignItems: 'center'
-                    }}>
-                    {info.type === 'artist' ? <IconChecked /> : info.type}
+                     sx={{
+                         fontSize: '.9rem',
+                         fontWeight: '600',
+                         textTransform: 'uppercase',
+                         display: 'flex', alignItems: 'center'
+                     }}>
+                    {info.type === 'artist' ? <IconChecked/> : info.type}
                 </Box>
                 <Box sx={{
                     fontSize: info.title?.length > 15 ? '2.5rem' : '5.5rem',
@@ -60,23 +60,24 @@ const Details = ({ info }) => {
                 }}>
                     {info.title || info.name}
                 </Box>
-                <Box sx={{ color: 'white', fontWeight: '500', fontSize: '.9rem', }}>
+                <Box sx={{color: 'white', fontWeight: '500', fontSize: '.9rem',}}>
                     {info.label && <Box mb={1}>{info.label}</Box>}
                     {info.followers && <Box mb={1}>{info.followers} người nghe hàng tháng</Box>}
-                    {info.artists?.map((artist, i) => (
-                        <Artists artist={artist} key={artist._id} showSeparate={i < info.artists.length} />
-                    ))}
-                    {info.duration &&
-                        <Box component="span" sx={{ color: '#b3b3b3' }}>
-                            {formatTime(info.duration)}
-                        </Box>
+                    {info.artists?.length > 0 ?
+                        <>
+                            {info.artists?.map((artist, i) => (
+                                <Artists artist={artist} key={i} showSeparate={i < info.artists.length}/>
+                            ))}
+                        </> :
+                        <Artists artist={{name: 'Anonymous'}}/>
                     }
-                    <Box component="span" sx={{ display: 'inline-block' }}>
-                        {info.totalTracks &&
-                            <Box component="span">
-                                <FiberManualRecordIcon sx={{ fontSize: '8px', mx: '4px' }} />     {info.totalTracks} bài hát
-                            </Box>
-                        }
+                    <Box component="span" sx={{color: '#b3b3b3'}}>
+                        {formatTime(info.duration || 0)}
+                    </Box>
+                    <Box component="span" sx={{display: 'inline-block'}}>
+                        <Box component="span">
+                            <FiberManualRecordIcon sx={{fontSize: '8px', mx: '4px'}}/> {info.totalTracks || 0} bài hát
+                        </Box>
                     </Box>
                 </Box>
             </Box>
@@ -84,9 +85,9 @@ const Details = ({ info }) => {
     )
 }
 
-const Artists = ({ artist, showSeparate }) => {
+const Artists = ({artist, showSeparate}) => {
     return (
-        <Box sx={{ display: 'inline' }}>
+        <Box sx={{display: 'inline'}}>
             <Box
                 component={Link}
                 to={`/artist/${artist.id}`}
@@ -101,7 +102,7 @@ const Artists = ({ artist, showSeparate }) => {
                 {artist.name}
             </Box>
             {showSeparate &&
-                <FiberManualRecordIcon sx={{ fontSize: '8px', mx: '4px' }} />
+                <FiberManualRecordIcon sx={{fontSize: '8px', mx: '4px'}}/>
             }
         </Box>
     )
@@ -119,7 +120,7 @@ export const IconChecked = () => {
                     d="M16.8637 7.41226l-6.6435 7.77824-2.80421-3.2842-.4935.5775 3.29771 3.8617 7.2135-8.44649-.57-.48675z"
                     fill="#fff"></path>
             </svg>
-            <Box sx={{ textTransform: 'none', fontWeight: '500', fontSize: '.9rem' }}>Nghệ sĩ được xác minh</Box>
+            <Box sx={{textTransform: 'none', fontWeight: '500', fontSize: '.9rem'}}>Nghệ sĩ được xác minh</Box>
         </Box>
     )
 }

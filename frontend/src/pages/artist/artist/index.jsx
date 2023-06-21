@@ -57,7 +57,7 @@ function Artist() {
         </Helmet>
 
     );
-};
+}
 
 const ArtistProfile = ({ artist }) => {
     const [openEdit, setOpenEdit] = useState(false);

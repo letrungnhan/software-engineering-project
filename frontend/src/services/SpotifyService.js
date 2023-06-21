@@ -1,4 +1,4 @@
-import { protectedRequest, publicRequest } from "../utils/requestMethod";
+import {protectedRequest, publicRequest} from "../utils/requestMethod";
 
 class Spotify {
 
@@ -14,14 +14,22 @@ class Spotify {
         })
     }
 
+    async updateTrack(track) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/songs/${track._id}`, track).then(resolve).catch(reject)
+        })
+    }
+
     async getSongByArtistId(artistId) {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/songs/artist/${artistId}`).then(resolve).catch(reject)
         })
     }
 
-    async getArtist() {
-        return 'artist';
+    async getArtistById(id) {
+        return new Promise((resolve, reject) => {
+            publicRequest().get(`/artists/${id}`).then(resolve).catch(reject)
+        })
     }
 
     async getAllSongs() {
@@ -42,6 +50,12 @@ class Spotify {
         })
     }
 
+    async getAlbums() {
+        return new Promise((resolve, reject) => {
+            publicRequest().get(`/albums`).then(resolve).catch(reject)
+        })
+    }
+
     async getAlbumById(albumId) {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/albums/${albumId}`).then(resolve).catch(reject)
@@ -59,19 +73,22 @@ class Spotify {
             protectedRequest().post(`/playlists/create`, playlist).then(resolve).catch(reject)
         })
     }
+
     async deletePlaylist(id) {
         return new Promise((resolve, reject) => {
             protectedRequest().delete(`/playlists/${id}`).then(resolve).catch(reject)
         })
     }
+
     async editPlaylist(id, playlist) {
         return new Promise((resolve, reject) => {
             protectedRequest().put(`/playlists/edit/${id}`, playlist).then(resolve).catch(reject)
         })
     }
-    async addSongToPlaylist({ playListId, songId }) {
+
+    async addSongToPlaylist({playListId, songId}) {
         return new Promise((resolve, reject) => {
-            protectedRequest().put(`/playlists/addSong`, { playListId, songId }).then(resolve).catch(reject)
+            protectedRequest().put(`/playlists/addSong`, {playListId, songId}).then(resolve).catch(reject)
         })
     }
 
@@ -86,6 +103,7 @@ class Spotify {
             protectedRequest().get(`/playlists/user/${userId}`).then(resolve).catch(reject)
         })
     }
+
     async search(textSearch) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/search/search?q=${textSearch}`).then(resolve).catch(reject)

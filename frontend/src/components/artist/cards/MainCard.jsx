@@ -34,7 +34,7 @@ export default function MainCard({item, type}) {
                 <PlayArrowRoundedIcon sx={{fontSize: '40px',}}/>
             </IconButton>
             <CardActionArea
-                component={Link} to={`/services/artist/${type}/${_id}`}
+                component={Link} to={`/services/${type}/${_id}`}
                 sx={{zIndex: 0, padding: '16px'}}>
                 <Box
                     component="div"
@@ -87,7 +87,7 @@ export default function MainCard({item, type}) {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                     }}>
-                        {desc || artists.map(a => a.name)}
+                        {desc || artists?.map(a => a.name)}
                     </Typography>
                 </CardContent>
             </CardActionArea>

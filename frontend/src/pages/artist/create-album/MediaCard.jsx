@@ -70,15 +70,15 @@ function MediaCard({ item, addSong }) {
                     }} />
                     {isPlaying && audio?.isPlaying ?
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{ width: '100%', textAlign: 'center' }}>
                             <Box component={"img"} sx={{
                                 width: '16px', height: '16px'
                             }}
-                                src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
-                                alt={"equalizer"} />
+                                 src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
+                                 alt={"equalizer"} />
                         </Box> :
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{ width: '100%', textAlign: 'center' }}>
                             {item.number}
                         </Box>
                     }
@@ -145,22 +145,22 @@ function MediaCard({ item, addSong }) {
                         maxWidth: '350px'
                     }}>
                         {item?.artists?.length < 10 ? item?.artists?.map((artist, index) => {
-                            return (
-                                <Box key={index} component={Link} to={`/artist/${artist._id}`}
-                                    sx={{
-                                        fontSize: '.8rem',
-                                        lineHeight: '1.5rem',
-                                        height: '1.5rem',
-                                        color: '#b3b3b3',
-                                        textDecoration: 'none',
-                                        transition: 'all .2s',
-                                        zIndex: 1,
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                            color: 'white'
-                                        }
-                                    }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
-                        }) :
+                                return (
+                                    <Box key={index} component={Link} to={`/artist/${artist._id}`}
+                                         sx={{
+                                             fontSize: '.8rem',
+                                             lineHeight: '1.5rem',
+                                             height: '1.5rem',
+                                             color: '#b3b3b3',
+                                             textDecoration: 'none',
+                                             transition: 'all .2s',
+                                             zIndex: 1,
+                                             '&:hover': {
+                                                 textDecoration: 'underline',
+                                                 color: 'white'
+                                             }
+                                         }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
+                            }) :
                             <Box sx={{
                                 fontSize: '.8rem',
                                 lineHeight: '1.5rem',

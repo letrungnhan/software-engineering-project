@@ -1,53 +1,32 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import TracksSection from "./TracksSection";
-import BackgroundColor from '../../../components/common/BackgroundColor';
-import Details from "../../../components/common/Details";
-import Helmet from '../../../components/common/Helmet';
-import Header from '../../../components/web/layout/Header';
-import Layout from "../../../components/web/layout/Layout";
+import React, {useEffect, useState} from 'react';
+import {useSelector} from "react-redux";
 import SpotifyService from "../../../services/SpotifyService";
-import ButtonGroupService from '../../../components/artist/button-group-service';
-import { useParams } from 'react-router-dom';
-
-
+import {useNavigate, useParams} from 'react-router-dom';
+import CreateAlbum from "../create-album";
+import Helmet from "../../../components/common/Helmet";
 
 function Album() {
-    const { id } = useParams();
-    const { user } = useSelector(state => state);
+    const {id} = useParams();
     const [songs, setSongs] = useState([]);
-    const [info, setInfo] = useState({})
+    const [title, setTitle] = useState(null);
+    const [image, setImage] = useState(null);
+
     useEffect(() => {
         SpotifyService.getAlbumById(id)
             .then(res => {
-                setInfo({
-                    ...res.data.album, type: 'album'
-                })
+                setTitle(res.data.album.title)
+                setImage(res.data.album.imageUrl)
                 setSongs(res.data.album.songs)
             })
             .catch(err => {
-                setInfo({})
                 setSongs([])
             })
     }, [id])
 
     return (
-        <Helmet title={'Nhạc của tôi'} style={{ position: 'relative' }}>
-            <Layout>
-                <Header>
-                    <ButtonGroupService />
-                </Header>
-                <BackgroundColor />
-                <Box sx={{ p: 3 }}>
-                    <Details info={{ ...info }} />
-                    <Box sx={{ my: 5 }}>
-                        <TracksSection items={songs || []} createdAt={true} hasAlbum={true} />
-                    </Box>
-                </Box>
-            </Layout>
+        <Helmet title={title}>
+            <CreateAlbum image={image} title={title} songs={songs}/>
         </Helmet>
-
     );
 };
 export default Album;

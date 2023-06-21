@@ -32,6 +32,7 @@ function Playlist() {
     useEffect(() => {
         SpotifyService.getPlaylistById(id)
             .then(res => {
+                console.log(res)
                 setName(res.data.playList.name || '')
                 setDescription(res.data.playList.desc || '')
                 setImage({ url: res.data.playList.imageUrl })

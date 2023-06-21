@@ -14,10 +14,8 @@ const createSong = asyncHandler(async (req, res) => {
 // @desc    Update a song by id
 const updateSongById = asyncHandler(async (req, res) => {
     const song = await Song.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
-    if (!song) return res.status(404).send({
-        message: 'Song not found'
-    });
-    res.status(200).send({song});
+    if (!song) return res.status(404).send({message: 'Song not found'});
+    return res.status(200).send({song});
 });
 
 // @desc    Delete a song by id
@@ -28,15 +26,15 @@ const deleteSongById = asyncHandler(async (req, res) => {
 
 // @desc    Get a song by id
 const getSongById = asyncHandler(async (req, res) => {
-    const song = await Song.findById(req.params.id);
+    const song = await Song.getSongById(req.params.id);
     if (!song) return res.status(404).send({message: 'Song not found'});
     res.status(200).send({song});
 });
 
 // @desc    Get all songs
 const getSongs = asyncHandler(async (req, res) => {
-    const songs = await Song.find();
-    res.status(200).send({songs});
+    const songs = await Song.getSongs();
+    return res.status(200).send({songs});
 });
 
 // @desc    Get a song by artist id
@@ -44,7 +42,7 @@ const getSongsByArtistId = asyncHandler(async (req, res) => {
     const {id} = req.params;
     const songs = await Song.getSongsByArtistId(id);
     if (!songs) return res.status(404).send({message: 'Artist not found'});
-    res.status(200).send({songs});
+    return res.status(200).send({songs});
 });
 
 // @desc   like a song
