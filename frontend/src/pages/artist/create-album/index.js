@@ -15,7 +15,7 @@ import Layout from "../../../components/web/layout/Layout";
 import './style.scss';
 import SpotifyService from "../../../services/SpotifyService";
 import TracksSection from '../../../components/artist/sections/TracksSection';
-import MediaCard from './MediaCard';
+import PopupMediaCard from './PopupMediaCard';
 import FirebaseService from '../../../services/FirebaseService';
 import CircularProgressWithLabel from '../../../components/web/CircularProgressWithLabel';
 
@@ -48,10 +48,13 @@ export const ShowingAlbum = (props) => {
         setArtists(props.artists || artists)
     }, [props])
 
-    function addSong(song) {
+    async function addSong(song) {
         const index = songs.findIndex(item => item._id === song._id)
         if (index !== -1) return;
         setSongs(prev => ([...prev, song]))
+        if (props.albumId) {
+            SpotifyService.addSongToAlbum(props.albumId, song._id)
+        }
     }
 
     function handleUploadImage(e) {
@@ -85,12 +88,30 @@ export const ShowingAlbum = (props) => {
         }
         SpotifyService.createAlbum(album)
             .then(res => {
-                navigate(`/services/artist/album/${res.data.album._id}`)
+                navigate(`/services/album/${res.data.album._id}`)
             })
             .catch(err => {
                 console.log(err.response);
                 setProgressUpload(null)
             })
+    }
+
+    async function removeFromAlbum(songId) {
+        if (props?.albumId) {
+            SpotifyService.removeSongFromAlbum(props.albumId, songId)
+                .then(res => {
+                    setSongs(prev => prev.filter(song => song._id !== songId))
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        } else {
+            setSongs(prev => prev.filter(song => song._id !== songId))
+        }
+    }
+
+    async function deleteAlbum() {
+
     }
 
     return (
@@ -140,7 +161,7 @@ export const ShowingAlbum = (props) => {
                 </div>
                 <div className={`${open ? 'open' : 'hidden'} popup`}>
                     <div className={"popup__header"}>
-                        <h5>Tạo Album</h5>
+                        {props.albumId ? <h5>Cập nhật Album</h5> : <h5>Tạo Album</h5>}
                         <button type={"button"} onClick={() => setOpen(false)}>
                             <CloseIcon className={"icon"}/>
                         </button>
@@ -202,6 +223,17 @@ export const ShowingAlbum = (props) => {
                 >
                     Thêm bài hát
                 </Box>
+                {props?.albumId &&
+                    <Box component={'button'} type='button' onClick={() => deleteAlbum()}
+                         sx={{
+                             background: '#ffffff12', color: 'white',
+                             fontSize: '0.9rem', fontWeight: '600', outline: 'none', border: 'none',
+                             p: '10px 24px', borderRadius: '5px', cursor: 'pointer',
+                         }}
+                    >
+                        Xóa Album
+                    </Box>
+                }
                 <Box component={'button'} type='button' onClick={handleSave}
                      sx={{
                          background: 'var(--primary-color)', color: 'white',
@@ -214,7 +246,7 @@ export const ShowingAlbum = (props) => {
             </Box>
             <PopupTracks artist={user?.info} openSong={openSong} setOpenSong={setOpenSong} addSong={addSong}/>
             <Box sx={{px: 3}}>
-                <TracksSection items={songs} createdAt={true}/>
+                <TracksSection items={songs} createdAt={true} removeFromAlbum={removeFromAlbum}/>
             </Box>
             <Backdrop open={!!progressUpload} sx={{zIndex: 1001}}>
                 <CircularProgressWithLabel value={progressUpload?.progress || 0} message={progressUpload?.message}/>
@@ -223,7 +255,7 @@ export const ShowingAlbum = (props) => {
     );
 }
 
-const PopupTracks = ({artist, songs, addSong, openSong, setOpenSong}) => {
+const PopupTracks = ({artist, addSong, openSong, setOpenSong}) => {
     const [tracks, setTracks] = useState([]);
 
     useEffect(() => {
@@ -268,7 +300,7 @@ const PopupTracks = ({artist, songs, addSong, openSong, setOpenSong}) => {
                 </form>
                 <Box sx={{overflowY: 'auto', maxHeight: '400px', pr: '10px'}} className="scroll-component">
                     {tracks.map((track, i) => (
-                        <MediaCard key={track._id} item={{...track, number: i + 1}} addSong={addSong}/>
+                        <PopupMediaCard key={track._id} item={{...track, number: i + 1}} addSong={addSong}/>
                     ))}
                 </Box>
             </Box>

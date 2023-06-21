@@ -1,20 +1,17 @@
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
-import { setCurrentTrack } from "../../../redux/actions/audioActions";
-import { formatTime } from "../../../utils/changeDuration";
-import { formatMediumTime } from "../../../utils/formatTime";
+import {Box} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from 'react-router-dom';
+import * as config from "../../../config/routes";
+import {setCurrentTrack} from "../../../redux/actions/audioActions";
+import {formatTime} from "../../../utils/changeDuration";
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 
-function MediaCard({ item }) {
-    const { audio } = useSelector(state => state);
+function PopupMediaCard({item, addSong}) {
+    const {audio} = useSelector(state => state);
     const dispatch = useDispatch();
-    const [isPlaying, setIsPlaying] = useState(() => {
-        return audio?.currentTrack?._id === item._id
-    })
+    const [isPlaying, setIsPlaying] = useState(() => audio?.currentTrack?._id === item._id)
 
     useEffect(() => {
         setIsPlaying(audio?.currentTrack?._id === item._id)
@@ -22,7 +19,7 @@ function MediaCard({ item }) {
 
     function playTrack() {
         if (audio?.currentTrack?._id === item._id) return;
-        const action = setCurrentTrack({ ...item, isPlaying: true });
+        const action = setCurrentTrack({...item, isPlaying: true});
         dispatch(action);
     }
 
@@ -30,6 +27,7 @@ function MediaCard({ item }) {
         <Box sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             gap: '1rem',
             height: '56px',
             padding: '0 16px',
@@ -67,18 +65,18 @@ function MediaCard({ item }) {
                         display: 'none',
                         opacity: '0',
                         width: '100%',
-                    }} />
+                    }}/>
                     {isPlaying && audio?.isPlaying ?
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             <Box component={"img"} sx={{
                                 width: '16px', height: '16px'
                             }}
-                                src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
-                                alt={"equalizer"} />
+                                 src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
+                                 alt={"equalizer"}/>
                         </Box> :
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             {item.number}
                         </Box>
                     }
@@ -123,7 +121,7 @@ function MediaCard({ item }) {
                 <Box sx={{
                     fontSize: '1rem', lineHeight: '1.5rem', letterSpacing: 'normal', fontWeight: '500', flex: 1
                 }}>
-                    <Box component={Link} to={`/me/song/${item?._id}`} sx={{
+                    <Box component={Link} to={`/services${config.serviceDetailSong}/${item?._id}`} sx={{
                         WebkitBoxOrient: 'vertical',
                         color: 'white',
                         textDecoration: 'none',
@@ -145,22 +143,22 @@ function MediaCard({ item }) {
                         maxWidth: '350px'
                     }}>
                         {item?.artists?.length < 10 ? item?.artists?.map((artist, index) => {
-                            return (
-                                <Box key={index} component={Link} to={`/artist/${artist._id}`}
-                                    sx={{
-                                        fontSize: '.8rem',
-                                        lineHeight: '1.5rem',
-                                        height: '1.5rem',
-                                        color: '#b3b3b3',
-                                        textDecoration: 'none',
-                                        transition: 'all .2s',
-                                        zIndex: 1,
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                            color: 'white'
-                                        }
-                                    }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
-                        }) :
+                                return (
+                                    <Box key={index} component={Link} to={`/artist/${artist._id}`}
+                                         sx={{
+                                             fontSize: '.8rem',
+                                             lineHeight: '1.5rem',
+                                             height: '1.5rem',
+                                             color: '#b3b3b3',
+                                             textDecoration: 'none',
+                                             transition: 'all .2s',
+                                             zIndex: 1,
+                                             '&:hover': {
+                                                 textDecoration: 'underline',
+                                                 color: 'white'
+                                             }
+                                         }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
+                            }) :
                             <Box sx={{
                                 fontSize: '.8rem',
                                 lineHeight: '1.5rem',
@@ -191,51 +189,29 @@ function MediaCard({ item }) {
             >
                 {item.album?.name}
             </Box>
-            <Box
-                sx={{
-                    textAlign: 'left',
-                    flex: 1,
-                    fontSize: '.9rem',
-                    fontWeight: '500',
-                    textDecoration: 'none',
-                    color: '#b3b3b3',
-                    transition: 'all .25s',
-                    '&:hover': {
-                        color: 'white', textDecoration: 'underline',
-                    }
-                }}
-            >
-                {item.createdAt && formatMediumTime(item.createdAt)}
-            </Box>
             <Box sx={{
                 fontWeight: '500',
                 color: '#b3b3b3',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '110px'
+                width: '80px'
             }}>
-                <FavoriteBorderOutlinedIcon sx={{
-                    fontSize: '1.2rem',
-                    visibility: 'hidden',
-                    opacity: '0',
-                    transition: 'all 0s'
-                }} />
                 <Box sx={{
                     fontWeight: '500',
 
                 }}>
                     {item.duration && formatTime(item.duration)}
                 </Box>
-                <MoreHorizIcon sx={{
+                <LibraryMusicIcon onClick={() => {
+                    addSong(item)
+                }} sx={{
                     fontSize: '1.2rem',
-                    visibility: 'hidden',
-                    opacity: '0',
                     transition: 'all 0s'
-                }} />
+                }}/>
             </Box>
         </Box>
     );
 }
 
-export default MediaCard;
+export default PopupMediaCard;

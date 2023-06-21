@@ -1,28 +1,36 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
-import { setCurrentTrack } from "../../../redux/actions/audioActions";
-import { formatTime } from "../../../utils/changeDuration";
-import { formatMediumTime } from "../../../utils/formatTime";
+import {Box, Menu, MenuItem} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from 'react-router-dom';
+import {setCurrentTrack} from "../../../redux/actions/audioActions";
+import {formatTime} from "../../../utils/changeDuration";
+import {formatMediumTime} from "../../../utils/formatTime";
 
-function MediaCard({ item }) {
-    const { audio } = useSelector(state => state);
+function MediaCard({item, removeFromAlbum}) {
+    const {audio} = useSelector(state => state);
     const dispatch = useDispatch();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
     const [isPlaying, setIsPlaying] = useState(() => {
         return audio?.currentTrack?._id === item._id
     })
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     useEffect(() => {
         setIsPlaying(audio?.currentTrack?._id === item._id)
     }, [audio?.currentTrack])
 
     function playTrack() {
         if (audio?.currentTrack?._id === item._id) return;
-        const action = setCurrentTrack({ ...item, isPlaying: true });
+        const action = setCurrentTrack({...item, isPlaying: true});
         dispatch(action);
     }
 
@@ -67,18 +75,18 @@ function MediaCard({ item }) {
                         display: 'none',
                         opacity: '0',
                         width: '100%',
-                    }} />
+                    }}/>
                     {isPlaying && audio?.isPlaying ?
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             <Box component={"img"} sx={{
                                 width: '16px', height: '16px'
                             }}
-                                src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
-                                alt={"equalizer"} />
+                                 src={'https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif'}
+                                 alt={"equalizer"}/>
                         </Box> :
                         <Box className='item-index'
-                            sx={{ width: '100%', textAlign: 'center' }}>
+                             sx={{width: '100%', textAlign: 'center'}}>
                             {item.number}
                         </Box>
                     }
@@ -145,22 +153,22 @@ function MediaCard({ item }) {
                         maxWidth: '350px'
                     }}>
                         {item?.artists?.length < 10 ? item?.artists?.map((artist, index) => {
-                            return (
-                                <Box key={index} component={Link} to={`/artist/${artist._id}`}
-                                    sx={{
-                                        fontSize: '.8rem',
-                                        lineHeight: '1.5rem',
-                                        height: '1.5rem',
-                                        color: '#b3b3b3',
-                                        textDecoration: 'none',
-                                        transition: 'all .2s',
-                                        zIndex: 1,
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                            color: 'white'
-                                        }
-                                    }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
-                        }) :
+                                return (
+                                    <Box key={index} component={Link} to={`/artist/${artist._id}`}
+                                         sx={{
+                                             fontSize: '.8rem',
+                                             lineHeight: '1.5rem',
+                                             height: '1.5rem',
+                                             color: '#b3b3b3',
+                                             textDecoration: 'none',
+                                             transition: 'all .2s',
+                                             zIndex: 1,
+                                             '&:hover': {
+                                                 textDecoration: 'underline',
+                                                 color: 'white'
+                                             }
+                                         }}>{index < item.artists.length - 1 ? `${artist.name}, ` : artist.name}</Box>)
+                            }) :
                             <Box sx={{
                                 fontSize: '.8rem',
                                 lineHeight: '1.5rem',
@@ -220,19 +228,84 @@ function MediaCard({ item }) {
                     visibility: 'hidden',
                     opacity: '0',
                     transition: 'all 0s'
-                }} />
+                }}/>
                 <Box sx={{
                     fontWeight: '500',
 
                 }}>
                     {item.duration && formatTime(item.duration)}
                 </Box>
-                <MoreHorizIcon sx={{
-                    fontSize: '1.2rem',
-                    visibility: 'hidden',
-                    opacity: '0',
-                    transition: 'all 0s'
-                }} />
+                <Box sx={{
+                    position: 'relative'
+                }}>
+                    <MoreHorizIcon
+                        id="song-options-button"
+                        aria-haspopup="true"
+                        aria-controls={open ? 'song-options' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        sx={{
+                            fontSize: '1.2rem',
+                            visibility: 'hidden',
+                            opacity: '0',
+                            transition: 'all 0s'
+                        }}
+                    />
+                    <Menu
+                        id="song-options"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'song-options-button',
+                        }}
+                        sx={{
+                            overflow: 'visible',
+                            mt: 1,
+                            '.MuiMenu-paper': {
+                                transform: 'translate(-50px,-100%) !important',
+                                borderRadius: '5px',
+                                background: 'transparent', overflow: 'visible'
+                            },
+                            '& ul': {
+                                backgroundColor: '#282828',
+                                color: '#fff',
+                                boxShadow: '0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%)',
+                                maxHeight: 'calc(100vh - 24px)',
+                                maxWidth: '350px',
+                                minWidth: '160px',
+                                padding: '5px',
+                                '& li': {
+                                    fontSize: '.8rem',
+                                    fontWeight: '500',
+                                    letterSpacing: '.5px',
+                                    py: '8px',
+                                    px: '5px',
+                                    borderRadius: '5px',
+                                    transition: 'all .15s ease-in-out',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(255,255,255,.1)',
+                                    }
+                                }
+                            }
+                        }}
+                    >
+                        {removeFromAlbum &&
+                            <MenuItem onClick={() => removeFromAlbum(item._id)}>
+                                Remove from album
+                            </MenuItem>
+                        }
+                        <MenuItem>
+                            Show credits
+                        </MenuItem>
+                        <MenuItem>
+                            Share
+                        </MenuItem>
+                        <MenuItem>
+                            Open in Desktop app
+                        </MenuItem>
+                    </Menu>
+                </Box>
             </Box>
         </Box>
     );

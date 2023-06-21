@@ -1,7 +1,4 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
+
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
 const { Album, validateAlbum } = require('../models/album');
@@ -54,8 +51,9 @@ const addSongToAlbum = asyncHandler(async (req, res) => {
     res.status(200).send({ album, message: 'Song added to album successfully' });
 });
 
-const removeSongFromAlbum = asyncHandler(async (req, res) => {
-    const { albumId, songId } = req.params;
+
+const removeSongFromAlbum = asyncHandler(async (req, res) =>  {
+    const {albumId, songId} = req.params;
     const album = await Album.findById(albumId);
     if (!album) {
         res.status(404).send({ message: 'Album not found' });
@@ -70,11 +68,12 @@ const removeSongFromAlbum = asyncHandler(async (req, res) => {
         res.status(400).send({ message: 'Song does not exist in album' });
         return;
     }
-    album.songs = album.songs.filter(song => song !== songId);
+    album.songs = album.songs.filter(song => song.toString() !== songId);
     album.totalTracks -= 1;
     album.duration -= song.duration;
     await album.save();
-    res.status(200).send({ album, message: 'Song removed from album successfully' });
+
+    return res.status(200).send({album, message: 'Song removed from album successfully'});
 });
 
 const addArtistToAlbum = asyncHandler(async (req, res) => {

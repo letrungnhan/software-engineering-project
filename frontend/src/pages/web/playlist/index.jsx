@@ -75,7 +75,7 @@ function Playlist() {
             name,
             description,
             imageUrl,
-            user: info.user,
+            user: info.user._id,
             songs: songs.map(song => song._id)
         }
         SpotifyService.editPlaylist(info._id, payload)

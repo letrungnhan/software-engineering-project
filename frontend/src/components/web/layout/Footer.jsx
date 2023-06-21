@@ -76,7 +76,7 @@ const Footer = () => {
                             </Box>
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
                                 {audio.currentTrack.artists.map((artist, i) => (
-                                    <Box key={artist._id} component={Link} to={`/artist/${artist._id}`} sx={{
+                                    <Box key={i} component={Link} to={`/artist/${artist._id}`} sx={{
                                         fontWeight: '500',
                                         textDecoration: 'none',
                                         fontSize: '0.8rem',
