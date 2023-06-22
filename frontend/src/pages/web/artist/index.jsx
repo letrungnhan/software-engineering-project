@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import Index from '../../../components/common/background-color';
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
 import Layout from "../../../components/web/layout/Layout";
@@ -53,7 +53,7 @@ function Artist() {
                 <Header>
                     <ButtonGroupService />
                 </Header>
-                <BackgroundColor />
+                <Index />
                 <Box sx={{ p: 3 }}>
                     {artist && <ArtistProfile artist={artist} />}
                 </Box>

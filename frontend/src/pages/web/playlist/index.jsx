@@ -5,7 +5,7 @@ import { Backdrop, Box, Button, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import Index from '../../../components/common/background-color';
 import Details from "./Details";
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
@@ -116,7 +116,7 @@ function Playlist() {
         <Helmet title={info.name} style={{ position: 'relative' }}>
             <Layout>
                 <Header />
-                <BackgroundColor />
+                <Index />
                 <Box sx={{ p: 3 }}>
                     <Details info={{ ...info }} open={setOpenEdit} />
                     <Backdrop open={!!progressUpload} sx={{ zIndex: 1001 }}>

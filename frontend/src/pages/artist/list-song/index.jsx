@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import TracksSection from "../../../components/artist/sections/TracksSection";
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import Index from '../../../components/common/background-color';
 import Details from "../../../components/common/Details";
 import Helmet from '../../../components/common/Helmet';
 import ButtonGroupService from "../../../components/artist/button-group-service";
@@ -35,7 +35,7 @@ const ListSong = () => {
                 <Header>
                     <ButtonGroupService />
                 </Header>
-                <BackgroundColor />
+                <Index />
                 <Box sx={{ p: 3 }}>
                     {artist && <Details info={{ ...user?.info, type: 'artist' }} />}
                     <Box sx={{ my: 5 }}>

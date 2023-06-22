@@ -112,7 +112,7 @@ export default function UserOptions() {
             >
                 <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
                 <MenuItem onClick={() => navigate("/services/artist")}>Hồ sơ của tôi</MenuItem>
-                <MenuItem onClick={() => navigate("/services/artist/song/upload")}>Tải nhạc lên</MenuItem>
+                <MenuItem onClick={() => navigate("/services/song/upload")}>Tải nhạc lên</MenuItem>
                 <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>
         </Box>

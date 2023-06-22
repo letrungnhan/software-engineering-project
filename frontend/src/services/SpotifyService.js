@@ -54,6 +54,12 @@ class Spotify {
         })
     }
 
+    async updateAlbum(albumId, album) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/albums/${albumId}`, album).then(resolve).catch(reject)
+        })
+    }
+
     async addSongToAlbum(albumId, songId) {
         return new Promise((resolve, reject) => {
             protectedRequest().post(`/albums/${albumId}/add-song/${songId}`).then(resolve).catch(reject)

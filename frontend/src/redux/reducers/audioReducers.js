@@ -4,7 +4,7 @@
  */
 import * as types from "../constants/ActionType";
 
-const userReducers = (state = { volume: 100 }, action) => {
+const userReducers = (state = { volume: 50 }, action) => {
     switch (action.type) {
         case types.audio.SET_AUDIO:
             if (!state.currentTrack) return { ...state }

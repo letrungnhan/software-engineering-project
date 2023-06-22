@@ -8,15 +8,14 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const Header = (props) => {
     const navigate = useNavigate()
     const [onScroll, setOnScroll] = useState(false)
+
     useEffect(() => {
         const content = document.querySelector('.container__content')
         content?.addEventListener('scroll', () => {
             setOnScroll(content.scrollTop > 50)
         })
-        return () => {
-            // content?.removeEventListener();
-        }
     }, [])
+
     return (
         <Grid container
               className={onScroll ? 'header__on-scroll' : ''}

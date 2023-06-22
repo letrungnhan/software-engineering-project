@@ -2,7 +2,7 @@ import {memo, useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
 import Helmet from '../../../components/common/Helmet'
 import Header from '../../../components/web/layout/Header'
-import BackgroundColor from '../../../components/common/BackgroundColor'
+import Index from '../../../components/common/background-color'
 import SpotifyService from "../../../services/SpotifyService";
 import {Box} from '@mui/material'
 import Layout from "../../../components/web/layout/Layout";
@@ -28,7 +28,7 @@ const TrackDashboard = () => {
         <Helmet title={track?.title} style={{position: 'relative'}}>
             <Layout>
                 <Header/>
-                <BackgroundColor/>
+                <Index/>
                 <Box sx={{p: 3}}>
                     {track && <Details info={track}/>}
                     {track &&
