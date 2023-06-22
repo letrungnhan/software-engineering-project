@@ -1,7 +1,3 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
 const {Album, validateAlbum} = require('../models/album');
@@ -31,6 +27,28 @@ const createAlbum = asyncHandler(async (req, res) => {
     }
 });
 
+const updateAlbum = asyncHandler(async (req, res) => {
+    const {error} = validateAlbum(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    const album = await Album.findById(req.params.id);
+    if (!album) return res.status(404).send({
+        message: 'Playlist not found'
+    });
+    const user = await User.findById(req.user._id);
+    const havePermission = album.artists?.includes(user._id);
+    if (!havePermission) return res.status(403).send({
+        message: 'User do not have permission to edit this playlist'
+    });
+    album.title = req.body.title;
+    album.imageUrl = req.body.imageUrl;
+    album.artists = req.body.artists;
+    album.totalTracks = req.body.totalTracks;
+    album.duration = req.body.duration;
+    await album.save();
+    album.songs = await Song.find({'_id': {$in: album.songs}}).exec();
+    return res.status(200).send({album, message: 'Album updated successfully'});
+});
+
 const addSongToAlbum = asyncHandler(async (req, res) => {
     const {albumId, songId} = req.params;
     const album = await Album.findById(albumId);
@@ -54,7 +72,7 @@ const addSongToAlbum = asyncHandler(async (req, res) => {
     res.status(200).send({album, message: 'Song added to album successfully'});
 });
 
-const removeSongFromAlbum = asyncHandler(async (req, res) =>  {
+const removeSongFromAlbum = asyncHandler(async (req, res) => {
     const {albumId, songId} = req.params;
     const album = await Album.findById(albumId);
     if (!album) {
@@ -74,6 +92,7 @@ const removeSongFromAlbum = asyncHandler(async (req, res) =>  {
     album.totalTracks -= 1;
     album.duration -= song.duration;
     await album.save();
+
     return res.status(200).send({album, message: 'Song removed from album successfully'});
 });
 
@@ -131,7 +150,7 @@ const getAlbumsByArtist = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    createAlbum, getAlbumById, getAlbumsByArtist,
+    createAlbum, updateAlbum, getAlbumById, getAlbumsByArtist,
     addSongToAlbum, removeSongFromAlbum,
     addArtistToAlbum, removeArtistFromAlbum,
 }

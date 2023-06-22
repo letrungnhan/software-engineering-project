@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import { publicRequest, protectedRequest } from "../utils/requestMethod";
 
 class User {

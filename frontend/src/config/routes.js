@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 export const home = '/home'
 export const login = '/login'
 export const signup = '/signup'

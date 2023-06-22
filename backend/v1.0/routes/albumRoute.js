@@ -9,6 +9,7 @@ const validateObjectId = require('../middlewares/validateObjectId');
 const albumController = require('../controllers/albumController');
 
 router.post("/", [auth], albumController.createAlbum);
+router.put("/:id", [auth], albumController.updateAlbum);
 router.get("/:id", albumController.getAlbumById);
 router.get("/artist/:id", albumController.getAlbumsByArtist);
 

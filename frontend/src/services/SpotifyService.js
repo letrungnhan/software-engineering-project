@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import {protectedRequest, publicRequest} from "../utils/requestMethod";
 
 class Spotify {
@@ -47,6 +51,12 @@ class Spotify {
     async createAlbum(album) {
         return new Promise((resolve, reject) => {
             protectedRequest().post(`/albums`, album).then(resolve).catch(reject)
+        })
+    }
+
+    async updateAlbum(albumId, album) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/albums/${albumId}`, album).then(resolve).catch(reject)
         })
     }
 

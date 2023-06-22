@@ -1,18 +1,20 @@
 import React from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import './assets/scss/index.scss';
 import useAudio from "./hooks/useAudio";
 import Router from "./routes/Router";
+import Toast from "./components/common/toast";
 
 
 function App() {
-    const { audio } = useSelector(state => state);
-    const dispatch = useDispatch();
+    const {audio} = useSelector(state => state);
     const [setTrack] = useAudio();
 
-
     return (
-        <Router />
+        <div>
+            <Toast/>
+            <Router/>
+        </div>
     )
 }
 

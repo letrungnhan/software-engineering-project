@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react'
 import Helmet from '../../../components/common/Helmet'
 import Header from '../../../components/web/layout/Header'
 import CardSection from '../../../components/web/sections/CardSection'
-import BackgroundColor from '../../../components/common/BackgroundColor'
+import Index from '../../../components/common/background-color'
 import { Box } from '@mui/material'
 import Layout from "../../../components/web/layout/Layout";
 import { useSelector } from "react-redux";
@@ -42,7 +42,7 @@ const Home = () => {
         <Helmet title="Trình phát trên web" style={{ position: 'relative' }}>
             <Layout>
                 <Header></Header>
-                <BackgroundColor />
+                <Index />
                 <Box sx={{ p: 3 }}>
                     {playlist &&
                         <CardSection title={playlist.title} desc={playlist.desc} items={playlist.items} type={"playlist"} />}

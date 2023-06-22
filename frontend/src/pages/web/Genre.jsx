@@ -4,7 +4,7 @@ import { spotifyApi } from '../../utils/spotify';
 import Helmet from '../../components/common/Helmet'
 import Header from '../../components/web/layout/Header'
 import CardSection from '../../components/web/sections/CardSection'
-import BackgroundColor from '../../components/common/BackgroundColor'
+import Index from '../../components/common/background-color'
 import { Box } from '@mui/material'
 const Genre = () => {
     const { id } = useParams();
@@ -41,7 +41,7 @@ const Genre = () => {
     return (
         <Helmet title={info.name} style={{ position: 'relative' }} >
             <Header />
-            <BackgroundColor src={info.images} />
+            <Index src={info.images} />
             <Box sx={{ p: 3 }}>
                 <Infomation info={info} />
                 <Box sx={{ mb: 3 }}>

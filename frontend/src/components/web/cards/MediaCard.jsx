@@ -10,9 +10,12 @@ import {formatTime} from "../../../utils/changeDuration";
 import {formatMediumTime} from "../../../utils/formatTime";
 import SpotifyService from "../../../services/SpotifyService";
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import {toast} from "react-toastify";
+import * as ActionType from "../../../redux/constants/ActionType";
+import {createPlaylist} from "../../../redux/actions/playlistActions";
 
 function MediaCard({item}) {
-    const {audio, playlist} = useSelector(state => state);
+    const {audio, playlist, user} = useSelector(state => state);
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -41,22 +44,27 @@ function MediaCard({item}) {
     function handleAddSongToPlaylist(playListId) {
         SpotifyService.addSongToPlaylist({playListId, songId: item._id})
             .then(res => {
-                console.log(res);
+                toast.success('Đã thêm bài hát vào playlist')
             })
             .catch(err => {
-                console.log(err);
+                if (err?.response?.data?.message === 'Song already added to playlist')
+                    toast.info('Bài hát đã có trong playlist')
             })
     }
 
-    function handleCreatePlaylist() {
-        const payload = {}
-        SpotifyService.createPlaylist(payload)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+    async function handleCreatePlaylist() {
+        const payload = {
+            name: `My Playlist #${playlist.length + 1}`,
+            user: user.info._id,
+            songs: []
+        }
+        const action = await createPlaylist(payload);
+        if (action.type === ActionType.playlist.CREATE_PLAYLIST) {
+            dispatch(action);
+            toast.success('Tạo playlist thành công')
+        } else {
+            toast.error('Tạo playlist thất bại')
+        }
     }
 
     return (
@@ -260,7 +268,7 @@ function MediaCard({item}) {
                     position: 'relative'
                 }}>
                     <MoreHorizIcon
-                        id="song-options-button"
+                        id="song-options-button-dsa"
                         aria-haspopup="true"
                         aria-controls={open ? 'song-options' : undefined}
                         aria-expanded={open ? 'true' : undefined}
@@ -278,7 +286,7 @@ function MediaCard({item}) {
                         open={open}
                         onClose={handleClose}
                         MenuListProps={{
-                            'aria-labelledby': 'song-options-button',
+                            'aria-labelledby': 'song-options-button-dsa',
                         }}
                         sx={{
                             overflow: 'visible',
@@ -304,8 +312,9 @@ function MediaCard({item}) {
                                     px: '5px',
                                     borderRadius: '5px',
                                     transition: 'all .15s ease-in-out',
+                                    backgroundColor: '#282828 !important',
                                     '&:hover': {
-                                        backgroundColor: 'rgba(255,255,255,.1)',
+                                        backgroundColor: 'rgba(255,255,255,.1) !important',
                                     }
                                 }
                             }

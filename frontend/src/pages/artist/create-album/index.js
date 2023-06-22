@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
@@ -7,7 +11,7 @@ import {Backdrop, Box} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import BackgroundColor from "../../../components/common/BackgroundColor";
+import Index from "../../../components/common/background-color";
 import Helmet from "../../../components/common/Helmet";
 import ButtonGroupService from "../../../components/artist/button-group-service";
 import Header from "../../../components/web/layout/Header";
@@ -18,6 +22,7 @@ import TracksSection from '../../../components/artist/sections/TracksSection';
 import PopupMediaCard from './PopupMediaCard';
 import FirebaseService from '../../../services/FirebaseService';
 import CircularProgressWithLabel from '../../../components/web/CircularProgressWithLabel';
+import {toast} from "react-toastify";
 
 function CreateAlbum(props) {
     return (
@@ -50,10 +55,22 @@ export const ShowingAlbum = (props) => {
 
     async function addSong(song) {
         const index = songs.findIndex(item => item._id === song._id)
-        if (index !== -1) return;
-        setSongs(prev => ([...prev, song]))
+        if (index !== -1) {
+            toast.error('Bài hát đã có trong album')
+            return;
+        }
         if (props.albumId) {
             SpotifyService.addSongToAlbum(props.albumId, song._id)
+                .then(res => {
+                    toast.success('Đã thêm bài hát vào album')
+                    setSongs(prev => ([...prev, song]))
+                })
+                .catch(err => {
+                    toast.error('Thêm bài hát vào album thất bại')
+                })
+        } else {
+            toast.success('Đã thêm bài hát vào album')
+            setSongs(prev => ([...prev, song]))
         }
     }
 
@@ -69,43 +86,54 @@ export const ShowingAlbum = (props) => {
     }
 
     async function handleSave() {
-        let imageUrl, duration = 0, totalTracks = songs.length;
+        let imageUrl = image?.url, duration = 0, totalTracks = songs.length;
         songs.forEach(song => duration += song.duration)
-        await FirebaseService.uploadFile('images', image.file,
-            (progress) => {
-                setProgressUpload({message: 'Uploading image', progress});
-            },
-            (error) => {
-                console.log(error)
-            },
-            (uploadedURL) => {
-                imageUrl = uploadedURL;
-            })
+        if (image.file) {
+            await FirebaseService.uploadFile('images', image.file,
+                (progress) => setProgressUpload({message: 'Uploading image', progress}),
+                (error) => console.log(error),
+                (uploadedURL) => imageUrl = uploadedURL
+            )
+        }
         const album = {
             title, duration, totalTracks, imageUrl,
             artists: artists.map(artist => artist._id),
-            songs: songs.map(song => song._id),
+            songs: songs.map(song => song._id)
         }
-        SpotifyService.createAlbum(album)
-            .then(res => {
-                navigate(`/services/album/${res.data.album._id}`)
-            })
-            .catch(err => {
-                console.log(err.response);
-                setProgressUpload(null)
-            })
+        if (props.albumId) {
+            SpotifyService.updateAlbum(props.albumId, album)
+                .then(res => {
+                    toast.success(`Lưu album ${res.data.album.title} thành công`)
+                })
+                .catch(err => {
+                    toast.error('Lưu album thất bại')
+                    setProgressUpload(null)
+                })
+        } else {
+            SpotifyService.createAlbum(album)
+                .then(res => {
+                    toast.success(`Lưu album ${res.data.album.title} thành công`)
+                    navigate(`/services/album/${res.data.album._id}`)
+                })
+                .catch(err => {
+                    toast.error('Lưu album thất bại')
+                    setProgressUpload(null)
+                })
+        }
     }
 
     async function removeFromAlbum(songId) {
         if (props?.albumId) {
             SpotifyService.removeSongFromAlbum(props.albumId, songId)
                 .then(res => {
+                    toast.success('Đã xóa bài hát khỏi album')
                     setSongs(prev => prev.filter(song => song._id !== songId))
                 })
                 .catch(err => {
                     console.log(err)
                 })
         } else {
+            toast.success('Đã xóa bài hát khỏi album')
             setSongs(prev => prev.filter(song => song._id !== songId))
         }
     }
@@ -119,7 +147,7 @@ export const ShowingAlbum = (props) => {
             <Header>
                 <ButtonGroupService/>
             </Header>
-            <BackgroundColor/>
+            <Index/>
             <Box sx={{p: 3}}>
                 <div className="song">
                     <button type={"button"} onClick={() => setOpen(true)} className="button-select-song"

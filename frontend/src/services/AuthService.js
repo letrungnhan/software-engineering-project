@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 export const isRole = (user, role) => {
     // user = user || localStorage.getItem('user');
     if (!user || !user.token || !user.info) return false;

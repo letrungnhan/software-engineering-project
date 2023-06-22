@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const { User, validateUser } = require('../models/user');
 const asyncHandler = require('express-async-handler');
 

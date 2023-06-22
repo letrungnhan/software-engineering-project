@@ -69,16 +69,19 @@ const Details = ({info}) => {
                                 <Artists artist={artist} key={i} showSeparate={i < info.artists.length}/>
                             ))}
                         </> :
-                        <Artists artist={{name: 'Anonymous'}}/>
+                        <Artists artist={{name: 'Various artist'}}/>
                     }
                     <Box component="span" sx={{color: '#b3b3b3'}}>
                         {formatTime(info.duration || 0)}
                     </Box>
-                    <Box component="span" sx={{display: 'inline-block'}}>
-                        <Box component="span">
-                            <FiberManualRecordIcon sx={{fontSize: '8px', mx: '4px'}}/> {info.totalTracks || 0} bài hát
+                    {info.totalTracks > 0 &&
+                        <Box component="span" sx={{display: 'inline-block'}}>
+                            <Box component="span">
+                                <FiberManualRecordIcon sx={{fontSize: '8px', mx: '4px'}}/> {info.totalTracks || 0} bài
+                                hát
+                            </Box>
                         </Box>
-                    </Box>
+                    }
                 </Box>
             </Box>
         </Box>

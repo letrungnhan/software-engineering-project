@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import Index from '../../../components/common/background-color';
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
 import Layout from '../../../components/web/layout/Layout';
@@ -27,7 +27,7 @@ const Collection = () => {
         <Helmet title="Collection">
             <Layout>
                 <Header />
-                <BackgroundColor />
+                <Index />
                 <Box p={3}>
                     <Playlist title={'Playlist'} items={playlists} type={"playlist"} />
                 </Box>

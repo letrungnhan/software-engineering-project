@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 // Not found
 const notFound = (req, res, next) => {
     const error = new Error(`Not found - ${req.originalUrl}`);

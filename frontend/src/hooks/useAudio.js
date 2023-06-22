@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio} from "../redux/actions/audioActions";
