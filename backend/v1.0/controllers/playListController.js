@@ -21,7 +21,6 @@ const createPlayList = asyncHandler(async (req, res) => {
 
 // @desc    edit a playlist
 const editPlayList = asyncHandler(async (req, res) => {
-
     const schema = joi.object({
         name: joi.string().required(),
         description: joi.string().allow(''),
@@ -121,7 +120,6 @@ const getUserFavoritePlayList = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get random playlist
-
 const getRandomPlayList = asyncHandler(async (req, res) => {
     const playLists = await PlayList.aggregate([{$sample: {size: 10}}]);
     res.status(200).send({data: playLists, message: 'Playlists fetched successfully'});
@@ -148,7 +146,6 @@ const getAllPlayLists = asyncHandler(async (req, res) => {
 });
 
 // @desc    delete a playlist by id
-
 const deletePlayList = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const playList = await PlayList.findById(req.params.id);

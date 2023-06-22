@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom'
+import React, {useEffect, useState} from 'react';
 import Helmet from '../../../components/common/Helmet'
 import CardSection from '../../../components/web/sections/CardSection'
 import MediaSection from '../../../components/web/sections/MediaSection'
@@ -9,6 +8,7 @@ import Header from '../../../components/web/layout/Header'
 import {Box, Grid, Typography} from '@mui/material';
 import Layout from "../../../components/web/layout/Layout";
 import SpotifyService from '../../../services/SpotifyService';
+import Logo from '../../../assets/images/logo-white.png';
 
 const Search = () => {
     const [topSearch, setTopSearch] = useState()
@@ -37,7 +37,10 @@ const Search = () => {
                 setTracks(songs);
                 setAlbums(albums);
                 setArtists(artists);
-                setPlaylists(playlists.map(playlist => ({...playlist, type: 'playlist'})));
+                setPlaylists(playlists.map(playlist => ({
+                    ...playlist, type: 'playlist',
+                    artists: [playlist.user],
+                })));
                 handleSetTopSearch({songs, albums, artists, playlists})
             })
             .catch(err => {
@@ -91,6 +94,7 @@ const Search = () => {
                 id: playlists[0]._id,
                 desc: playlists[0].description,
                 name: playlists[0].name,
+                artists: [playlists[0].user],
                 imageUrl: playlists[0].imageUrl,
                 type: 'playlist',
             })
@@ -103,7 +107,7 @@ const Search = () => {
                 <Header>
                     <Searching handleSearchResults={handleSearchResults}/>
                 </Header>
-                {!textSearch && <TextLabel label={'Duyệt tìm tất cả'}/>}
+                {!textSearch && <TextLabel label={"Let's start with your Spotify"}/>}
                 {textSearch &&
                     <Box>
                         {hasResult ?
@@ -134,10 +138,22 @@ const Search = () => {
 const TextLabel = ({label}) => {
 
     return (
-        <Box sx={{mt: 10, p: 3, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <Box sx={{
+            mt: 10,
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>
+            <Box component={"img"} src={Logo}
+                 sx={{
+                     width: '250px', mb: 5, mt: 5
+                 }}
+            />
             <Typography gutterBottom variant="h2" component="div"
                         sx={{
-                            fontSize: '1.5rem',
+                            fontSize: '1.8rem',
                             fontWeight: '700',
                             lineHeight: '28px',
                             letterSpacing: '-.04em',
@@ -148,4 +164,5 @@ const TextLabel = ({label}) => {
         </Box>
     )
 }
+
 export default Search;
