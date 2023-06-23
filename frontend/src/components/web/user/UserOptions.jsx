@@ -1,12 +1,12 @@
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../../redux/actions/userActions";
+import {Avatar, Box, Button, Menu, MenuItem} from '@mui/material';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {logout} from "../../../redux/actions/userActions";
 
 export default function UserOptions() {
-    const { user } = useSelector(state => state);
+    const {user} = useSelector(state => state);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -52,7 +52,7 @@ export default function UserOptions() {
                     },
 
                 }}>
-                <Avatar src={user.avatar} sx={{ transform: 'scale(.7)' }} />
+                <Avatar src={user.avatar} sx={{transform: 'scale(.7)'}}/>
                 <Box sx={{
                     maxWidth: '180px',
                     display: 'flex',
@@ -72,7 +72,7 @@ export default function UserOptions() {
                     <ArrowDropDownOutlinedIcon sx={{
                         width: '2rem',
                         paddingRight: '.5rem',
-                    }} />
+                    }}/>
                 </Box>
             </Button>
             <Menu
@@ -83,9 +83,9 @@ export default function UserOptions() {
                 MenuListProps={{
                     'aria-labelledby': 'user-options',
                 }}
-                sx={{ 
+                sx={{
                     mt: 1,
-                    '& div': { background: 'transparent' },
+                    '& div': {background: 'transparent'},
                     '& ul': {
                         backgroundColor: '#282828',
                         color: '#fff',
@@ -110,7 +110,7 @@ export default function UserOptions() {
                     }
                 }}
             >
-                <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
+                <MenuItem onClick={() => navigate("/profile")}>Tài khoản</MenuItem>
                 <MenuItem onClick={() => navigate("/services/artist")}>Hồ sơ của tôi</MenuItem>
                 <MenuItem onClick={() => navigate("/services/song/upload")}>Tải nhạc lên</MenuItem>
                 <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>

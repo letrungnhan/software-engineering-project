@@ -25,6 +25,7 @@ const userReducers = (state = initialState(), action) => {
             setItem("user", {...action.payload})
             return {...action.payload}
         case types.user.UPDATE_USER_SUCCESS:
+            console.log(action.payload)
             setItem("user", {...state, ...action.payload})
             return {...state, ...action.payload}
         case types.user.CHECK_TOKEN_FAILED:

@@ -42,7 +42,6 @@ const getSongById = asyncHandler(async (req, res) => {
 // @desc    Get all songs
 const getSongs = asyncHandler(async (req, res) => {
     const {page, limit} = req.query;
-    console.log(page, limit)
     const songs = await Song.getSongs(page, limit);
     return res.status(200).send({songs});
 });

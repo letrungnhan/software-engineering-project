@@ -44,17 +44,9 @@ export const validateToken = async () => {
     return {...action}
 }
 
-export const updateUser = async (user) => {
-    let action = {type: types.user.UPDATE_USER_FAILED};
-    await protectedRequest().put(`/users/user-profile/${user.id}`, {name: user.name, phoneNumber: user.phoneNumber})
-        .then(res => {
-            action = {
-                type: types.user.UPDATE_USER_SUCCESS,
-                payload: {...user},
-            }
-        })
-        .catch(err => {
-            action = {type: types.user.UPDATE_USER_FAILED}
-        })
-    return {...action}
+export const updateUser = (user) => {
+    return {
+        type: types.user.UPDATE_USER_SUCCESS,
+        payload: {info: {...user}}
+    }
 }
