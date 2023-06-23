@@ -11,6 +11,7 @@ export const artist = '/artist/:id'
 export const playlist = '/playlist/:id'
 export const album = '/album/:id'
 export const collection = '/collection'
+export const profile = '/profile'
 
 
 // /service

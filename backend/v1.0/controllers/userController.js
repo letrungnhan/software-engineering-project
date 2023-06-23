@@ -22,13 +22,15 @@ const getUserById = asyncHandler(async (req, res) => {
 
 // @desc    Update a user by id
 const updateUserById = asyncHandler(async (req, res) => {
+    console.log(req.body)
     const user = await User.findByIdAndUpdate(
         req.params.id,
         {$set: req.body},
         {new: true}
     ).select('-password -__v');
+    console.log(user)
     if (!user) return res.status(404).send('User not found');
-    res.status(200).send({user});
+    return res.status(200).send({user});
 });
 
 // @desc    Delete a user by id
@@ -37,8 +39,6 @@ const deleteUserById = asyncHandler(async (req, res) => {
     res.status(200).send({message: 'User deleted successfully'});
 
 });
-
-
 
 
 module.exports = {getUsers, getUserById, updateUserById, deleteUserById};
