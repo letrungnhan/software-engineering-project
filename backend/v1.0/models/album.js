@@ -35,6 +35,10 @@ albumSchema.statics.getAlbumById = async function (id) {
 albumSchema.statics.getAlbumsByArtistId = async function (id, page, limit) {
     return await this.find({ artists: { $in: [id] } }).limit(limit).skip(limit * page).populate('songs').populate('artists');
 }
+albumSchema.statics.getAllAlbums = async function (page, limit) {
+    return await this.find({}).limit(limit).skip(limit * page).populate('songs').populate('artists');
+}
+
 
 
 

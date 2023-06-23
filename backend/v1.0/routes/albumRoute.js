@@ -12,6 +12,7 @@ router.post("/", [auth], albumController.createAlbum);
 router.put("/:id", [auth], albumController.updateAlbum);
 router.get("/:id", albumController.getAlbumById);
 router.get("/artist/:id", albumController.getAlbumsByArtist);
+router.get("/", albumController.getAllAlbums);
 
 router.post("/:albumId/add-artist/:artistId", [auth], albumController.addArtistToAlbum);
 router.post("/:albumId/remove-artist/:artistId", [auth], albumController.removeArtistFromAlbum);
