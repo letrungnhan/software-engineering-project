@@ -8,6 +8,8 @@ import {Link} from 'react-router-dom';
 import {setCurrentTrack} from "../../../redux/actions/audioActions";
 import {formatTime} from "../../../utils/changeDuration";
 import {formatMediumTime} from "../../../utils/formatTime";
+import SpotifyService from "../../../services/SpotifyService";
+import {toast} from "react-toastify";
 
 function MediaCard({item}) {
     const {audio} = useSelector(state => state);
@@ -24,6 +26,16 @@ function MediaCard({item}) {
         if (audio?.currentTrack?._id === item._id) return;
         const action = setCurrentTrack({...item, isPlaying: true});
         dispatch(action);
+    }
+
+    async function handleLikeSong() {
+        SpotifyService.likeSong(item._id)
+            .then(res => {
+                toast.success(res.data.message)
+            })
+            .catch(err => {
+                toast.error('Xảy ra lỗi. Vui lòng thử lại sau')
+            })
     }
 
     return (
@@ -215,16 +227,15 @@ function MediaCard({item}) {
                 justifyContent: 'space-between',
                 width: '110px'
             }}>
-                <FavoriteBorderOutlinedIcon sx={{
-                    fontSize: '1.2rem',
-                    visibility: 'hidden',
-                    opacity: '0',
-                    transition: 'all 0s'
-                }}/>
-                <Box sx={{
-                    fontWeight: '500',
-
-                }}>
+                <FavoriteBorderOutlinedIcon
+                    onClick={handleLikeSong}
+                    sx={{
+                        fontSize: '1.2rem',
+                        visibility: 'hidden',
+                        opacity: '0',
+                        transition: 'all 0s'
+                    }}/>
+                <Box sx={{fontWeight: '500'}}>
                     {item.duration && formatTime(item.duration)}
                 </Box>
                 <MoreHorizIcon sx={{

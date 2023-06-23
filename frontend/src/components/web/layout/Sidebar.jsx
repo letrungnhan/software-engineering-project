@@ -65,7 +65,7 @@ export default function Sidebar() {
                         <AddBoxSharp/>
                         <ListItemText primary="Tạo playlist"/>
                     </ListItem>
-                    <ItemLink url='/collection/tracks' exact={false}>
+                    <ItemLink url='/liked-tracks' exact={false}>
                         <FavoriteSharp/>
                         <ListItemText primary="Bài hát đã thích"/>
                     </ItemLink>
