@@ -283,8 +283,9 @@ function MediaCard({item, removeFromAlbum}) {
                                     px: '5px',
                                     borderRadius: '5px',
                                     transition: 'all .15s ease-in-out',
+                                    backgroundColor: '#282828 !important',
                                     '&:hover': {
-                                        backgroundColor: 'rgba(255,255,255,.1)',
+                                        backgroundColor: 'rgba(255,255,255,.1) !important',
                                     }
                                 }
                             }
