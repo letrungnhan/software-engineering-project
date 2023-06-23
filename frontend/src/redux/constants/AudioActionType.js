@@ -11,6 +11,7 @@ const audio = {
     CHANGE_CURRENT_TIME: 'CHANGE_CURRENT_TIME',
     PAUSE_TRACK: 'PAUSE_TRACK',
     PLAY_TRACK: 'PLAY_TRACK',
+    PLAY_PLAYLIST: 'PLAY_PLAYLIST',
 
 }
 export default audio;

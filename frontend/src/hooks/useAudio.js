@@ -1,10 +1,6 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio} from "../redux/actions/audioActions";
+import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio, setCurrentTrack} from "../redux/actions/audioActions";
 
 const useAudio = () => {
     const audioState = useSelector(state => state.audio);
@@ -23,6 +19,11 @@ const useAudio = () => {
         dispatch(changeCurrentTime({currentTimePercent, currentTime}))
     }
 
+    const nextTrack = () => {
+        const position = audioState.tracks.findIndex(track => track._id === audioState.currentTrack._id)
+        return audioState.tracks[position + 1]
+    }
+
     useEffect(() => {
         if (!audioState?.seeking) return;
         audio.currentTime = audioState.currentTime;
@@ -33,6 +34,11 @@ const useAudio = () => {
         if (!audioState?.currentTrack) return;
         setTrack(audioState.currentTrack)
     }, [audioState?.currentTrack])
+
+    useEffect(() => {
+        if (!audioState?.tracks || audioState?.tracks?.length <= 0) return;
+        dispatch(setCurrentTrack(audioState?.tracks[0]))
+    }, [audioState?.tracks])
 
     useEffect(() => {
         audioState.isPlaying ? audio.play() : audio.pause();
@@ -47,13 +53,17 @@ const useAudio = () => {
     }, [audioState?.volume]);
 
     useEffect(() => {
-        audio.addEventListener('ended', () => dispatch(pauseTrack()));
+        const listenerEnded = () => {
+            if (!audioState.tracks || audioState?.tracks.length <= 0) return dispatch(pauseTrack())
+            dispatch(setCurrentTrack(nextTrack()))
+        }
         audio.addEventListener('timeupdate', setCurrentTime);
+        audio.addEventListener('ended', listenerEnded);
         return () => {
             pauseTrack();
             audio.src = null;
-            audio.removeEventListener('ended', () => dispatch(pauseTrack()));
             audio.removeEventListener('timeupdate', setCurrentTime);
+            audio.removeEventListener('ended', listenerEnded);
         };
     }, [audio]);
 
