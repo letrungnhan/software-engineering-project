@@ -6,7 +6,7 @@ import './style.css'
 function Toast() {
     return (
         <ToastContainer position={'top-center'}
-                        autoClose={1500}
+                        autoClose={800}
                         hideProgressBar={false}
                         closeOnClick={true}
                         pauseOnHover={true}

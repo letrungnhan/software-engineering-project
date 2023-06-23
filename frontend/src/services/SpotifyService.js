@@ -113,7 +113,11 @@ class Spotify {
             protectedRequest().put(`/playlists/addSong`, {playListId, songId}).then(resolve).catch(reject)
         })
     }
-
+    async removeSongFromPlaylist({playListId, songId}) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/playlists/removeSong`, {playListId, songId}).then(resolve).catch(reject)
+        })
+    }
     async getPlaylistById(id) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/playlists/${id}`).then(resolve).catch(reject)

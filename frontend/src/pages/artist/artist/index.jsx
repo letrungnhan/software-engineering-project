@@ -12,6 +12,7 @@ import {IconChecked} from "../../../components/common/Details";
 import EditIcon from '@mui/icons-material/Edit';
 import TracksSection from '../../../components/artist/sections/TracksSection';
 import CardSection from '../../../components/artist/sections/CardSection';
+import {Link} from "react-router-dom";
 
 function Artist() {
     const {user} = useSelector(state => state);
@@ -60,7 +61,6 @@ function Artist() {
 }
 
 const ArtistProfile = ({artist}) => {
-    const [openEdit, setOpenEdit] = useState(false);
 
     return (
         <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
@@ -112,17 +112,27 @@ const ArtistProfile = ({artist}) => {
                         }}>
                         <IconChecked/>
                     </Box>
-                    <Box component={"button"} type={"button"} onClick={() => setOpenEdit(true)}
+                    <Box component={Link} to={"/profile"}
                          sx={{
-                             background: 'var(--primary-color)', outline: 'none', border: 'none',
-                             fontSize: '0.85rem', fontWeight: 600, color: 'white', padding: '6px 12px',
-                             borderRadius: '50px', letterSpacing: '1px',
-                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                             background: 'var(--primary-color)',
+                             outline: 'none',
+                             border: 'none',
+                             textDecoration: 'none',
+                             fontSize: '0.85rem',
+                             fontWeight: 600,
+                             color: 'white',
+                             padding: '6px 12px',
+                             borderRadius: '50px',
+                             letterSpacing: '1px',
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center',
+                             gap: '6px',
                              cursor: 'pointer'
                          }}
                     >
                         <EditIcon sx={{width: '16px', height: '16px'}}/>
-                        <Box sx={{position:'relative', top:'0.8px'}}>
+                        <Box sx={{position: 'relative', top: '0.8px'}}>
                             Edit Profile
                         </Box>
                     </Box>
@@ -144,7 +154,7 @@ const ArtistProfile = ({artist}) => {
 }
 
 const EditArtistProfile = ({openEdit, artist}) => {
-    
+
     return (
         <Box>
 
