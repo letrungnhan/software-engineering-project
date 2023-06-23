@@ -139,6 +139,18 @@ class Spotify {
         })
     }
 
+    async getLikedSongs() {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/songs/liked`).then(resolve).catch(reject)
+        })
+    }
+
+    async likeSong(songId) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/songs/like/${songId}`).then(resolve).catch(reject)
+        })
+    }
+
     async search(textSearch) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/search/search?q=${textSearch}`).then(resolve).catch(reject)
