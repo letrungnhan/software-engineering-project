@@ -175,7 +175,7 @@ function MediaCard({item}) {
             </Box>
             <Box
                 component={Link}
-                to={`/album/${item.album?.id}`}
+                to={`/album/${item.album?._id}`}
                 sx={{
                     textAlign: 'left',
                     width: '30%',

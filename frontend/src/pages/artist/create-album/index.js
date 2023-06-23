@@ -128,11 +128,11 @@ export const ShowingAlbum = (props) => {
         if (props?.albumId) {
             SpotifyService.removeSongFromAlbum(props.albumId, songId)
                 .then(res => {
-                    toast.success('Đã xóa bài hát khỏi album')
                     setSongs(prev => prev.filter(song => song._id !== songId))
+                    toast.success('Đã xóa bài hát khỏi album')
                 })
                 .catch(err => {
-                    console.log(err)
+                    toast.error('Xảy ra lỗi. Vui lòng thử lại sau')
                 })
         } else {
             toast.success('Đã xóa bài hát khỏi album')
@@ -141,7 +141,14 @@ export const ShowingAlbum = (props) => {
     }
 
     async function deleteAlbum() {
-
+        SpotifyService.deleteAlbum(props.albumId)
+            .then(res => {
+                navigate('/services/artist')
+                toast.success('Xóa album thành công')
+            })
+            .catch(err => {
+                toast.error('Xảy ra lỗi. Vui lòng thử lại sau')
+            })
     }
 
     return (

@@ -157,8 +157,6 @@ const deletePlayList = asyncHandler(async (req, res) => {
     await user.save();
     await playList.deleteOne();
     res.status(200).send({message: 'Playlist deleted successfully'});
-
-
 });
 
 module.exports = {
