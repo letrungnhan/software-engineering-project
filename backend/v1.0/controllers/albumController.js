@@ -155,10 +155,19 @@ const getAlbumsByArtist = asyncHandler(async (req, res) => {
     res.status(200).send({albums});
 });
 
+// get all albums (paginated)
+const getAllAlbums = asyncHandler(async (req, res) => {
+    const {page, limit} = req.query;
+    const albums = await Album.getAllAlbums(page, limit);
+    res.status(200).send({albums});
+});
+
+
 
 
 module.exports = {
     createAlbum, updateAlbum, getAlbumById, getAlbumsByArtist,
     addSongToAlbum, removeSongFromAlbum,
     addArtistToAlbum, removeArtistFromAlbum,
+    getAllAlbums
 }
