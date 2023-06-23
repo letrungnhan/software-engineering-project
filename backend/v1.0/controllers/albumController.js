@@ -35,14 +35,10 @@ const updateAlbum = asyncHandler(async (req, res) => {
     const {error} = validateAlbum(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     const album = await Album.findById(req.params.id);
-    if (!album) return res.status(404).send({
-        message: 'Playlist not found'
-    });
+    if (!album) return res.status(404).send({message: 'Album not found'});
     const user = await User.findById(req.user._id);
     const havePermission = album.artists?.includes(user._id);
-    if (!havePermission) return res.status(403).send({
-        message: 'User do not have permission to edit this playlist'
-    });
+    if (!havePermission) return res.status(403).send({message: 'User do not have permission to edit this playlist'});
     album.title = req.body.title;
     album.imageUrl = req.body.imageUrl;
     album.artists = req.body.artists;
@@ -51,6 +47,16 @@ const updateAlbum = asyncHandler(async (req, res) => {
     await album.save();
     album.songs = await Song.find({'_id': {$in: album.songs}}).exec();
     return res.status(200).send({album, message: 'Album updated successfully'});
+});
+
+const deleteAlbum = asyncHandler(async (req, res) => {
+    const album = await Album.findById(req.params.id);
+    if (!album) return res.status(404).send({message: 'Album not found'});
+    const user = await User.findById(req.user._id);
+    const havePermission = album.artists?.includes(user._id);
+    if (!havePermission) return res.status(403).send({message: 'User do not have permission to edit this playlist'});
+    await album.deleteOne();
+    return res.status(200).send({message: 'Album deleted successfully'});
 });
 
 const addSongToAlbum = asyncHandler(async (req, res) => {
@@ -163,10 +169,9 @@ const getAllAlbums = asyncHandler(async (req, res) => {
 });
 
 
-
-
 module.exports = {
-    createAlbum, updateAlbum, getAlbumById, getAlbumsByArtist,
+    createAlbum, updateAlbum, deleteAlbum,
+    getAlbumById, getAlbumsByArtist,
     addSongToAlbum, removeSongFromAlbum,
     addArtistToAlbum, removeArtistFromAlbum,
     getAllAlbums
