@@ -42,6 +42,7 @@ class Spotify {
         })
     }
 
+
     async getSongById(id) {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/songs/${id}`).then(resolve).catch(reject)
@@ -72,9 +73,9 @@ class Spotify {
         })
     }
 
-    async getAlbums() {
+    async getAllAlbum(page = 0, limit = 6) {
         return new Promise((resolve, reject) => {
-            publicRequest().get(`/albums`).then(resolve).catch(reject)
+            publicRequest().get(`/albums?page=${page}&limit=${limit}`).then(resolve).catch(reject)
         })
     }
 
@@ -113,11 +114,13 @@ class Spotify {
             protectedRequest().put(`/playlists/addSong`, {playListId, songId}).then(resolve).catch(reject)
         })
     }
+
     async removeSongFromPlaylist({playListId, songId}) {
         return new Promise((resolve, reject) => {
             protectedRequest().put(`/playlists/removeSong`, {playListId, songId}).then(resolve).catch(reject)
         })
     }
+
     async getPlaylistById(id) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/playlists/${id}`).then(resolve).catch(reject)

@@ -7,14 +7,13 @@ const mongoose = require('mongoose');
 const Joi = require("joi");
 
 const albumSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    imageUrl: { type: String, required: true },
-    totalTracks: { type: Number, required: false, default: 0 },
-    duration: { type: Number, required: false, default: 0 },
-    artists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],
-    songs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song', default: [] }],
-}, { timestamps: true });
-
+    title: {type: String, required: true},
+    imageUrl: {type: String, required: true},
+    totalTracks: {type: Number, required: false, default: 0},
+    duration: {type: Number, required: false, default: 0},
+    artists: [{type: mongoose.Schema.Types.ObjectId, ref: 'User', default: []}],
+    songs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Song', default: []}],
+}, {timestamps: true});
 
 
 const validateAlbum = (album) => {
@@ -29,19 +28,17 @@ const validateAlbum = (album) => {
 };
 
 albumSchema.statics.getAlbumById = async function (id) {
-    return await this.findOne({ _id: id }).populate('songs').populate('artists');
+    return await this.findOne({_id: id}).populate('songs').populate('artists');
 }
 
 albumSchema.statics.getAlbumsByArtistId = async function (id, page, limit) {
-    return await this.find({ artists: { $in: [id] } }).limit(limit).skip(limit * page).populate('songs').populate('artists');
+    return await this.find({artists: {$in: [id]}}).limit(limit).skip(limit * page).populate('songs').populate('artists');
 }
+
 albumSchema.statics.getAllAlbums = async function (page, limit) {
-    return await this.find({}).limit(limit).skip(limit * page).populate('songs').populate('artists');
+    return await this.find({}).limit(limit).skip(limit * page).populate('artists');
 }
-
-
-
 
 const Album = mongoose.model('Album', albumSchema);
 
-module.exports = { Album, validateAlbum }
+module.exports = {Album, validateAlbum}
