@@ -104,6 +104,7 @@ export const ShowingAlbum = (props) => {
             SpotifyService.updateAlbum(props.albumId, album)
                 .then(res => {
                     toast.success(`Lưu album ${res.data.album.title} thành công`)
+                    setProgressUpload(null)
                 })
                 .catch(err => {
                     toast.error('Lưu album thất bại')
@@ -113,6 +114,7 @@ export const ShowingAlbum = (props) => {
             SpotifyService.createAlbum(album)
                 .then(res => {
                     toast.success(`Lưu album ${res.data.album.title} thành công`)
+                    setProgressUpload(null)
                     navigate(`/services/album/${res.data.album._id}`)
                 })
                 .catch(err => {

@@ -36,9 +36,9 @@ class Spotify {
         })
     }
 
-    async getAllSongs() {
+    async getAllSongs(page = 0, limit = 6) {
         return new Promise((resolve, reject) => {
-            publicRequest().get("/songs").then(resolve).catch(reject)
+            publicRequest().get(`/songs?page=${page}&limit=${limit}`).then(resolve).catch(reject)
         })
     }
 
