@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
 const {Album, validateAlbum} = require('../models/album');
@@ -144,10 +148,14 @@ const getAlbumById = asyncHandler(async (req, res) => {
     res.status(200).send({album});
 });
 
+// get albums by artist id (paginated)
 const getAlbumsByArtist = asyncHandler(async (req, res) => {
-    const albums = await Album.getAlbumsByArtistId(req.params.id);
+    const {page, limit} = req.query;
+    const albums = await Album.getAlbumsByArtistId(req.params.id, page, limit);
     res.status(200).send({albums});
 });
+
+
 
 module.exports = {
     createAlbum, updateAlbum, getAlbumById, getAlbumsByArtist,
