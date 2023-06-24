@@ -1,10 +1,7 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio} from "../redux/actions/audioActions";
+import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio, setCurrentTrack} from "../redux/actions/audioActions";
+import * as types from "../redux/constants/ActionType";
 
 const useAudio = () => {
     const audioState = useSelector(state => state.audio);
@@ -35,6 +32,11 @@ const useAudio = () => {
     }, [audioState?.currentTrack])
 
     useEffect(() => {
+        if (!audioState?.tracks || audioState?.tracks?.length <= 0) return;
+        dispatch(setCurrentTrack(audioState?.tracks[0]))
+    }, [audioState?.tracks])
+
+    useEffect(() => {
         audioState.isPlaying ? audio.play() : audio.pause();
     }, [audioState?.isPlaying]);
 
@@ -46,16 +48,44 @@ const useAudio = () => {
         }
     }, [audioState?.volume]);
 
+
     useEffect(() => {
-        audio.addEventListener('ended', () => dispatch(pauseTrack()));
         audio.addEventListener('timeupdate', setCurrentTime);
         return () => {
-            pauseTrack();
-            audio.src = null;
-            audio.removeEventListener('ended', () => dispatch(pauseTrack()));
             audio.removeEventListener('timeupdate', setCurrentTime);
         };
-    }, [audio]);
+    }, [audioState]);
+
+    useEffect(() => {
+        const nextTrack = () => {
+            if (!audioState.tracks) return null;
+            const position = audioState.tracks.findIndex(track => track._id === audioState.currentTrack._id);
+            if (position + 1 >= audioState.tracks.length) return audioState.tracks[0]
+            return audioState.tracks[position + 1]
+        }
+
+        const listenerEnded = () => {
+            if (!audioState.repeat) {
+                dispatch(pauseTrack())
+                audio.removeEventListener('timeupdate', setCurrentTime);
+            } else if (audioState.repeat === types.audio.REPEAT_PLAYLIST) {
+                if (!audioState.tracks || audioState?.tracks.length <= 0) {
+                    audio.removeEventListener('timeupdate', setCurrentTime);
+                    return dispatch(pauseTrack());
+                }
+                const track = nextTrack();
+                dispatch(setCurrentTrack(track))
+            }
+        }
+
+        audio.loop = audioState.repeat === types.audio.REPEAT_TRACK
+        audio.addEventListener('ended', () => {
+            listenerEnded()
+        });
+        return () => {
+            audio.removeEventListener('ended', listenerEnded);
+        };
+    }, [audioState.repeat, audioState.tracks, audioState.currentTrack])
 
     return [setTrack];
 };

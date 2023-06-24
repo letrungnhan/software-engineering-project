@@ -4,22 +4,22 @@
  */
 const asyncHandler = require('express-async-handler');
 const Song = require('../models/song');
-const { User } = require("../models/user");
+const {User} = require("../models/user");
 
 
 // @desc    create a new song
 const createSong = asyncHandler(async (req, res) => {
-    const { error } = Song.validateSong(req.body);
+    const {error} = Song.validateSong(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     const song = await new Song(req.body).save();
-    res.status(200).send({ song, message: 'Song created successfully' });
+    res.status(200).send({song, message: 'Song created successfully'});
 });
 
 // @desc    Update a song by id
 const updateSongById = asyncHandler(async (req, res) => {
-    const song = await Song.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-    if (!song) return res.status(404).send({ message: 'Song not found' });
-    return res.status(200).send({ song });
+    const song = await Song.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
+    if (!song) return res.status(404).send({message: 'Song not found'});
+    return res.status(200).send({song});
 });
 
 // @desc    Delete a song by id
@@ -35,22 +35,23 @@ const deleteSongById = asyncHandler(async (req, res) => {
 // @desc    Get a song by id
 const getSongById = asyncHandler(async (req, res) => {
     const song = await Song.getSongById(req.params.id);
-    if (!song) return res.status(404).send({ message: 'Song not found' });
-    res.status(200).send({ song });
+    if (!song) return res.status(404).send({message: 'Song not found'});
+    res.status(200).send({song});
 });
 
 // @desc    Get all songs
 const getSongs = asyncHandler(async (req, res) => {
-    const songs = await Song.getSongs();
-    return res.status(200).send({ songs });
+    const {page, limit} = req.query;
+    const songs = await Song.getSongs(page, limit);
+    return res.status(200).send({songs});
 });
 
 // @desc    Get a song by artist id
 const getSongsByArtistId = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const {id} = req.params;
     const songs = await Song.getSongsByArtistId(id);
-    if (!songs) return res.status(404).send({ message: 'Artist not found' });
-    return res.status(200).send({ songs });
+    if (!songs) return res.status(404).send({message: 'Artist not found'});
+    return res.status(200).send({songs});
 });
 
 // @desc   like a song
@@ -100,8 +101,6 @@ const getLikedSongs = asyncHandler(async (req, res) => {
         message: 'Liked songs fetched successfully'
     });
 });
-
-
 
 
 module.exports = {

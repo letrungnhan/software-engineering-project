@@ -1,7 +1,7 @@
 import {Box} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import Index from '../../../components/common/background-color';
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
 import Layout from "../../../components/web/layout/Layout";
@@ -12,6 +12,7 @@ import {IconChecked} from "../../../components/common/Details";
 import EditIcon from '@mui/icons-material/Edit';
 import TracksSection from '../../../components/artist/sections/TracksSection';
 import CardSection from '../../../components/artist/sections/CardSection';
+import {Link} from "react-router-dom";
 
 function Artist() {
     const {user} = useSelector(state => state);
@@ -43,7 +44,7 @@ function Artist() {
                 <Header>
                     <ButtonGroupService/>
                 </Header>
-                <BackgroundColor/>
+                <Index/>
                 <Box sx={{p: 3}}>
                     <ArtistProfile artist={{...user?.info}}/>
                 </Box>
@@ -60,7 +61,6 @@ function Artist() {
 }
 
 const ArtistProfile = ({artist}) => {
-    const [openEdit, setOpenEdit] = useState(false);
 
     return (
         <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
@@ -112,17 +112,27 @@ const ArtistProfile = ({artist}) => {
                         }}>
                         <IconChecked/>
                     </Box>
-                    <Box component={"button"} type={"button"} onClick={() => setOpenEdit(true)}
+                    <Box component={Link} to={"/profile"}
                          sx={{
-                             background: 'var(--primary-color)', outline: 'none', border: 'none',
-                             fontSize: '0.85rem', fontWeight: 600, color: 'white', padding: '6px 12px',
-                             borderRadius: '50px', letterSpacing: '1px',
-                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                             background: 'var(--primary-color)',
+                             outline: 'none',
+                             border: 'none',
+                             textDecoration: 'none',
+                             fontSize: '0.85rem',
+                             fontWeight: 600,
+                             color: 'white',
+                             padding: '6px 12px',
+                             borderRadius: '50px',
+                             letterSpacing: '1px',
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center',
+                             gap: '6px',
                              cursor: 'pointer'
                          }}
                     >
                         <EditIcon sx={{width: '16px', height: '16px'}}/>
-                        <Box sx={{position:'relative', top:'0.8px'}}>
+                        <Box sx={{position: 'relative', top: '0.8px'}}>
                             Edit Profile
                         </Box>
                     </Box>
@@ -144,7 +154,7 @@ const ArtistProfile = ({artist}) => {
 }
 
 const EditArtistProfile = ({openEdit, artist}) => {
-    
+
     return (
         <Box>
 

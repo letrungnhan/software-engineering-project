@@ -14,7 +14,7 @@ import {toast} from "react-toastify";
 import * as ActionType from "../../../redux/constants/ActionType";
 import {createPlaylist} from "../../../redux/actions/playlistActions";
 
-function MediaCard({item}) {
+function MediaCard({item, handleLikeSong}) {
     const {audio, playlist, user} = useSelector(state => state);
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -65,16 +65,6 @@ function MediaCard({item}) {
         } else {
             toast.error('Tạo playlist thất bại')
         }
-    }
-
-    async function handleLikeSong() {
-        SpotifyService.likeSong(item._id)
-            .then(res => {
-                toast.success(res.data.message)
-            })
-            .catch(err => {
-                toast.error('Xảy ra lỗi. Vui lòng thử lại sau')
-            })
     }
 
     return (
@@ -263,7 +253,7 @@ function MediaCard({item}) {
                 width: '110px'
             }}>
                 <FavoriteBorderOutlinedIcon
-                    onClick={handleLikeSong}
+                    onClick={() => handleLikeSong(item._id)}
                     sx={{
                         fontSize: '1.2rem',
                         visibility: 'hidden',

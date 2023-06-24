@@ -1,8 +1,3 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
-
 const {PlayList, validatePlayList} = require('../models/playlist');
 const {User} = require('../models/user');
 const Song = require('../models/song');
@@ -26,6 +21,14 @@ const createPlayList = asyncHandler(async (req, res) => {
 
 // @desc    edit a playlist
 const editPlayList = asyncHandler(async (req, res) => {
+    const schema = joi.object({
+        name: joi.string().required(),
+        description: joi.string().allow(''),
+        imageUrl: joi.string().allow(''),
+    });
+    const {error} = validatePlayList(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
     const playList = await PlayList.findById(req.params.id);
     if (!playList) return res.status(404).send({
         message: 'Playlist not found'
@@ -39,9 +42,7 @@ const editPlayList = asyncHandler(async (req, res) => {
     playList.description = req.body.description;
     playList.imageUrl = req.body.imageUrl;
     await playList.save();
-    playList.songs = await Song.find({
-        '_id': {$in: playList.songs}
-    }).exec();
+    playList.songs = await Song.find({'_id': {$in: playList.songs}}).exec();
     res.status(200).send({playList, message: 'Playlist edited successfully'});
 });
 
@@ -115,7 +116,6 @@ const getUserFavoritePlayList = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get random playlist
-
 const getRandomPlayList = asyncHandler(async (req, res) => {
     const playLists = await PlayList.aggregate([{$sample: {size: 10}}]);
     res.status(200).send({data: playLists, message: 'Playlists fetched successfully'});
@@ -142,7 +142,6 @@ const getAllPlayLists = asyncHandler(async (req, res) => {
 });
 
 // @desc    delete a playlist by id
-
 const deletePlayList = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const playList = await PlayList.findById(req.params.id);
@@ -158,8 +157,6 @@ const deletePlayList = asyncHandler(async (req, res) => {
     await user.save();
     await playList.deleteOne();
     res.status(200).send({message: 'Playlist deleted successfully'});
-
-
 });
 
 module.exports = {

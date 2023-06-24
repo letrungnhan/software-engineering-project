@@ -16,7 +16,6 @@ const albumSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 
-
 const validateAlbum = (album) => {
     return Joi.object({
         title: Joi.string().required(),
@@ -32,8 +31,12 @@ albumSchema.statics.getAlbumById = async function (id) {
     return await this.findOne({_id: id}).populate('songs').populate('artists');
 }
 
-albumSchema.statics.getAlbumsByArtistId = async function (id) {
-    return await this.find({artists: {$in: [id]}}).populate('artists');
+albumSchema.statics.getAlbumsByArtistId = async function (id, page, limit) {
+    return await this.find({artists: {$in: [id]}}).limit(limit).skip(limit * page).populate('songs').populate('artists');
+}
+
+albumSchema.statics.getAllAlbums = async function (page, limit) {
+    return await this.find({}).limit(limit).skip(limit * page).populate('artists');
 }
 
 const Album = mongoose.model('Album', albumSchema);

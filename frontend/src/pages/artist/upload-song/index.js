@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import BackgroundColor from "../../../components/common/BackgroundColor";
+import Index from "../../../components/common/background-color";
 import Helmet from "../../../components/common/Helmet";
 import CircularProgressWithLabel from "../../../components/web/CircularProgressWithLabel";
 import Header from "../../../components/web/layout/Header";
@@ -114,7 +114,7 @@ function UploadSong() {
                 <Header>
                     <ButtonGroupService/>
                 </Header>
-                <BackgroundColor/>
+                <Index/>
                 <Box sx={{p: 3}}>
                     <div className="song">
                         <button type={"button"} className={"button-select-song"} onClick={() => setOpen(true)}

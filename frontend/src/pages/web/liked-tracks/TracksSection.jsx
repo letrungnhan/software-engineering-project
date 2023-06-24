@@ -2,7 +2,7 @@ import MediaCard from './MediaCard'
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import {Box} from '@mui/material'
 
-const TracksSection = ({items, hasAlbum, createdAt, handleRemoveFromPlaylist}) => {
+const TracksSection = ({items, info, handleLikeSong}) => {
 
     return (
         <Box component='div' mt={2}>
@@ -25,10 +25,10 @@ const TracksSection = ({items, hasAlbum, createdAt, handleRemoveFromPlaylist}) =
                     Tiêu đề
                 </Box>
                 <Box sx={{width: '30%'}}>
-                    {hasAlbum && 'Album'}
+                    {info.hasAlbum && 'Album'}
                 </Box>
                 <Box sx={{flex: '1'}}>
-                    {createdAt && 'Thêm vào ngày'}
+                    {info.createdAt && 'Thêm vào ngày'}
                 </Box>
                 <Box sx={{fontSize: '1rem', width: '110px', textAlign: 'center'}}>
                     <AccessTimeRoundedIcon/>
@@ -41,12 +41,28 @@ const TracksSection = ({items, hasAlbum, createdAt, handleRemoveFromPlaylist}) =
             }
             {items?.length > 0 &&
                 <div>
-                    {items.map((item, i) => {
-                        return <MediaCard key={item._id || i} item={{...item, number: i + 1}}
-                                          handleRemoveFromPlaylist={handleRemoveFromPlaylist}/>
+                    {items?.map((item, i) => {
+                        return <MediaCard key={item._id} item={{...item, number: i + 1}}
+                                          handleLikeSong={handleLikeSong}/>
                     })}
                 </div>
             }
+            <Box mt={5}>
+                {info.copyrights?.map((item, index) => (
+                    <Box
+                        key={index}
+                        sx={{
+                            display: 'block',
+                            marginBottom: '8px',
+                            fontSize: '.8rem',
+                            color: '#b3b3b3',
+                            fontWeight: '500'
+                        }}
+                    >
+                        {item.type === 'C' && '©'}{item.type === 'P' && '℗'} {item.text}
+                    </Box>
+                ))}
+            </Box>
         </Box>
     );
 };

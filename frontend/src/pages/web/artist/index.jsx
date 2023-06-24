@@ -1,22 +1,22 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import BackgroundColor from '../../../components/common/BackgroundColor';
+import {Box} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from "react-redux";
+import Index from '../../../components/common/background-color';
 import Helmet from '../../../components/common/Helmet';
 import Header from '../../../components/web/layout/Header';
 import Layout from "../../../components/web/layout/Layout";
 import SpotifyService from "../../../services/SpotifyService";
 import ButtonGroupService from "../../../components/artist/button-group-service";
 import DefaultArtistImage from "../../../assets/images/default-artist.jpg";
-import { IconChecked } from "../../../components/common/Details";
+import {IconChecked} from "../../../components/common/Details";
 import EditIcon from '@mui/icons-material/Edit';
 import TracksSection from '../../../components/artist/sections/TracksSection';
 import CardSection from '../../../components/artist/sections/CardSection';
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 function Artist() {
-    const { id } = useParams();
-    const { user } = useSelector(state => state);
+    const {id} = useParams();
+    const {user} = useSelector(state => state);
     const [tracks, setTracks] = useState([]);
     const [albums, setAlbums] = useState([]);
     const [artist, setArtist] = useState();
@@ -31,7 +31,7 @@ function Artist() {
             })
         SpotifyService.getSongByArtistId(id)
             .then(res => {
-                setTracks([...res.data.songs.map(song => ({ ...song, type: 'track' }))])
+                setTracks([...res.data.songs.map(song => ({...song, type: 'track'}))])
             })
             .catch(err => {
                 setTracks([])
@@ -40,7 +40,7 @@ function Artist() {
         SpotifyService.getAlbumsByArtistId(id)
             .then(res => {
                 console.log(res);
-                setAlbums([...res.data.albums.map(album => ({ ...album, type: 'album' }))])
+                setAlbums([...res.data.albums.map(album => ({...album, type: 'album'}))])
             })
             .catch(err => {
                 setAlbums([])
@@ -48,20 +48,21 @@ function Artist() {
     }, [id])
 
     return (
-        <Helmet title={artist?.name} style={{ position: 'relative' }}>
+        <Helmet title={artist?.name} style={{position: 'relative'}}>
             <Layout>
                 <Header>
-                    <ButtonGroupService />
+                    <ButtonGroupService/>
                 </Header>
-                <BackgroundColor />
-                <Box sx={{ p: 3 }}>
-                    {artist && <ArtistProfile artist={artist} />}
+                <Index/>
+                <Box sx={{p: 3}}>
+                    {artist && <ArtistProfile artist={artist}/>}
                 </Box>
-                <Box sx={{ p: 3 }}>
-                    <TracksSection items={tracks} createdAt={true} hasAlbum={true} />
+                <Box sx={{p: 3}}>
+                    <TracksSection items={tracks} createdAt={true} hasAlbum={true}/>
                 </Box>
-                <Box sx={{ p: 3 }}>
-                    {albums?.length > 0 && <CardSection items={albums} title={`Album của ${artist?.name}`} type="album" />}
+                <Box sx={{p: 3}}>
+                    {albums?.length > 0 &&
+                        <CardSection items={albums} title={`Album của ${artist?.name}`} type="album"/>}
                 </Box>
             </Layout>
         </Helmet>
@@ -69,11 +70,10 @@ function Artist() {
     );
 };
 
-const ArtistProfile = ({ artist }) => {
-    const [openEdit, setOpenEdit] = useState(false);
+const ArtistProfile = ({artist}) => {
 
     return (
-        <Box sx={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <Box sx={{display: 'flex', gap: '1.5rem', alignItems: 'center'}}>
             <Box
                 component="div"
                 sx={{
@@ -120,7 +120,7 @@ const ArtistProfile = ({ artist }) => {
                             textTransform: 'uppercase',
                             display: 'flex', alignItems: 'center'
                         }}>
-                        <IconChecked />
+                        <IconChecked/>
                     </Box>
                 </Box>
                 <Box sx={{
@@ -130,7 +130,7 @@ const ArtistProfile = ({ artist }) => {
                 }}>
                     {artist.name}
                 </Box>
-                <Box sx={{ color: 'white', fontWeight: '500', fontSize: '.9rem' }}>
+                <Box sx={{color: 'white', fontWeight: '500', fontSize: '.9rem'}}>
                     {artist.label && <Box mb={1}>{artist.label}</Box>}
                     {artist.followers && <Box mb={1}>{artist.followers} người nghe hàng tháng</Box>}
                 </Box>
@@ -139,7 +139,7 @@ const ArtistProfile = ({ artist }) => {
     )
 }
 
-const EditArtistProfile = ({ openEdit, artist }) => {
+const EditArtistProfile = ({openEdit, artist}) => {
 
 
     return (
