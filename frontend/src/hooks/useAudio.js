@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentTime, pauseTrack, resetSeekTrack, setAudio, setCurrentTrack} from "../redux/actions/audioActions";
+import * as types from "../redux/constants/ActionType";
 
 const useAudio = () => {
     const audioState = useSelector(state => state.audio);
@@ -17,11 +18,6 @@ const useAudio = () => {
         const currentTime = e.target.currentTime;
         const currentTimePercent = Math.round(currentTime * 100 / audio.duration);
         dispatch(changeCurrentTime({currentTimePercent, currentTime}))
-    }
-
-    const nextTrack = () => {
-        const position = audioState.tracks.findIndex(track => track._id === audioState.currentTrack._id)
-        return audioState.tracks[position + 1]
     }
 
     useEffect(() => {
@@ -52,20 +48,44 @@ const useAudio = () => {
         }
     }, [audioState?.volume]);
 
+
     useEffect(() => {
-        const listenerEnded = () => {
-            if (!audioState.tracks || audioState?.tracks.length <= 0) return dispatch(pauseTrack())
-            dispatch(setCurrentTrack(nextTrack()))
-        }
         audio.addEventListener('timeupdate', setCurrentTime);
-        audio.addEventListener('ended', listenerEnded);
         return () => {
-            pauseTrack();
-            audio.src = null;
             audio.removeEventListener('timeupdate', setCurrentTime);
+        };
+    }, [audioState]);
+
+    useEffect(() => {
+        const nextTrack = () => {
+            if (!audioState.tracks) return null;
+            const position = audioState.tracks.findIndex(track => track._id === audioState.currentTrack._id);
+            if (position + 1 >= audioState.tracks.length) return audioState.tracks[0]
+            return audioState.tracks[position + 1]
+        }
+
+        const listenerEnded = () => {
+            if (!audioState.repeat) {
+                dispatch(pauseTrack())
+                audio.removeEventListener('timeupdate', setCurrentTime);
+            } else if (audioState.repeat === types.audio.REPEAT_PLAYLIST) {
+                if (!audioState.tracks || audioState?.tracks.length <= 0) {
+                    audio.removeEventListener('timeupdate', setCurrentTime);
+                    return dispatch(pauseTrack());
+                }
+                const track = nextTrack();
+                dispatch(setCurrentTrack(track))
+            }
+        }
+
+        audio.loop = audioState.repeat === types.audio.REPEAT_TRACK
+        audio.addEventListener('ended', () => {
+            listenerEnded()
+        });
+        return () => {
             audio.removeEventListener('ended', listenerEnded);
         };
-    }, [audio]);
+    }, [audioState.repeat, audioState.tracks, audioState.currentTrack])
 
     return [setTrack];
 };

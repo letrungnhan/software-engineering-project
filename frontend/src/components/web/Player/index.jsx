@@ -3,9 +3,12 @@ import {Box, IconButton, Slider} from "@mui/material";
 import {PlayCircle, Repeat, Replay, SkipNext, SkipPrevious} from "@mui/icons-material";
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import {useDispatch, useSelector} from "react-redux";
-import {pauseTrack, playTrack, seekTrack} from "../../../redux/actions/audioActions";
+import {pauseTrack, playTrack, seekTrack, setRepeat} from "../../../redux/actions/audioActions";
 import {formatTime} from "../../../utils/changeDuration";
-
+import * as types from "../../../redux/constants/ActionType";
+import RepeatIcon from '@mui/icons-material/Repeat';
+import RepeatOneIcon from '@mui/icons-material/RepeatOne';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 
 function PlayBack() {
     const {audio} = useSelector(state => state);
@@ -30,6 +33,15 @@ function PlayBack() {
         }
     }
 
+    function handleSetRepeat() {
+        if (!audio.repeat)
+            dispatch(setRepeat({repeat: types.audio.REPEAT_PLAYLIST}))
+        else if (audio.repeat === types.audio.REPEAT_PLAYLIST)
+            dispatch(setRepeat({repeat: types.audio.REPEAT_TRACK}))
+        else if (audio.repeat === types.audio.REPEAT_TRACK)
+            dispatch(setRepeat({repeat: null}))
+    }
+
     return (
         <Box sx={{height: '100%', maxHeight: '100%'}}>
             <Box sx={{
@@ -40,7 +52,7 @@ function PlayBack() {
             }}>
                 <Box sx={{mt: 0.75}}>
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
-                        <Repeat sx={{fontSize: '22px'}}/>
+                        <ShuffleIcon sx={{fontSize: '22px'}}/>
                     </IconButton>
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
                         <SkipPrevious sx={{fontSize: '22px'}}/>
@@ -54,8 +66,24 @@ function PlayBack() {
                     <IconButton sx={{color: '#b3b3b3'}} component="button">
                         <SkipNext sx={{fontSize: '22px'}}/>
                     </IconButton>
-                    <IconButton sx={{color: '#b3b3b3'}} component="button">
-                        <Replay sx={{fontSize: '22px'}}/>
+                    <IconButton sx={{color: '#b3b3b3'}} component="button" onClick={handleSetRepeat}>
+                        {audio?.repeat === types.audio.REPEAT_TRACK &&
+                            <RepeatOneIcon sx={{
+                                fontSize: '22px',
+                                color: 'var(--primary-color)',
+                                '&:hover': {color: 'var(--primary-color)'}
+                            }}/>
+                        }
+                        {audio?.repeat === types.audio.REPEAT_PLAYLIST &&
+                            <RepeatIcon sx={{
+                                fontSize: '22px',
+                                color: 'var(--primary-color)',
+                                '&:hover': {color: 'var(--primary-color)'}
+                            }}/>
+                        }
+                        {!audio?.repeat &&
+                            <RepeatIcon sx={{fontSize: '22px'}}/>
+                        }
                     </IconButton>
                 </Box>
             </Box>
@@ -68,7 +96,7 @@ function PlayBack() {
             }}>
                 <Box sx={{
                     color: '#b3b3b3',
-                    fontSize: '.9rem',
+                    fontSize: '.8rem',
                     fontWeight: '600',
                     letterSpacing: '.8px'
                 }}>
@@ -86,7 +114,7 @@ function PlayBack() {
                 />
                 <Box sx={{
                     color: '#b3b3b3',
-                    fontSize: '.9rem',
+                    fontSize: '.8rem',
                     fontWeight: '600',
                     letterSpacing: '.8px'
                 }}>

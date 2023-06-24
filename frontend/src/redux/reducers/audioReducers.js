@@ -32,6 +32,8 @@ const userReducers = (state = {volume: 50}, action) => {
             return {...state, tracks: action.payload.tracks}
         case types.audio.CHANGE_VOLUME:
             return {...state, volume: action.payload.volume}
+        case types.audio.SET_REPEAT:
+            return {...state, repeat: action.payload.repeat}
         case types.audio.PAUSE_TRACK:
             if (!state.currentTrack) return {...state}
             return {...state, isPlaying: false}
