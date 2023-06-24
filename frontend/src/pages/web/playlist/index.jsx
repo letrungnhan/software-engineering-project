@@ -80,6 +80,7 @@ function Playlist() {
             user: info.user._id,
             songs: songs.map(song => song._id)
         }
+
         SpotifyService.editPlaylist(info._id, payload)
             .then((res) => {
                 setName(res.data.playList.name || '')
@@ -113,6 +114,19 @@ function Playlist() {
             })
             .catch(err => {
                 console.log(err);
+            })
+    }
+
+    async function handleRemoveFromPlaylist(songId) {
+        SpotifyService.removeSongFromPlaylist({playListId: info._id, songId})
+            .then(res => {
+                if (res.status === 200) {
+                    setSongs(prev => prev.filter(song => song._id !== songId))
+                    toast.success("Đã xóa bài hát khỏi album")
+                }
+            })
+            .catch(err => {
+                console.log(err)
             })
     }
 
@@ -222,17 +236,16 @@ function Playlist() {
                             <DeleteIcon/>
                         </Box>
                     </Box>
-                    {(songs && songs.length > 0) &&
-                        <Box sx={{my: 5}}>
-                            <TracksSection items={songs || []} createdAt={true} hasAlbum={true}/>
-                        </Box>
-                    }
+                    <Box sx={{my: 5}}>
+                        <TracksSection items={songs || []} createdAt={true} hasAlbum={true}
+                                       handleRemoveFromPlaylist={handleRemoveFromPlaylist}/>
+                    </Box>
                 </Box>
             </Layout>
         </Helmet>
-
     );
-};
+}
+
 export default Playlist;
 
 

@@ -42,6 +42,7 @@ class Spotify {
         })
     }
 
+
     async getSongById(id) {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/songs/${id}`).then(resolve).catch(reject)
@@ -60,6 +61,12 @@ class Spotify {
         })
     }
 
+    async deleteAlbum(albumId) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().delete(`/albums/${albumId}`).then(resolve).catch(reject)
+        })
+    }
+
     async addSongToAlbum(albumId, songId) {
         return new Promise((resolve, reject) => {
             protectedRequest().post(`/albums/${albumId}/add-song/${songId}`).then(resolve).catch(reject)
@@ -72,9 +79,9 @@ class Spotify {
         })
     }
 
-    async getAlbums() {
+    async getAllAlbum(page = 0, limit = 6) {
         return new Promise((resolve, reject) => {
-            publicRequest().get(`/albums`).then(resolve).catch(reject)
+            publicRequest().get(`/albums?page=${page}&limit=${limit}`).then(resolve).catch(reject)
         })
     }
 
@@ -114,6 +121,12 @@ class Spotify {
         })
     }
 
+    async removeSongFromPlaylist({playListId, songId}) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/playlists/removeSong`, {playListId, songId}).then(resolve).catch(reject)
+        })
+    }
+
     async getPlaylistById(id) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/playlists/${id}`).then(resolve).catch(reject)
@@ -123,6 +136,18 @@ class Spotify {
     async getPlaylistByUser(userId) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/playlists/user/${userId}`).then(resolve).catch(reject)
+        })
+    }
+
+    async getLikedSongs() {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/songs/liked`).then(resolve).catch(reject)
+        })
+    }
+
+    async likeSong(songId) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/songs/like/${songId}`).then(resolve).catch(reject)
         })
     }
 

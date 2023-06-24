@@ -20,11 +20,9 @@ function Album() {
     useEffect(() => {
         SpotifyService.getAlbumById(id)
             .then(res => {
-                console.log(res)
-                setInfo({
-                    ...res.data.album, type: 'album'
-                })
-                setSongs(res.data.album.songs)
+                const {_id, title} = res.data.album
+                setInfo({...res.data.album, type: 'album'})
+                setSongs(res.data.album.songs.map(song => ({...song, album: {_id, title}})))
             })
             .catch(err => {
                 setInfo({})

@@ -15,6 +15,8 @@ const Playlist = lazy(() => import('../pages/web/playlist'));
 const Artist = lazy(() => import('../pages/web/artist'));
 const Collection = lazy(() => import('../pages/web/collection'));
 const Search = lazy(() => import('../pages/web/search'));
+const Profile = lazy(() => import('../pages/web/profile'));
+const LikedTracks = lazy(() => import('../pages/web/liked-tracks'));
 
 const routes = [
     {path: config.login, element: Login},
@@ -27,7 +29,9 @@ const userRoutes = [
     {path: config.artist, element: Artist},
     {path: config.playlist, element: Playlist},
     {path: config.collection, element: Collection},
+    {path: config.likedTracks, element: LikedTracks},
     {path: config.search, element: Search},
+    {path: config.profile, element: Profile},
     {path: '/', element: Home},
 ];
 
